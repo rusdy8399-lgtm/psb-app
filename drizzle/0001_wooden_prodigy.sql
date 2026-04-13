@@ -1,0 +1,3 @@
+ALTER TABLE `pengaturan_web` ADD `hero_title` text DEFAULT 'Membangun Generasi Rabbani Berilmu, Beramal, dan Berakhlaqul Karimah';--> statement-breakpoint
+ALTER TABLE `pengaturan_web` ADD `hero_subtitle` text DEFAULT 'Pondok Pesantren Bali Bina Insani memadukan kurikulum nasional dan kepesantrenan untuk mencetak generasi muslim yang unggul di era digital.';--> statement-breakpoint
+ALTER TABLE `pengaturan_web` ADD `hero_image_url` text;

@@ -1,0 +1,1 @@
+ALTER TABLE `pengaturan_web` ADD `hero_badge` text DEFAULT 'PENERIMAAN PESERTA DIDIK BARU 2026/2027';

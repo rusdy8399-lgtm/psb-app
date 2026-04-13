@@ -1,0 +1,170 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-poppins);
+  --font-heading: var(--font-poppins);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary-light: var(--primary-light);
+  --color-primary: var(--primary);
+  --color-gold: var(--gold);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+:root {
+  --background: #FAFAF8;
+  --foreground: #1C1C1E;
+  --card: #FFFFFF;
+  --card-foreground: #1C1C1E;
+  --popover: #FFFFFF;
+  --popover-foreground: #1C1C1E;
+  --primary: #1A4D2E;
+  --primary-light: #2D7A4F;
+  --primary-foreground: #FFFFFF;
+  --secondary: #F3F4F6;
+  --secondary-foreground: #1A4D2E;
+  --muted: #F3F4F6;
+  --muted-foreground: #6B7280;
+  --accent: #F3F4F6;
+  --accent-foreground: #1C1C1E;
+  --destructive: #EF4444;
+  --destructive-foreground: #FFFFFF;
+  --border: #E5E7EB;
+  --input: #E5E7EB;
+  --ring: #1A4D2E;
+  --gold: #C9A84C;
+  --radius: 0.5rem;
+
+  --sidebar: #FAFAF8;
+  --sidebar-foreground: #1C1C1E;
+  --sidebar-primary: #1A4D2E;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: #F3F4F6;
+  --sidebar-accent-foreground: #1C1C1E;
+  --sidebar-border: #E5E7EB;
+  --sidebar-ring: #1A4D2E;
+}
+
+.dark {
+  --background: #1C1C1E;
+  --foreground: #FAFAF8;
+  --card: #27272A;
+  --card-foreground: #FAFAF8;
+  --popover: #27272A;
+  --popover-foreground: #FAFAF8;
+  --primary: #2D7A4F;
+  --primary-light: #41A06A;
+  --primary-foreground: #FFFFFF;
+  --secondary: #3F3F46;
+  --secondary-foreground: #FAFAF8;
+  --muted: #3F3F46;
+  --muted-foreground: #A1A1AA;
+  --accent: #3F3F46;
+  --accent-foreground: #FAFAF8;
+  --destructive: #7F1D1D;
+  --destructive-foreground: #FFFFFF;
+  --border: #3F3F46;
+  --input: #3F3F46;
+  --ring: #41A06A;
+  --gold: #D4B663;
+
+  --sidebar: #1C1C1E;
+  --sidebar-foreground: #FAFAF8;
+  --sidebar-primary: #2D7A4F;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: #3F3F46;
+  --sidebar-accent-foreground: #FAFAF8;
+  --sidebar-border: #3F3F46;
+  --sidebar-ring: #41A06A;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  button,
+  .font-heading {
+    @apply font-heading text-foreground font-bold tracking-tight;
+  }
+}
+
+/* Premium Badge Styles */
+.badge-gold-elegan {
+  @apply inline-block py-2 px-6 rounded-full bg-gold/15 text-gold text-[10px] md:text-xs font-bold tracking-[0.3em] uppercase mb-4 border border-gold/30 backdrop-blur-lg font-heading transition-all hover:bg-gold/25;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+.badge-glass-modern {
+  @apply inline-block py-2 px-6 rounded-full bg-white/10 text-white text-[10px] md:text-xs font-bold tracking-[0.3em] uppercase mb-4 border border-white/20 backdrop-blur-xl shadow-lg font-heading transition-all hover:bg-white/20;
+}
+
+.badge-green-soft {
+  @apply inline-block py-2 px-6 rounded-full bg-primary/20 text-primary-light text-[10px] md:text-xs font-bold tracking-[0.3em] uppercase mb-4 border border-primary/30 backdrop-blur-md shadow-md font-heading transition-all hover:border-gold/40;
+}
+
+/* Image Shimmer Loading Effect */
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+.image-shimmer {
+  background: #f6f7f8;
+  background-image: linear-gradient(to right,
+      #f6f7f8 0%,
+      #edeef1 20%,
+      #f6f7f8 40%,
+      #f6f7f8 100%);
+  background-repeat: no-repeat;
+  background-size: 1000px 100%;
+  animation: shimmer 2s infinite linear;
+}

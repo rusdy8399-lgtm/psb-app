@@ -1,0 +1,1 @@
+ALTER TABLE `pengaturan_web` ADD `hero_foreground_image_url` text;
