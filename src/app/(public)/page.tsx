@@ -13,20 +13,11 @@ export const metadata = {
     description: "Penerimaan Santri Baru (PSB) Pondok Pesantren Bali Bina Insani. Daftar online untuk jenjang MTs dan MA.",
     url: "https://project-98lnv.vercel.app",
     type: "website" as const,
-    images: [
-      {
-        url: "https://project-98lnv.vercel.app/logo-bina-insani.png",
-        width: 800,
-        height: 800,
-        alt: "Logo Pondok Pesantren Bali Bina Insani",
-      },
-    ],
   },
   twitter: {
     card: "summary_large_image" as const,
     title: "PSB Online - Pondok Pesantren Bali Bina Insani",
     description: "Penerimaan Santri Baru (PSB) Pondok Pesantren Bali Bina Insani.",
-    images: ["https://project-98lnv.vercel.app/logo-bina-insani.png"],
   },
 };
 
