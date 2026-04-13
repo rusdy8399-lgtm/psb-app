@@ -5,6 +5,31 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { BookOpen, Users, Trophy, GraduationCap, ArrowRight, Library, Languages } from "lucide-react";
 
+export const metadata = {
+  title: "PSB Online - Pondok Pesantren Bali Bina Insani",
+  description: "Penerimaan Santri Baru (PSB) Pondok Pesantren Bali Bina Insani Tolerance Islamic Boarding School. Daftar online untuk jenjang MTs dan MA di Tabanan, Bali.",
+  openGraph: {
+    title: "PSB Online - Pondok Pesantren Bali Bina Insani",
+    description: "Penerimaan Santri Baru (PSB) Pondok Pesantren Bali Bina Insani. Daftar online untuk jenjang MTs dan MA.",
+    url: "https://project-98lnv.vercel.app",
+    type: "website" as const,
+    images: [
+      {
+        url: "https://project-98lnv.vercel.app/logo-bina-insani.png",
+        width: 800,
+        height: 800,
+        alt: "Logo Pondok Pesantren Bali Bina Insani",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image" as const,
+    title: "PSB Online - Pondok Pesantren Bali Bina Insani",
+    description: "Penerimaan Santri Baru (PSB) Pondok Pesantren Bali Bina Insani.",
+    images: ["https://project-98lnv.vercel.app/logo-bina-insani.png"],
+  },
+};
+
 export default async function Home() {
   // Fetch site settings and active sliders in parallel
   const [settings, sliders] = await Promise.all([

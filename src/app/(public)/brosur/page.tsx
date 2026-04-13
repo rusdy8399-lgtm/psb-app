@@ -9,6 +9,25 @@ export const metadata = {
   title: "Download Brosur PSB | Pondok Pesantren Bali Bina Insani",
   description:
     "Unduh brosur penerimaan santri baru (PSB) Pondok Pesantren Bali Bina Insani. Dapatkan informasi lengkap program, fasilitas, dan cara pendaftaran.",
+  openGraph: {
+    title: "Download Brosur PSB | Pondok Pesantren Bali Bina Insani",
+    description: "Unduh brosur penerimaan santri baru (PSB) Pondok Pesantren Bali Bina Insani. Dapatkan informasi lengkap program, fasilitas, dan cara pendaftaran.",
+    url: "https://project-98lnv.vercel.app/brosur",
+    type: "website" as const,
+    images: [
+      {
+        url: "https://project-98lnv.vercel.app/logo-bina-insani.png",
+        width: 800,
+        height: 800,
+        alt: "Logo Pondok Pesantren Bali Bina Insani",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image" as const,
+    title: "Download Brosur PSB | Pondok Pesantren Bali Bina Insani",
+    images: ["https://project-98lnv.vercel.app/logo-bina-insani.png"],
+  },
 };
 
 const highlights = [
