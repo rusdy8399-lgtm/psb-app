@@ -1,6 +1,7 @@
 import { createAuthClient } from "better-auth/react";
 
 export const authClient = createAuthClient({
-    baseURL: process.env.NEXT_PUBLIC_APP_URL || 
-             (typeof window !== "undefined" ? window.location.origin : "http://localhost:3000")
+  baseURL: typeof window !== "undefined" 
+    ? window.location.origin 
+    : (process.env.NODE_ENV === "production" ? "https://project-98lnv.vercel.app" : "http://localhost:3000")
 });
