@@ -19,7 +19,7 @@ export async function PUT(
       .set(body)
       .where(eq(fasilitas.id, id));
       
-    revalidatePath("/fasilitas");
+    revalidatePath("/", "layout");
     return NextResponse.json({ success: true });
   } catch (error) {
     return NextResponse.json({ error: "Failed to update fasilitas" }, { status: 500 });
@@ -33,7 +33,7 @@ export async function DELETE(
   try {
     const { id } = await params;
     await db.delete(fasilitas).where(eq(fasilitas.id, id));
-    revalidatePath("/fasilitas");
+    revalidatePath("/", "layout");
     return NextResponse.json({ success: true });
   } catch (error) {
     return NextResponse.json({ error: "Failed to delete fasilitas" }, { status: 500 });

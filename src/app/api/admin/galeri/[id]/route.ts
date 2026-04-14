@@ -13,7 +13,7 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
     const body = await req.json();
     
     await db.update(galeri).set(body).where(eq(galeri.id, id));
-    revalidatePath("/kegiatan");
+    revalidatePath("/", "layout");
     return NextResponse.json({ success: true });
   } catch (error) {
     return NextResponse.json({ error: "Failed to update galeri" }, { status: 500 });
@@ -25,7 +25,7 @@ export async function DELETE(req: NextRequest, { params }: { params: Promise<{ i
     const { id } = await params;
     
     await db.delete(galeri).where(eq(galeri.id, id));
-    revalidatePath("/kegiatan");
+    revalidatePath("/", "layout");
     return NextResponse.json({ success: true });
   } catch (error) {
     return NextResponse.json({ error: "Failed to delete galeri" }, { status: 500 });

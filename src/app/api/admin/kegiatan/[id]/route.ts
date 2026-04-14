@@ -19,7 +19,7 @@ export async function PUT(
       .set(body)
       .where(eq(kegiatan.id, id));
       
-    revalidatePath("/kegiatan");
+    revalidatePath("/", "layout");
     return NextResponse.json({ success: true });
   } catch (error) {
     return NextResponse.json({ error: "Failed to update kegiatan" }, { status: 500 });
@@ -33,7 +33,7 @@ export async function DELETE(
   try {
     const { id } = await params;
     await db.delete(kegiatan).where(eq(kegiatan.id, id));
-    revalidatePath("/kegiatan");
+    revalidatePath("/", "layout");
     return NextResponse.json({ success: true });
   } catch (error) {
     return NextResponse.json({ error: "Failed to delete kegiatan" }, { status: 500 });

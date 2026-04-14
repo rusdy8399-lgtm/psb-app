@@ -32,7 +32,7 @@ export async function POST(req: NextRequest) {
     };
     
     await db.insert(heroSection).values(newSlider);
-    revalidatePath("/");
+    revalidatePath("/", "layout");
     return NextResponse.json(newSlider);
   } catch (error) {
     return NextResponse.json({ error: "Failed to create slider" }, { status: 500 });

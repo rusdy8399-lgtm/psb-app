@@ -5,6 +5,8 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { BookOpen, Users, Trophy, GraduationCap, ArrowRight, Library, Languages } from "lucide-react";
 
+export const dynamic = "force-dynamic";
+
 export const metadata = {
   title: "PSB Online - Pondok Pesantren Bali Bina Insani",
   description: "Penerimaan Santri Baru (PSB) Pondok Pesantren Bali Bina Insani Tolerance Islamic Boarding School. Daftar online untuk jenjang MTs dan MA di Tabanan, Bali.",

@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
       ...body,
     };
     await db.insert(fasilitas).values(newData);
-    revalidatePath("/fasilitas");
+    revalidatePath("/", "layout");
     return NextResponse.json(newData);
   } catch (error) {
     return NextResponse.json({ error: "Failed to create fasilitas" }, { status: 500 });

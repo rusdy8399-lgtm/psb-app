@@ -1,12 +1,7 @@
 import { getKegiatanById, getKegiatanList } from "@/lib/data-fetching";
 import { notFound } from "next/navigation";
 
-export async function generateStaticParams() {
-  const items = await getKegiatanList();
-  return items.map((item) => ({
-    id: item.id.toString(),
-  }));
-}
+export const dynamic = "force-dynamic";
 import { CalendarDays, ArrowRight, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
