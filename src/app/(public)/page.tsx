@@ -173,10 +173,7 @@ export default async function Home() {
         <div className="max-w-6xl mx-auto px-4">
           <div className="mb-8">
             <span className="text-xs uppercase tracking-wide text-green-600 font-semibold">Jenjang Pendidikan</span>
-            <h2 className="text-xl md:text-2xl lg:text-3xl font-semibold text-gray-800 leading-tight mt-1">
-              Dua Jenjang, Satu Visi
-            </h2>
-            <p className="text-sm md:text-base text-gray-500 leading-relaxed mt-2 max-w-xl">
+            <p className="text-sm md:text-base text-gray-500 leading-relaxed mt-1.5 max-w-xl">
               Pondok Pesantren Bali Bina Insani menyelenggarakan pendidikan formal setingkat SMP dan SMA di bawah naungan Kementerian Agama.
             </p>
           </div>
