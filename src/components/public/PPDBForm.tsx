@@ -221,10 +221,10 @@ export function PPDBForm({ settings }: PPDBFormProps) {
   return (
     <div className="container mx-auto px-4 max-w-[850px] font-heading py-8">
       {/* Header Info */}
-      <div className="text-center mb-8">
+      <div className="text-center mb-5 md:mb-8 mt-4 md:mt-0">
         <span className="badge-gold-elegan text-[10px] py-1 px-3">{settings?.heroBadge || "PENERIMAAN SANTRI BARU"}</span>
-        <h1 className="text-2xl md:text-3xl font-bold text-primary mt-3 tracking-tight">Formulir Pendaftaran Online</h1>
-        <p className="text-slate-500 mt-1.5 text-sm max-w-lg mx-auto leading-relaxed">Silakan lengkapi data calon santri sesuai dengan dokumen resmi untuk mempermudah proses verifikasi.</p>
+        <h1 className="text-[24px] md:text-3xl font-bold text-primary mt-3 tracking-tight leading-[1.2]">Formulir Pendaftaran Online</h1>
+        <p className="text-slate-500 mt-2 text-[14px] max-w-[90%] md:max-w-lg mx-auto leading-relaxed">Silakan lengkapi data calon santri sesuai dengan dokumen resmi untuk mempermudah proses verifikasi.</p>
       </div>
 
       {/* Progress Tracker */}
@@ -245,18 +245,18 @@ export function PPDBForm({ settings }: PPDBFormProps) {
 
         {/* STEP 0: LEVEL SELECTION */}
         {step === 0 && (
-          <div className="bg-white p-6 md:p-10 rounded-2xl border border-slate-100 shadow-xl shadow-primary/5 text-center animate-in fade-in zoom-in-95 duration-500">
-            <div className="w-16 h-16 bg-primary/5 rounded-full flex items-center justify-center mx-auto mb-5 text-primary">
-              <Users className="w-8 h-8" />
+          <div className="bg-white p-5 md:p-10 rounded-[16px] border border-slate-100 shadow-[0_8px_24px_rgba(0,0,0,0.06)] text-center animate-in fade-in zoom-in-95 duration-500">
+            <div className="w-14 h-14 bg-primary/5 rounded-full flex items-center justify-center mx-auto mb-4 text-primary">
+              <Users className="w-7 h-7" />
             </div>
             <h3 className="text-lg font-bold text-slate-800 mb-1">Pilih Jenjang Sekolah</h3>
             <p className="text-sm text-slate-500 mb-6">Pilih jenjang pendidikan yang ingin Anda daftarkan.</p>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-md mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4 max-w-md mx-auto">
               <button
                 type="button"
                 onClick={() => handleInputChange("jenjang", "MTs")}
-                className={`p-5 rounded-xl border-2 transition-all flex flex-col items-center gap-2 ${formData.jenjang === "MTs" ? "border-primary bg-primary/5 shadow-inner" : "border-slate-50 hover:border-primary/40"
+                className={`p-4 md:p-5 rounded-2xl border-2 transition-all duration-200 flex flex-col items-center gap-1.5 ${formData.jenjang === "MTs" ? "border-[#166534] bg-[#F0FDF4] shadow-sm scale-95" : "border-[#E5E7EB] hover:border-[#166534]/50 hover:bg-[#F0FDF4]/30"
                   }`}
               >
                 <span className="text-2xl font-black text-primary">MTs</span>
@@ -265,7 +265,7 @@ export function PPDBForm({ settings }: PPDBFormProps) {
               <button
                 type="button"
                 onClick={() => handleInputChange("jenjang", "MA")}
-                className={`p-5 rounded-xl border-2 transition-all flex flex-col items-center gap-2 ${formData.jenjang === "MA" ? "border-primary bg-primary/5 shadow-inner" : "border-slate-50 hover:border-primary/40"
+                className={`p-4 md:p-5 rounded-2xl border-2 transition-all duration-200 flex flex-col items-center gap-1.5 ${formData.jenjang === "MA" ? "border-[#166534] bg-[#F0FDF4] shadow-sm scale-95" : "border-[#E5E7EB] hover:border-[#166534]/50 hover:bg-[#F0FDF4]/30"
                   }`}
               >
                 <span className="text-2xl font-black text-primary">MA</span>
@@ -273,14 +273,14 @@ export function PPDBForm({ settings }: PPDBFormProps) {
               </button>
             </div>
 
-            <div className="mt-8 flex justify-center">
+            <div className="mt-6 md:mt-8 flex justify-center">
               <Button
                 type="button"
                 onClick={nextStep}
                 disabled={!formData.jenjang}
-                className="bg-primary hover:bg-[#133d24] h-11 px-10 text-sm rounded-lg font-bold group shadow-lg transition-all"
+                className={`bg-[#166534] hover:bg-[#133d24] w-full md:w-auto h-[52px] px-10 text-white rounded-xl font-semibold text-[16px] group shadow-sm transition-all duration-200 ${!formData.jenjang ? "opacity-50" : ""}`}
               >
-                Mulai Pendaftaran <ChevronRight className="w-4 h-4 ml-1.5 group-hover:translate-x-1 transition-transform" />
+                Mulai Pendaftaran <ChevronRight className="w-5 h-5 ml-1.5 group-hover:translate-x-1 transition-transform" />
               </Button>
             </div>
           </div>

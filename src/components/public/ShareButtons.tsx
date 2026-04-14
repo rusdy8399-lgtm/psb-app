@@ -45,34 +45,36 @@ export function ShareButtons({ title, url }: ShareButtonsProps) {
   };
 
   return (
-    <div className="flex flex-col gap-4 p-6 bg-slate-50 rounded-3xl border border-slate-100">
-      <div className="flex items-center gap-2 text-slate-500 font-bold text-xs uppercase tracking-widest">
-        <Share2 className="w-4 h-4" /> Bagikan Kabar Ini
-      </div>
-      
-      <div className="flex flex-wrap gap-2">
-        <Button 
-          onClick={shareWhatsApp}
-          className="bg-[#25D366] hover:bg-[#128C7E] text-white gap-2 font-medium px-5 py-3 h-auto rounded-xl shadow-md transition-all active:scale-95 text-sm md:text-base flex-1 sm:flex-none justify-center"
-        >
-          <WhatsAppIcon className="w-5 h-5" /> WhatsApp
-        </Button>
+    <div className="mt-6 pt-5 border-t border-[#E5E7EB]">
+      <div className="flex flex-col gap-3">
+        <div className="flex items-center gap-2 text-[#6B7280] font-semibold text-[14px]">
+          <Share2 className="w-4 h-4" /> Bagikan
+        </div>
+        
+        <div className="grid grid-cols-2 gap-3">
+          <Button 
+            onClick={shareWhatsApp}
+            className="bg-[#25D366] hover:bg-[#128C7E] text-white gap-2 font-medium px-0 py-0 h-[44px] rounded-[10px] shadow-[0_4px_12px_rgba(0,0,0,0.08)] transition-all active:scale-95 text-[14px] flex items-center justify-center w-full border-none"
+          >
+            <WhatsAppIcon className="w-4 h-4" /> WhatsApp
+          </Button>
 
-        <Button 
-          onClick={shareFacebook}
-          className="bg-[#1877F2] hover:bg-[#0d65d9] text-white gap-2 font-medium px-5 py-3 h-auto rounded-xl shadow-md transition-all active:scale-95 text-sm md:text-base flex-1 sm:flex-none justify-center"
-        >
-          <FBIcon className="w-5 h-5" /> Facebook
-        </Button>
+          <Button 
+            onClick={shareFacebook}
+            className="bg-[#1877F2] hover:bg-[#0d65d9] text-white gap-2 font-medium px-0 py-0 h-[44px] rounded-[10px] shadow-[0_4px_12px_rgba(0,0,0,0.08)] transition-all active:scale-95 text-[14px] flex items-center justify-center w-full border-none"
+          >
+            <FBIcon className="w-4 h-4" /> Facebook
+          </Button>
 
-        <Button 
-          onClick={copyToClipboard}
-          variant="outline"
-          className="bg-white border-slate-200 text-slate-600 gap-2 font-medium px-5 py-3 h-auto rounded-xl shadow-sm hover:bg-slate-50 transition-all active:scale-95 text-sm md:text-base flex-1 sm:flex-none justify-center"
-        >
-          {copied ? <Check className="w-5 h-5 text-green-500" /> : <LinkIcon className="w-5 h-5" />}
-          {copied ? "Tersalin!" : "Salin Link"}
-        </Button>
+          <Button 
+            onClick={copyToClipboard}
+            variant="outline"
+            className="col-span-2 bg-[#F3F4F6] border-[#E5E7EB] border text-[#111827] gap-2 font-medium px-0 py-0 h-[44px] rounded-[10px] shadow-[0_4px_12px_rgba(0,0,0,0.08)] hover:bg-[#E5E7EB] hover:text-[#111827] transition-all active:scale-95 text-[14px] flex items-center justify-center w-full"
+          >
+            {copied ? <Check className="w-4 h-4 text-[#25D366]" /> : <LinkIcon className="w-4 h-4" />}
+            {copied ? "Tersalin!" : "Salin Link"}
+          </Button>
+        </div>
       </div>
     </div>
   );

@@ -37,25 +37,31 @@ export function Navbar({ settings }: NavbarProps) {
 
   const schoolName = settings?.namaWeb || "Bali Bina Insani";
 
+  const isFormPage = pathname?.startsWith("/ppdb");
+
   return (
     <header 
       className={`w-full sticky top-0 z-50 transition-all duration-500 ${
-        isScrolled 
-          ? "bg-white/95 backdrop-blur-md shadow-sm py-1 md:py-1.5" 
-          : "bg-white py-2 md:py-2.5 border-b border-slate-50"
+        isFormPage 
+          ? "bg-white h-[60px] flex items-center shadow-[0_2px_8px_rgba(0,0,0,0.05)] border-b border-slate-100 py-0"
+          : isScrolled 
+            ? "bg-white/95 backdrop-blur-md shadow-sm py-1 md:py-1.5" 
+            : "bg-white py-2 md:py-2.5 border-b border-slate-50"
       }`}
     >
       {/* Main Navbar - Premium Left-Aligned Layout */}
       <div className="max-w-[1440px] mx-auto px-4 md:px-8 flex items-center justify-between">
         
         {/* Left Section: Single Unified Logo */}
-        <Link href="/" className="flex items-center group transition-all relative h-[32px] md:h-[68px] w-[140px] md:w-[240px]">
+        <Link href="/" className={`flex items-center group transition-all relative ${
+          isFormPage ? "h-[36px] w-[36px] overflow-hidden rounded-full" : "h-[32px] md:h-[68px] w-[140px] md:w-[240px]"
+        }`}>
           <Image 
             src="/logo-navbar.jpg" 
             alt="Bali Bina Insani Tolerance Islamic Boarding School" 
             fill
             priority
-            className="object-contain object-left transition-transform duration-300 group-hover:scale-[1.02]"
+            className={`${isFormPage ? "object-cover" : "object-contain"} object-left transition-transform duration-300 group-hover:scale-[1.02]`}
             sizes="(max-width: 768px) 140px, 240px"
           />
         </Link>
@@ -92,12 +98,14 @@ export function Navbar({ settings }: NavbarProps) {
         </div>
 
         {/* Mobile menu button */}
-        <button
-          className="md:hidden p-1.5 text-slate-800 focus:outline-none transition-colors rounded-xl hover:bg-slate-50"
-          onClick={() => setIsOpen(!isOpen)}
-        >
-          {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-        </button>
+        {!isFormPage && (
+          <button
+            className="md:hidden p-1.5 text-slate-800 focus:outline-none transition-colors rounded-xl hover:bg-slate-50"
+            onClick={() => setIsOpen(!isOpen)}
+          >
+            {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          </button>
+        )}
       </div>
 
       {/* Mobile Navigation Panel */}
