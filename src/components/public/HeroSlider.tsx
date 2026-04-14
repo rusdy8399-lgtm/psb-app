@@ -52,23 +52,23 @@ export function HeroSlider({ data, brosurUrl }: { data: SliderData[], brosurUrl?
                     sizes="100vw"
                   />
                 </div>
-                {/* Gradient Overlay - Darker on the left for text readability */}
-                <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent z-10" />
-                <div className="absolute inset-0 bg-[#0d8174]/20 z-0" />
+                {/* Gradient Overlay - Kontras Tinggi Mobile First */}
+                <div className="absolute inset-0 bg-gradient-to-b from-black/40 to-black/60 md:bg-gradient-to-r md:from-black/80 md:via-black/40 md:to-transparent z-10" />
+                <div className="absolute inset-0 bg-[#0d8174]/10 hidden md:block z-0" />
               </div>
               
               <div className="container relative mx-auto px-6 md:px-12 z-20 h-full flex items-center">
-                <div className="flex flex-col md:flex-row items-center w-full justify-between">
-                  {/* Text Content - Reduced width for cleaner layout */}
-                  <div className="w-full md:max-w-[600px] text-left space-y-6 animate-in fade-in slide-in-from-left-12 duration-1000">
+                <div className="flex flex-col md:flex-row items-center w-full justify-between mb-8 md:mb-0 mt-8 md:mt-0">
+                  {/* Text Content - Vertical Stack Mobile First */}
+                  <div className="w-full md:max-w-[600px] flex flex-col items-start text-left space-y-4 md:space-y-6 animate-in fade-in slide-in-from-left-12 duration-1000">
                     {slide.badge && (
-                      <span className="badge-gold-elegan">
+                      <span className="badge-gold-elegan text-[12px] uppercase tracking-[1.5px] font-bold font-sans">
                         {slide.badge}
                       </span>
                     )}
                     
-                    <div className="space-y-4">
-                      <h1 className="text-2xl md:text-4xl font-heading font-extrabold text-white leading-[1.15] drop-shadow-2xl tracking-normal">
+                    <div className="space-y-2 md:space-y-4">
+                      <h1 className="text-[28px] md:text-[32px] font-sans font-bold text-white leading-[1.2] tracking-normal mb-2">
                         {slide.title.includes('<br />') ? (
                           slide.title.split('<br />').map((t, i) => (
                             <React.Fragment key={i}>
@@ -81,7 +81,7 @@ export function HeroSlider({ data, brosurUrl }: { data: SliderData[], brosurUrl?
                       </h1>
                       
                       {slide.subtitle && (
-                        <p className="text-lg md:text-2xl text-gold font-sans font-medium drop-shadow-xl max-w-[500px] leading-relaxed opacity-90">
+                        <p className="text-[14px] md:text-[16px] text-white/80 font-sans font-normal max-w-[500px] leading-relaxed line-clamp-2 md:line-clamp-none">
                           {slide.subtitle?.includes('<br />') ? (
                             slide.subtitle.split('<br />').map((s, i) => (
                               <React.Fragment key={i}>
@@ -95,21 +95,20 @@ export function HeroSlider({ data, brosurUrl }: { data: SliderData[], brosurUrl?
                       )}
                     </div>
                     
-                    <div className="pt-4 flex flex-wrap gap-4">
-                      <Link href="/ppdb" className="inline-block">
-                        <Button className="bg-gold hover:bg-yellow-500 text-[#0d8174] font-bold px-10 h-14 rounded-2xl shadow-[0_10px_30px_rgba(251,191,36,0.3)] transform active:scale-95 transition-all text-lg flex gap-3 items-center group/btn border-none font-heading">
+                    <div className="pt-4 md:pt-6 w-full flex flex-col md:flex-row gap-3">
+                      <Link href="/ppdb" className="w-full md:w-auto">
+                        <Button className="w-full md:w-auto bg-[#1A4D2E] hover:bg-[#133d24] text-white font-semibold h-[48px] md:h-[52px] rounded-xl transition-all text-[16px] flex gap-3 items-center justify-center group/btn border-none font-sans">
                           Penerimaan Murid Baru
-                          <ArrowRight className="w-6 h-6 group-hover/btn:translate-x-2 transition-transform" />
+                          <ArrowRight className="hidden md:block w-5 h-5 group-hover/btn:translate-x-1 transition-transform" />
                         </Button>
                       </Link>
 
                       {brosurUrl && (
-                        <Link href="/brosur" className="inline-block">
+                        <Link href="/brosur" className="w-full md:w-auto">
                           <Button
                             variant="outline"
-                            className="border-2 border-white/30 bg-white/5 hover:bg-white/10 text-white font-bold px-8 h-14 rounded-2xl backdrop-blur-sm transform active:scale-95 transition-all text-lg flex gap-3 items-center group/brosur border-none font-heading"
+                            className="w-full md:w-auto border border-white/40 bg-transparent hover:bg-white/10 text-white font-semibold h-[48px] md:h-[52px] rounded-xl transition-all text-[16px] flex gap-3 items-center justify-center group/brosur font-sans"
                           >
-                            <FileText className="w-6 h-6 text-gold group-hover/brosur:scale-110 transition-transform" />
                             Download Brosur
                           </Button>
                         </Link>
@@ -143,8 +142,8 @@ export function HeroSlider({ data, brosurUrl }: { data: SliderData[], brosurUrl?
         ))}
       </CarouselContent>
 
-      {/* Premium Navigation Arrows */}
-      <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 z-30 flex justify-between px-6 pointer-events-none">
+      {/* Premium Navigation Arrows - Hidden on mobile */}
+      <div className="hidden md:flex absolute inset-x-0 top-1/2 -translate-y-1/2 z-30 justify-between px-6 pointer-events-none">
         <button 
           onClick={() => api?.scrollPrev()}
           className="pointer-events-auto w-14 h-14 bg-white/10 hover:bg-gold hover:text-[#0d8174] text-white rounded-full flex items-center justify-center transition-all backdrop-blur-md shadow-2xl border border-white/20 hover:scale-110 active:scale-90"
@@ -159,14 +158,14 @@ export function HeroSlider({ data, brosurUrl }: { data: SliderData[], brosurUrl?
         </button>
       </div>
 
-      {/* Progress Bars (Dots) */}
-      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-30 flex gap-3">
+      {/* Progress Bars (Dots) - Smaller and closer on mobile */}
+      <div className="absolute bottom-6 md:bottom-10 left-1/2 -translate-x-1/2 z-30 flex gap-1.5 md:gap-3">
         {data.map((_, i) => (
           <button
             key={i}
             onClick={() => api?.scrollTo(i)}
-            className={`h-1.5 rounded-full transition-all duration-500 ${
-              api?.selectedScrollSnap() === i ? "bg-gold w-12" : "bg-white/30 w-3 hover:bg-white/60"
+            className={`rounded-full transition-all duration-500 bg-white/40 hover:bg-white/80 ${
+              api?.selectedScrollSnap() === i ? "bg-white w-6 md:w-12 h-[4px] md:h-1.5" : "w-[6px] md:w-3 h-[4px] md:h-1.5"
             }`}
           />
         ))}
