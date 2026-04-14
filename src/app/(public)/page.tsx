@@ -8,18 +8,18 @@ import { BookOpen, Users, Trophy, GraduationCap, ArrowRight, Library, Languages 
 export const dynamic = "force-dynamic";
 
 export const metadata = {
-  title: "PSB Online - Pondok Pesantren Bali Bina Insani",
-  description: "Penerimaan Santri Baru (PSB) Pondok Pesantren Bali Bina Insani Tolerance Islamic Boarding School. Daftar online untuk jenjang MTs dan MA di Tabanan, Bali.",
+  title: "Pesantren Bali | Pesantren Terbaik & Terakreditasi | Bina Insani",
+  description: "Selamat Datang di Pesantren Bali Bina Insani (Est. 1991). Pilihan pesantren terbaik di Bali untuk pendidikan Islam terpadu, Tahfidz, dan karakter mulia. Daftar sekarang!",
   openGraph: {
-    title: "PSB Online - Pondok Pesantren Bali Bina Insani",
-    description: "Penerimaan Santri Baru (PSB) Pondok Pesantren Bali Bina Insani. Daftar online untuk jenjang MTs dan MA.",
+    title: "Pesantren Bali | Pondok Pesantren Bali Bina Insani",
+    description: "Pesantren modern terbaik di Bali dengan kurikulum terpadu.",
     url: "https://project-98lnv.vercel.app",
     type: "website" as const,
   },
   twitter: {
     card: "summary_large_image" as const,
-    title: "PSB Online - Pondok Pesantren Bali Bina Insani",
-    description: "Penerimaan Santri Baru (PSB) Pondok Pesantren Bali Bina Insani.",
+    title: "Pesantren Bali Bina Insani | Sekolah Islam Unggulan di Bali",
+    description: "Pesantren dengan karakter integral dan wawasan global di Bali.",
   },
 };
 
