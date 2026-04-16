@@ -125,7 +125,7 @@ export const generateCertificate = async (data: CertificateData) => {
           doc.text("FOTO ERROR", photoX + 15, photoY + 20, { align: "center" });
           resolve(false);
         };
-        img.src = data.pasFotoUrl;
+        img.src = data.pasFotoUrl!;
       });
     } catch (e) {
       console.error("PDF Photo Logic error", e);

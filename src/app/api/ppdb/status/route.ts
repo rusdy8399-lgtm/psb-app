@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import { pendaftar } from "@/lib/db/schema";
+import { pendaftar, berkasDokumen } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 
 export const dynamic = "force-dynamic";
