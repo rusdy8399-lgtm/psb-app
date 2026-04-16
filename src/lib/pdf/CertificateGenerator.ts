@@ -13,6 +13,7 @@ export interface CertificateData {
   asalSekolah: string;
   tanggalDaftar: string;
   tahunAjaran?: string; // e.g. "2026/2027"
+  pasFotoUrl?: string; // Santri photo URL
 }
 
 export const generateCertificate = async (data: CertificateData) => {
@@ -102,10 +103,38 @@ export const generateCertificate = async (data: CertificateData) => {
   }
 
   // Pas Foto Box
-  doc.rect(155, dataBoxY + 5, 30, 40);
-  doc.setFontSize(10);
-  doc.text("PAS FOTO", 170, dataBoxY + 22, { align: "center" });
-  doc.text("3 X 4", 170, dataBoxY + 28, { align: "center" });
+  const photoX = 155;
+  const photoY = dataBoxY + 5;
+  const photoW = 30;
+  const photoH = 40;
+  
+  doc.rect(photoX, photoY, photoW, photoH);
+  
+  if (data.pasFotoUrl) {
+    try {
+      await new Promise((resolve) => {
+        const img = new Image();
+        img.crossOrigin = "Anonymous";
+        img.onload = () => {
+          doc.addImage(img, "JPEG", photoX + 0.5, photoY + 0.5, photoW - 1, photoH - 1);
+          resolve(true);
+        };
+        img.onerror = () => {
+          console.error("Failed to load santri photo");
+          doc.setFontSize(8);
+          doc.text("FOTO ERROR", photoX + 15, photoY + 20, { align: "center" });
+          resolve(false);
+        };
+        img.src = data.pasFotoUrl;
+      });
+    } catch (e) {
+      console.error("PDF Photo Logic error", e);
+    }
+  } else {
+    doc.setFontSize(10);
+    doc.text("PAS FOTO", 170, dataBoxY + 22, { align: "center" });
+    doc.text("3 X 4", 170, dataBoxY + 28, { align: "center" });
+  }
 
   // --- Table Section ---
   const tableY = dataBoxY + 55 + 8;
@@ -172,17 +201,20 @@ export const generateCertificate = async (data: CertificateData) => {
   }
 
   // Output
-  const safeName = (data.namaLengkap || "Pendaftar").replace(/[^a-zA-Z0-9_-]/g, "_");
+  const safeName = (data.namaLengkap || "PENDAFTAR").toUpperCase().replace(/[^a-zA-Z0-9]/g, "-");
+  const jenjang = (data.jenjang || "MTs").toUpperCase();
+  const fileName = `KARTU-PENDAFTARAN-${safeName}-${jenjang}.pdf`;
+
   try {
     const blob = doc.output("blob");
     const blobUrl = URL.createObjectURL(blob);
     const pdfWindow = window.open(blobUrl, "_blank");
     if (pdfWindow) {
-      pdfWindow.document.title = `Kartu_Pendaftaran_${safeName}.pdf`;
+      pdfWindow.document.title = fileName;
     } else {
-      doc.save(`Kartu_Pendaftaran_${safeName}.pdf`);
+      doc.save(fileName);
     }
   } catch (err) {
-    doc.save(`Kartu_Pendaftaran_${safeName}.pdf`);
+    doc.save(fileName);
   }
 };

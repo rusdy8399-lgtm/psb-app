@@ -69,6 +69,7 @@ export function PendaftarDetailClient({ pendaftar, ortu, berkas, settings }: Pen
         nisn: pendaftar.nisn,
         nik: pendaftar.nik,
         asalSekolah: pendaftar.asalSekolah,
+        pasFotoUrl: berkas?.pasFotoUrl,
         tanggalDaftar: new Date(pendaftar.createdAt).toLocaleDateString('id-ID'),
         tahunAjaran: settings?.heroBadge,
       });

@@ -30,6 +30,7 @@ function SuksesPageContent() {
             nisn: result.nisn,
             nik: result.nik,
             asalSekolah: result.asalSekolah,
+            pasFotoUrl: result.pasFotoUrl,
             tanggalDaftar: new Date(result.createdAt).toLocaleDateString('id-ID'),
             tahunAjaran: result.heroBadge,
           });

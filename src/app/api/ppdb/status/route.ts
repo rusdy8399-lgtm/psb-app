@@ -24,11 +24,17 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: "Data tidak ditemukan" }, { status: 404 });
     }
 
+    // Fetch berkas for photo
+    const berkas = await db.query.berkasDokumen.findFirst({
+      where: eq(berkasDokumen.pendaftarId, data.id)
+    });
+
     // Include settings info for PDF generation
     const settings = await db.query.pengaturanWeb.findFirst();
 
     return NextResponse.json({
       ...data,
+      pasFotoUrl: berkas?.pasFotoUrl,
       heroBadge: settings?.heroBadge || "PENERIMAAN SANTRI BARU 2026/2027"
     });
   } catch (error: any) {
