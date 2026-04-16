@@ -4,7 +4,8 @@ import React, { useState } from "react";
 import {
   ArrowLeft, CheckCircle, FileText, User, Users, MapPin,
   Phone, Mail, Fingerprint, Calendar, Wallet, Download, ExternalLink,
-  ShieldCheck, AlertCircle, FolderOpen, CheckCircle2, Trash2, CreditCard
+  ShieldCheck, AlertCircle, FolderOpen, CheckCircle2, Trash2, CreditCard,
+  Sparkles
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -167,16 +168,23 @@ export function PendaftarDetailClient({ pendaftar, ortu, berkas, settings }: Pen
               <ArrowLeft className="w-5 h-5" />
             </Button>
           </Link>
-          <div className="space-y-0.5">
+              <div className="space-y-0.5">
             <div className="flex items-center gap-3">
               <h1 className="text-base font-bold text-gray-900 tracking-tight">Detail Pendaftar</h1>
-              <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-widest ${
-                currentStatus === "Terkonfirmasi" 
-                  ? "bg-green-100/80 text-green-600 border border-green-200" 
-                  : "bg-amber-100/80 text-amber-600 border border-amber-200"
-              }`}>
-                {currentStatus}
-              </span>
+              <div className="flex items-center gap-2">
+                <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-widest ${
+                  currentStatus === "Terkonfirmasi" 
+                    ? "bg-green-100/80 text-green-600 border border-green-200" 
+                    : "bg-amber-100/80 text-amber-600 border border-amber-200"
+                }`}>
+                  {currentStatus}
+                </span>
+                {pendaftar.confirmedAt && (
+                   <div className="flex items-center gap-1 text-[10px] font-bold text-green-500 bg-green-50 px-2 py-0.5 rounded-full border border-green-100">
+                      <Sparkles className="w-3 h-3" /> AUTO-VERIFIED
+                   </div>
+                )}
+              </div>
             </div>
             <p className="text-xs font-medium text-gray-400">
               ID Registrasi: <span className="text-indigo-500 font-mono font-bold tracking-tight">{pendaftar.kodePendaftaran}</span>

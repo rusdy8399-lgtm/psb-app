@@ -1,10 +1,10 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   CreditCard, UploadCloud, CheckCircle2, AlertCircle,
   User, Users, FolderOpen, ShieldCheck, ChevronRight, ChevronLeft,
-  FileText, Camera, Wallet
+  FileText, Camera, Wallet, Loader2, Sparkles, XCircle
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,6 +13,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Checkbox } from "@/components/ui/checkbox";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { createWorker } from 'tesseract.js';
 
 interface PPDBFormProps {
   settings: {
@@ -26,6 +27,8 @@ export function PPDBForm({ settings }: PPDBFormProps) {
   const router = useRouter();
   const [step, setStep] = useState(0); // 0: Select Jenjang, 1: A, 2: B, 3: C, 4: D, 5: E
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isVerifyingPayment, setIsVerifyingPayment] = useState(false);
+  const [paymentAutoVerified, setPaymentAutoVerified] = useState<boolean | null>(null);
 
   // Form State
   const [formData, setFormData] = useState({
@@ -68,8 +71,53 @@ export function PPDBForm({ settings }: PPDBFormProps) {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
-  const handleFileChange = (field: string, file: File | null) => {
+  const handleFileChange = async (field: string, file: File | null) => {
     setFiles(prev => ({ ...prev, [field]: file }));
+    
+    // If it's the payment proof, trigger OCR
+    if (field === "fileBukti" && file) {
+      await performPaymentOCR(file);
+    } else if (field === "fileBukti" && !file) {
+      setPaymentAutoVerified(null);
+    }
+  };
+
+  const performPaymentOCR = async (file: File) => {
+    setIsVerifyingPayment(true);
+    setPaymentAutoVerified(null);
+    
+    try {
+      const worker = await createWorker('ind'); // Use Indonesian language
+      const { data: { text } } = await worker.recognize(file);
+      await worker.terminate();
+
+      const ocrContent = text.toUpperCase();
+      console.log("OCR Result:", ocrContent);
+
+      // 1. Check for Nominal (200.000 or 200000)
+      const nominalRegex = /200[\s.,]?000/g;
+      const hasNominal = nominalRegex.test(ocrContent);
+
+      // 2. Check for Keywords (Brand/Account/Status)
+      const keywords = ["BERHASIL", "SUKSES", "TRANSFER", "BRI", "BINA INSANI"];
+      const matchedKeywords = keywords.filter(kw => ocrContent.includes(kw));
+
+      // 3. Validation Logic: Higher strictness as requested
+      // We want Nominal AND at least some confirmation keywords
+      if (hasNominal && matchedKeywords.length >= 1) {
+        setPaymentAutoVerified(true);
+        toast.success("Bukti transfer valid! Verifikasi otomatis berhasil.");
+      } else {
+        setPaymentAutoVerified(false);
+        toast.warning("Sistem tidak dapat memverifikasi otomatis. Panitia akan mengecek manual.");
+      }
+    } catch (error) {
+      console.error("OCR Error:", error);
+      setPaymentAutoVerified(false);
+      toast.error("Gagal memproses gambar. Mohon pastikan foto bukti jelas.");
+    } finally {
+      setIsVerifyingPayment(false);
+    }
   };
 
   const validateStep = () => {
@@ -99,6 +147,7 @@ export function PPDBForm({ settings }: PPDBFormProps) {
       if (!formData.namaPengirim) return "Nama Pengirim wajib diisi";
       if (!formData.tanggalTransfer) return "Tanggal Transfer wajib diisi";
       if (!files.fileBukti) return "Unggah Bukti Transfer";
+      if (isVerifyingPayment) return "Mohon tunggu, sedang memverifikasi bukti transfer...";
     }
     return null;
   };
@@ -150,6 +199,7 @@ export function PPDBForm({ settings }: PPDBFormProps) {
       fileFoto: null,
       fileBukti: null,
     });
+    setPaymentAutoVerified(null);
     setStep(0);
     window.scrollTo({ top: 0, behavior: 'smooth' });
     toast.info("Formulir telah dikosongkan");
@@ -175,6 +225,9 @@ export function PPDBForm({ settings }: PPDBFormProps) {
     Object.entries(files).forEach(([key, file]) => {
       if (file) submissionData.append(key, file);
     });
+
+    // Append verification flag
+    submissionData.append("paymentAutoVerified", (paymentAutoVerified === true).toString());
 
     try {
       const response = await fetch("/api/ppdb", {
@@ -587,7 +640,40 @@ export function PPDBForm({ settings }: PPDBFormProps) {
                 <Label className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">Bukti Transfer (Screenshot/Foto) <span className="text-destructive">*</span></Label>
                 <div className={`relative border border-dashed rounded-xl p-6 transition-all flex flex-col items-center justify-center text-center ${files.fileBukti ? 'border-primary bg-primary/5' : 'border-slate-100'}`}>
                   <input type="file" onChange={e => handleFileChange("fileBukti", e.target.files?.[0] || null)} className="absolute inset-0 opacity-0 cursor-pointer z-10" accept="image/*" />
-                  {files.fileBukti ? (
+                  
+                  {isVerifyingPayment ? (
+                    <div className="flex flex-col items-center gap-3 animate-in fade-in duration-300">
+                       <Loader2 className="w-10 h-10 text-primary animate-spin" />
+                       <div className="space-y-1">
+                          <p className="font-bold text-primary text-sm flex items-center justify-center gap-2">
+                             <Sparkles className="w-4 h-4" /> Menganalisa Bukti...
+                          </p>
+                          <p className="text-[10px] text-slate-500 uppercase tracking-widest font-medium">Sistem sedang memverifikasi nominal & tanggal</p>
+                       </div>
+                    </div>
+                  ) : paymentAutoVerified === true ? (
+                    <div className="flex flex-col items-center gap-2 animate-in zoom-in-95 duration-500">
+                       <div className="w-12 h-12 bg-green-500 text-white rounded-full flex items-center justify-center shadow-lg shadow-green-200">
+                          <CheckCircle2 className="w-7 h-7" />
+                       </div>
+                       <div className="space-y-0.5">
+                          <p className="font-bold text-green-600 text-[13px]">Pembayaran Terverifikasi Otomatis!</p>
+                          <p className="text-[10px] text-slate-400 font-medium italic">Data transfer terbaca dengan valid oleh sistem.</p>
+                       </div>
+                       <button type="button" className="text-[10px] text-slate-400 underline mt-1 font-medium hover:text-primary">Ganti Bukti Transfer</button>
+                    </div>
+                  ) : paymentAutoVerified === false ? (
+                    <div className="flex flex-col items-center gap-2 animate-in slide-in-from-top-2 duration-500">
+                       <div className="w-12 h-12 bg-amber-500 text-white rounded-full flex items-center justify-center shadow-lg shadow-amber-200">
+                          <AlertCircle className="w-7 h-7" />
+                       </div>
+                       <div className="space-y-0.5 max-w-[240px]">
+                          <p className="font-bold text-amber-600 text-[13px]">Verifikasi Otomatis Belum Berhasil</p>
+                          <p className="text-[10px] text-slate-400 font-medium leading-relaxed">Sistem gagal membaca nominal/tanggal. Pendaftaran tetap bisa dikirim & akan dicek manual oleh Panitia.</p>
+                       </div>
+                       <button type="button" className="text-[10px] text-slate-400 underline mt-2 font-medium hover:text-primary">Coba Unggah Foto Lebih Jelas</button>
+                    </div>
+                  ) : files.fileBukti ? (
                     <>
                       <CheckCircle2 className="w-7 h-7 text-primary mb-1.5" />
                       <p className="font-semibold text-primary text-[11px] truncate max-w-[180px]">{files.fileBukti.name}</p>

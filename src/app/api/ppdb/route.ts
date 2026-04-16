@@ -75,6 +75,7 @@ export async function POST(req: NextRequest) {
       // Payment
       namaPengirim: formData.get("namaPengirim")?.toString() || "",
       tanggalTransfer: formData.get("tanggalTransfer")?.toString() || "",
+      paymentAutoVerified: formData.get("paymentAutoVerified") === "true",
     };
 
     // Validation
@@ -131,7 +132,8 @@ export async function POST(req: NextRequest) {
         asalSekolah: data.asalSekolah,
         anakKe: data.anakKe,
         jumlahSaudara: data.jumlahSaudara,
-        status: "Menunggu Konfirmasi",
+        status: data.paymentAutoVerified ? "Terkonfirmasi" : "Menunggu Konfirmasi",
+        confirmedAt: data.paymentAutoVerified ? new Date() : null,
       });
 
       console.log("PPDB API: Inserting into 'ortuWakil'...");
@@ -165,6 +167,10 @@ export async function POST(req: NextRequest) {
 
     // Send Confirmation Email (Async, don't block response)
     if (resend && data.email) {
+      const confirmationStatus = data.paymentAutoVerified 
+        ? '<div style="background-color: #dcfce7; color: #166534; padding: 10px; border-radius: 6px; font-weight: bold; text-align: center; margin-bottom: 20px;">PEMBAYARAN TERVERIFIKASI OTOMATIS</div>' 
+        : "";
+
       resend.emails.send({
         from: "PPSB Bali Bina Insani <noreply@binainsani.com>",
         to: data.email,
@@ -176,11 +182,13 @@ export async function POST(req: NextRequest) {
               <p style="margin: 10px 0 0; opacity: 0.8;">PPDB Pondok Pesantren Bali Bina Insani</p>
             </div>
             <div style="padding: 30px; color: #334155; line-height: 1.6;">
+              ${confirmationStatus}
               <p>Yth. Orang Tua/Wali dari <strong>${data.namaLengkap}</strong>,</p>
               <p>Terima kasih telah melakukan pendaftaran online di Pondok Pesantren Bali Bina Insani. Data Anda telah kami terima dengan detail sebagai berikut:</p>
               <div style="background-color: #f8fafc; padding: 20px; border-radius: 8px; margin: 20px 0;">
                 <p style="margin: 0;"><strong>Kode Pendaftaran:</strong> <span style="color: #1A4D2E; font-family: monospace;">${kodePendaftaran}</span></p>
                 <p style="margin: 10px 0 0;"><strong>Jenjang:</strong> ${data.jenjang}</p>
+                <p style="margin: 5px 0 0;"><strong>Status:</strong> ${data.paymentAutoVerified ? "Terkonfirmasi (Lunas)" : "Menunggu Konfirmasi Pembayaran"}</p>
                 <p style="margin: 5px 0 0;"><strong>Tanggal Daftar:</strong> ${new Date().toLocaleDateString('id-ID')}</p>
               </div>
               <p>Silakan simpan kode pendaftaran di atas untuk keperluan verifikasi. Anda dapat mengunduh Surat Keterangan Pendaftaran melalui tautan di bawah ini:</p>
