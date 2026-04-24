@@ -141,8 +141,8 @@ export async function POST(req: NextRequest) {
         asalSekolah: data.asalSekolah,
         anakKe: data.anakKe,
         jumlahSaudara: data.jumlahSaudara,
-        status: data.paymentAutoVerified ? "Terkonfirmasi" : "Menunggu Konfirmasi",
-        confirmedAt: data.paymentAutoVerified ? new Date() : null,
+        status: "Terdaftar",
+        confirmedAt: new Date(),
       });
 
       console.log("PPDB API: Inserting into 'ortuWakil'...");

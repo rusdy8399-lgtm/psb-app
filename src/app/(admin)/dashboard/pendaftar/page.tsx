@@ -8,6 +8,8 @@ import { pendaftar } from "@/lib/db/schema";
 import { desc, like, or, sql, eq } from "drizzle-orm";
 import { Pagination } from "@/components/admin/Pagination";
 
+export const dynamic = "force-dynamic";
+
 export default async function PendaftarPage({
   searchParams,
 }: {
@@ -93,12 +95,9 @@ export default async function PendaftarPage({
                     <TableCell className="text-slate-500 text-sm font-medium">{p.asalSekolah}</TableCell>
                     <TableCell>
                       <span 
-                        className={`inline-flex items-center rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-widest border
-                          ${p.status === "Terkonfirmasi" 
-                            ? "bg-green-50 text-green-700 border-green-100" 
-                            : "bg-yellow-50 text-yellow-700 border-yellow-100"}`}
+                        className={`inline-flex items-center rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-widest border bg-emerald-50 text-emerald-700 border-emerald-100`}
                       >
-                        {p.status === "Terkonfirmasi" ? "Terkonfirmasi" : "Menunggu"}
+                        Terdaftar
                       </span>
                     </TableCell>
                     <TableCell className="text-right pr-6">

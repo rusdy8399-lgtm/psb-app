@@ -67,7 +67,7 @@ export const pendaftar = sqliteTable("pendaftar", {
   noKk: text("no_kk").notNull(),
   anakKe: integer("anak_ke"),
   jumlahSaudara: integer("jumlah_saudara"),
-  status: text("status").default("Menunggu Konfirmasi").notNull(), // 'Menunggu Konfirmasi' | 'Terkonfirmasi'
+  status: text("status").default("Terdaftar").notNull(), // 'Terdaftar'
   createdAt: integer("created_at", { mode: "timestamp" }).default(sql`(unixepoch())`).notNull(),
   confirmedAt: integer("confirmed_at", { mode: "timestamp" }),
 });

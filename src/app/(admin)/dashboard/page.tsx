@@ -4,15 +4,21 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { db } from "@/lib/db";
 import { pendaftar } from "@/lib/db/schema";
-import { sql, desc, eq } from "drizzle-orm";
+import { sql, desc, eq, gte } from "drizzle-orm";
 import { ExportButton } from "@/components/admin/ExportButton";
+
+export const dynamic = "force-dynamic";
 
 export default async function DashboardHomePage() {
   // Fetch site stats and recent pendaftar in parallel
-  const [totalRes, verifiedRes, pendingRes, recentPendaftar] = await Promise.all([
+  const yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 1);
+
+  const [totalRes, mtsRes, maRes, newRes, recentPendaftar] = await Promise.all([
     db.select({ count: sql<number>`count(*)` }).from(pendaftar),
-    db.select({ count: sql<number>`count(*)` }).from(pendaftar).where(eq(pendaftar.status, "Terkonfirmasi")),
-    db.select({ count: sql<number>`count(*)` }).from(pendaftar).where(eq(pendaftar.status, "Menunggu Konfirmasi")),
+    db.select({ count: sql<number>`count(*)` }).from(pendaftar).where(eq(pendaftar.jenjang, "MTs")),
+    db.select({ count: sql<number>`count(*)` }).from(pendaftar).where(eq(pendaftar.jenjang, "MA")),
+    db.select({ count: sql<number>`count(*)` }).from(pendaftar).where(gte(pendaftar.createdAt, yesterday)),
     db.query.pendaftar.findMany({
       limit: 5,
       orderBy: [desc(pendaftar.id)],
@@ -20,14 +26,15 @@ export default async function DashboardHomePage() {
   ]);
 
   const totalCount = totalRes[0].count || 0;
-  const verifiedCount = verifiedRes[0].count || 0;
-  const pendingCount = pendingRes[0].count || 0;
+  const mtsCount = mtsRes[0].count || 0;
+  const maCount = maRes[0].count || 0;
+  const newCount = newRes[0].count || 0;
 
   const stats = [
     { name: "Total Pendaftar", value: totalCount.toString(), icon: Users, color: "text-blue-500", bg: "bg-blue-100" },
-    { name: "Terkonfirmasi", value: verifiedCount.toString(), icon: UserCheck, color: "text-green-500", bg: "bg-green-100" },
-    { name: "Menunggu Konfirmasi", value: pendingCount.toString(), icon: Clock, color: "text-yellow-500", bg: "bg-yellow-100" },
-    { name: "Pendaftar Baru", value: pendingCount.toString(), icon: Clock, color: "text-orange-500", bg: "bg-orange-100" },
+    { name: "Pendaftar MTs", value: mtsCount.toString(), icon: UserCheck, color: "text-green-500", bg: "bg-green-100" },
+    { name: "Pendaftar MA", value: maCount.toString(), icon: UserCheck, color: "text-purple-500", bg: "bg-purple-100" },
+    { name: "Pendaftar Baru (24j)", value: newCount.toString(), icon: Clock, color: "text-orange-500", bg: "bg-orange-100" },
   ];
 
   return (
@@ -78,11 +85,8 @@ export default async function DashboardHomePage() {
                       </div>
                     </div>
                     <div className="flex items-center gap-4">
-                      <span className={`inline-flex items-center rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-widest border
-                        ${p.status === "Terkonfirmasi" 
-                          ? "bg-green-50 text-green-700 border-green-100" 
-                          : "bg-yellow-50 text-yellow-700 border-yellow-100"}`}>
-                        {p.status === "Terkonfirmasi" ? "Terkonfirmasi" : "Menunggu"}
+                      <span className={`inline-flex items-center rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-widest border bg-emerald-50 text-emerald-700 border-emerald-100`}>
+                        Terdaftar
                       </span>
                       <Link href={`/dashboard/pendaftar/${p.id}`}>
                         <Button variant="ghost" size="sm" className="text-primary hover:bg-primary/5 font-bold rounded-lg px-4 transition-colors">Detail</Button>

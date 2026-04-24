@@ -23,8 +23,6 @@ interface PendaftarDetailProps {
 
 export function PendaftarDetailClient({ pendaftar, ortu, berkas, settings }: PendaftarDetailProps) {
   const router = useRouter();
-  const [isConfirming, setIsConfirming] = useState(false);
-  const [currentStatus, setCurrentStatus] = useState(pendaftar?.status);
 
   if (!pendaftar) {
     return (
@@ -34,27 +32,6 @@ export function PendaftarDetailClient({ pendaftar, ortu, berkas, settings }: Pen
       </div>
     );
   }
-
-  const handleKonfirmasi = async () => {
-    setIsConfirming(true);
-    try {
-      const response = await fetch(`/api/admin/pendaftar/${pendaftar.id}/verify`, {
-        method: "POST",
-      });
-
-      if (response.ok) {
-        setCurrentStatus("Terkonfirmasi");
-        toast.success("Pendaftaran berhasil dikonfirmasi!");
-        router.refresh();
-      } else {
-        toast.error("Gagal melakukan konfirmasi.");
-      }
-    } catch (error) {
-      toast.error("Terjadi kesalahan koneksi.");
-    } finally {
-      setIsConfirming(false);
-    }
-  };
 
   const handleDownloadCertificate = async () => {
     toast.success("Mengunduh surat keterangan...");
@@ -173,18 +150,9 @@ export function PendaftarDetailClient({ pendaftar, ortu, berkas, settings }: Pen
             <div className="flex items-center gap-3">
               <h1 className="text-base font-bold text-gray-900 tracking-tight">Detail Pendaftar</h1>
               <div className="flex items-center gap-2">
-                <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-widest ${
-                  currentStatus === "Terkonfirmasi" 
-                    ? "bg-green-100/80 text-green-600 border border-green-200" 
-                    : "bg-amber-100/80 text-amber-600 border border-amber-200"
-                }`}>
-                  {currentStatus}
+                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-widest bg-emerald-100/80 text-emerald-600 border border-emerald-200">
+                  Terdaftar
                 </span>
-                {pendaftar.confirmedAt && (
-                   <div className="flex items-center gap-1 text-[10px] font-bold text-green-500 bg-green-50 px-2 py-0.5 rounded-full border border-green-100">
-                      <Sparkles className="w-3 h-3" /> AUTO-VERIFIED
-                   </div>
-                )}
               </div>
             </div>
             <p className="text-xs font-medium text-gray-400">
@@ -309,9 +277,8 @@ export function PendaftarDetailClient({ pendaftar, ortu, berkas, settings }: Pen
             <CardContent className="p-5 space-y-5">
               {berkas ? (
                 <>
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 gap-4">
                      {renderDataField("Pengirim", berkas.namaPengirim)}
-                     {renderDataField("Tgl Bayar", berkas.tanggalTransfer)}
                   </div>
                   <div className="relative group rounded-xl overflow-hidden border border-gray-100 aspect-video bg-gray-50 flex items-center justify-center">
                     {berkas.buktiPembayaranUrl ? (
@@ -350,26 +317,12 @@ export function PendaftarDetailClient({ pendaftar, ortu, berkas, settings }: Pen
 
           {/* Section E: Actions */}
           <div className="space-y-4">
-            {currentStatus !== "Terkonfirmasi" ? (
-              <Button
-                onClick={handleKonfirmasi}
-                disabled={isConfirming}
-                className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold h-12 rounded-xl transition-all flex items-center gap-2 justify-center shadow-md shadow-indigo-100 border-none"
-              >
-                {isConfirming ? "Memproses..." : <><CheckCircle2 className="w-5 h-5" /> Terima Pendaftaran</>}
-              </Button>
-            ) : (
-              <div className="w-full py-3.5 rounded-xl border border-green-200 bg-green-50 flex items-center justify-center gap-2 text-green-700 text-xs font-black uppercase tracking-widest shadow-sm shadow-green-50">
-                <ShieldCheck className="w-4 h-4" /> Terverifikasi Final
-              </div>
-            )}
-
             <Button
               onClick={handleDelete}
-              variant="ghost"
-              className="w-full text-gray-400 hover:text-red-500 hover:bg-red-50 text-[11px] font-bold uppercase tracking-widest h-10 transition-all flex items-center gap-2"
+              variant="destructive"
+              className="w-full font-bold h-12 rounded-xl transition-all flex items-center gap-2 justify-center shadow-sm"
             >
-              <Trash2 className="w-3.5 h-3.5" /> Abaikan / Hapus Data
+              <Trash2 className="w-5 h-5" /> Hapus Data Pendaftar
             </Button>
           </div>
         </div>
