@@ -5,7 +5,7 @@ export default async function PPDBPage() {
   const settings = await getSiteSettings();
 
   return (
-    <div className="bg-background min-h-screen pt-8 pb-16">
+    <div className="bg-background min-h-screen pt-8 pb-32">
       <PPDBForm settings={settings || null} />
     </div>
   );

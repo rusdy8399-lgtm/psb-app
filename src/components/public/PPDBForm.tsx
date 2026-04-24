@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import {
   CreditCard, UploadCloud, CheckCircle2, AlertCircle,
   User, Users, FolderOpen, ShieldCheck, ChevronRight, ChevronLeft,
-  FileText, Camera, Wallet, Loader2, Sparkles, XCircle
+  FileText, Camera, Wallet, XCircle
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,7 +13,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Checkbox } from "@/components/ui/checkbox";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { createWorker } from 'tesseract.js';
 
 interface PPDBFormProps {
   settings: {
@@ -25,10 +24,9 @@ interface PPDBFormProps {
 
 export function PPDBForm({ settings }: PPDBFormProps) {
   const router = useRouter();
-  const [step, setStep] = useState(0); // 0: Select Jenjang, 1: A, 2: B, 3: C, 4: D, 5: E
+  const [step, setStep] = useState(0); // 0: Select Jenjang, 1: A, 2: B, 3: C, 4: D
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isVerifyingPayment, setIsVerifyingPayment] = useState(false);
-  const [paymentAutoVerified, setPaymentAutoVerified] = useState<boolean | null>(null);
+  const [formError, setFormError] = useState<string | null>(null);
 
   // Form State
   const [formData, setFormData] = useState({
@@ -73,51 +71,6 @@ export function PPDBForm({ settings }: PPDBFormProps) {
 
   const handleFileChange = async (field: string, file: File | null) => {
     setFiles(prev => ({ ...prev, [field]: file }));
-    
-    // If it's the payment proof, trigger OCR
-    if (field === "fileBukti" && file) {
-      await performPaymentOCR(file);
-    } else if (field === "fileBukti" && !file) {
-      setPaymentAutoVerified(null);
-    }
-  };
-
-  const performPaymentOCR = async (file: File) => {
-    setIsVerifyingPayment(true);
-    setPaymentAutoVerified(null);
-    
-    try {
-      const worker = await createWorker('ind'); // Use Indonesian language
-      const { data: { text } } = await worker.recognize(file);
-      await worker.terminate();
-
-      const ocrContent = text.toUpperCase();
-      console.log("OCR Result:", ocrContent);
-
-      // 1. Check for Nominal (200.000 or 200000)
-      const nominalRegex = /200[\s.,]?000/g;
-      const hasNominal = nominalRegex.test(ocrContent);
-
-      // 2. Check for Keywords (Brand/Account/Status)
-      const keywords = ["BERHASIL", "SUKSES", "TRANSFER", "BRI", "BINA INSANI"];
-      const matchedKeywords = keywords.filter(kw => ocrContent.includes(kw));
-
-      // 3. Validation Logic: Higher strictness as requested
-      // We want Nominal AND at least some confirmation keywords
-      if (hasNominal && matchedKeywords.length >= 1) {
-        setPaymentAutoVerified(true);
-        toast.success("Bukti transfer valid! Verifikasi otomatis berhasil.");
-      } else {
-        setPaymentAutoVerified(false);
-        toast.warning("Sistem tidak dapat memverifikasi otomatis. Panitia akan mengecek manual.");
-      }
-    } catch (error) {
-      console.error("OCR Error:", error);
-      setPaymentAutoVerified(false);
-      toast.error("Gagal memproses gambar. Mohon pastikan foto bukti jelas.");
-    } finally {
-      setIsVerifyingPayment(false);
-    }
   };
 
   const validateStep = () => {
@@ -147,7 +100,6 @@ export function PPDBForm({ settings }: PPDBFormProps) {
       if (!formData.namaPengirim) return "Nama Pengirim wajib diisi";
       if (!formData.tanggalTransfer) return "Tanggal Transfer wajib diisi";
       if (!files.fileBukti) return "Unggah Bukti Transfer";
-      if (isVerifyingPayment) return "Mohon tunggu, sedang memverifikasi bukti transfer...";
     }
     return null;
   };
@@ -199,7 +151,6 @@ export function PPDBForm({ settings }: PPDBFormProps) {
       fileFoto: null,
       fileBukti: null,
     });
-    setPaymentAutoVerified(null);
     setStep(0);
     window.scrollTo({ top: 0, behavior: 'smooth' });
     toast.info("Formulir telah dikosongkan");
@@ -207,6 +158,7 @@ export function PPDBForm({ settings }: PPDBFormProps) {
 
   const handleSubmit = async (e?: React.FormEvent | React.MouseEvent) => {
     if (e) e.preventDefault();
+    setFormError(null);
 
     if (!formData.pernyataanCorrect) {
       toast.error("Anda harus menyetujui pernyataan kebenaran data.");
@@ -227,7 +179,7 @@ export function PPDBForm({ settings }: PPDBFormProps) {
     });
 
     // Append verification flag
-    submissionData.append("paymentAutoVerified", (paymentAutoVerified === true).toString());
+    submissionData.append("paymentAutoVerified", "false");
 
     try {
       const response = await fetch("/api/ppdb", {
@@ -244,9 +196,12 @@ export function PPDBForm({ settings }: PPDBFormProps) {
         console.error("ERROR API DETAIL:", errData);
         const errorMessage = errData.error || "Gagal mengirim pendaftaran.";
         const errorDetail = errData.details ? `: ${errData.details}` : "";
-        toast.error(`${errorMessage}${errorDetail}`);
+        const finalError = `${errorMessage}${errorDetail}`;
+        setFormError(finalError);
+        toast.error(finalError);
       }
     } catch (error: any) {
+      setFormError("Terjadi kesalahan koneksi. Silakan coba lagi.");
       toast.error("Terjadi kesalahan koneksi.");
     } finally {
       setIsSubmitting(false);
@@ -284,13 +239,12 @@ export function PPDBForm({ settings }: PPDBFormProps) {
       {step > 0 && (
         <div className="mb-8 flex items-center justify-between relative max-w-xl mx-auto">
           <div className="absolute top-4.5 left-0 right-0 h-0.5 bg-slate-100 -z-10" />
-          <div className="absolute top-4.5 left-0 right-0 h-0.5 bg-primary transition-all duration-1000 -z-10" style={{ width: `${(step - 1) * 25}%` }} />
+          <div className="absolute top-4.5 left-0 right-0 h-0.5 bg-primary transition-all duration-1000 -z-10" style={{ width: `${(step - 1) * 33.33}%` }} />
 
           {renderStepIcon(1, User, "Santri")}
           {renderStepIcon(2, Users, "Orang Tua")}
           {renderStepIcon(3, FolderOpen, "Dokumen")}
-          {renderStepIcon(4, Wallet, "Bayar")}
-          {renderStepIcon(5, ShieldCheck, "Finish")}
+          {renderStepIcon(4, ShieldCheck, "Selesai")}
         </div>
       )}
 
@@ -641,39 +595,7 @@ export function PPDBForm({ settings }: PPDBFormProps) {
                 <div className={`relative border border-dashed rounded-xl p-6 transition-all flex flex-col items-center justify-center text-center ${files.fileBukti ? 'border-primary bg-primary/5' : 'border-slate-100'}`}>
                   <input type="file" onChange={e => handleFileChange("fileBukti", e.target.files?.[0] || null)} className="absolute inset-0 opacity-0 cursor-pointer z-10" accept="image/*" />
                   
-                  {isVerifyingPayment ? (
-                    <div className="flex flex-col items-center gap-3 animate-in fade-in duration-300">
-                       <Loader2 className="w-10 h-10 text-primary animate-spin" />
-                       <div className="space-y-1">
-                          <p className="font-bold text-primary text-sm flex items-center justify-center gap-2">
-                             <Sparkles className="w-4 h-4" /> Menganalisa Bukti...
-                          </p>
-                          <p className="text-[10px] text-slate-500 uppercase tracking-widest font-medium">Sistem sedang memverifikasi nominal & tanggal</p>
-                       </div>
-                    </div>
-                  ) : paymentAutoVerified === true ? (
-                    <div className="flex flex-col items-center gap-2 animate-in zoom-in-95 duration-500">
-                       <div className="w-12 h-12 bg-green-500 text-white rounded-full flex items-center justify-center shadow-lg shadow-green-200">
-                          <CheckCircle2 className="w-7 h-7" />
-                       </div>
-                       <div className="space-y-0.5">
-                          <p className="font-bold text-green-600 text-[13px]">Pembayaran Terverifikasi Otomatis!</p>
-                          <p className="text-[10px] text-slate-400 font-medium italic">Data transfer terbaca dengan valid oleh sistem.</p>
-                       </div>
-                       <button type="button" className="text-[10px] text-slate-400 underline mt-1 font-medium hover:text-primary">Ganti Bukti Transfer</button>
-                    </div>
-                  ) : paymentAutoVerified === false ? (
-                    <div className="flex flex-col items-center gap-2 animate-in slide-in-from-top-2 duration-500">
-                       <div className="w-12 h-12 bg-amber-500 text-white rounded-full flex items-center justify-center shadow-lg shadow-amber-200">
-                          <AlertCircle className="w-7 h-7" />
-                       </div>
-                       <div className="space-y-0.5 max-w-[240px]">
-                          <p className="font-bold text-amber-600 text-[13px]">Verifikasi Otomatis Belum Berhasil</p>
-                          <p className="text-[10px] text-slate-400 font-medium leading-relaxed">Sistem gagal membaca nominal/tanggal. Pendaftaran tetap bisa dikirim & akan dicek manual oleh Panitia.</p>
-                       </div>
-                       <button type="button" className="text-[10px] text-slate-400 underline mt-2 font-medium hover:text-primary">Coba Unggah Foto Lebih Jelas</button>
-                    </div>
-                  ) : files.fileBukti ? (
+                  {files.fileBukti ? (
                     <>
                       <CheckCircle2 className="w-7 h-7 text-primary mb-1.5" />
                       <p className="font-semibold text-primary text-[11px] truncate max-w-[180px]">{files.fileBukti.name}</p>
@@ -692,27 +614,7 @@ export function PPDBForm({ settings }: PPDBFormProps) {
               </div>
             </div>
 
-            <div className="mt-8 flex justify-between items-center pt-5 border-t border-slate-50">
-              <button type="button" onClick={prevStep} className="text-slate-400 hover:text-primary transition-colors flex items-center gap-1.5 font-semibold uppercase text-[10px]">
-                <ChevronLeft className="w-3.5 h-3.5" /> Kembali
-              </button>
-              <Button type="button" onClick={nextStep} className="bg-primary px-7 h-10 rounded-lg font-bold text-[13px]">
-                Selanjutnya <ChevronRight className="w-3.5 h-3.5 ml-1" />
-              </Button>
-            </div>
-          </div>
-        )}
-
-        {/* STEP 5: PART E - PERNYATAAN */}
-        {step === 5 && (
-          <div className="bg-white p-6 md:p-10 rounded-2xl border border-slate-100 shadow-lg shadow-primary/5 text-center animate-in slide-in-from-bottom-8 duration-700">
-            <div className="w-16 h-16 bg-primary/5 rounded-full flex items-center justify-center mx-auto mb-5 text-primary">
-              <ShieldCheck className="w-7 h-7" />
-            </div>
-            <h3 className="text-lg font-bold text-primary mb-1 tracking-tight">Kirim Data Pendaftaran</h3>
-            <p className="text-[13px] text-slate-500 mb-8 max-w-sm mx-auto leading-relaxed">Silakan konfirmasi kebenaran data Anda sebelum diserahkan ke Panitia PPDB.</p>
-
-            <div className="bg-slate-50/50 p-5 rounded-xl border border-slate-100 text-left mb-8">
+            <div className="bg-slate-50/50 p-5 rounded-xl border border-slate-100 text-left mb-6 mt-8">
               <div className="flex items-start gap-3">
                 <Checkbox
                   id="pernyataan"
@@ -726,23 +628,31 @@ export function PPDBForm({ settings }: PPDBFormProps) {
               </div>
             </div>
 
-            <div className="flex flex-col md:flex-row justify-center gap-3">
-              <button type="button" onClick={prevStep} className="px-6 h-10 font-semibold text-slate-400 hover:text-slate-600 transition-colors uppercase text-[10px] tracking-wider">
-                Kembali
-              </button>
-              <button type="button" onClick={resetForm} className="px-6 h-10 font-semibold text-destructive hover:text-destructive/80 transition-colors uppercase text-[10px] tracking-wider">
-                Kosongkan Data
-              </button>
+            {formError && (
+              <div className="mb-6 p-4 bg-destructive/10 border border-destructive/20 rounded-xl text-destructive text-sm font-semibold animate-in zoom-in-95">
+                {formError}
+              </div>
+            )}
+
+            <div className="flex flex-col md:flex-row justify-between items-center gap-4 pt-5 border-t border-slate-50">
+              <div className="flex items-center gap-4 w-full md:w-auto justify-center md:justify-start">
+                 <button type="button" onClick={prevStep} className="text-slate-400 hover:text-primary transition-colors flex items-center gap-1.5 font-semibold uppercase text-[10px]">
+                   <ChevronLeft className="w-3.5 h-3.5" /> Kembali
+                 </button>
+                 <span className="text-slate-300">|</span>
+                 <button type="button" onClick={resetForm} className="text-destructive/80 hover:text-destructive transition-colors font-semibold uppercase text-[10px]">
+                   Kosongkan
+                 </button>
+              </div>
               <Button
-                type="submit"
+                type="button"
+                onClick={handleSubmit}
                 disabled={isSubmitting || !formData.pernyataanCorrect}
-                className="w-full md:w-auto px-8 bg-primary hover:bg-[#133d24] text-white font-bold h-12 rounded-xl transition-all flex items-center justify-center gap-2 shadow-sm"
+                className="w-full md:w-auto px-10 bg-primary hover:bg-[#133d24] text-white font-bold h-12 rounded-xl transition-all flex items-center justify-center gap-2 shadow-sm"
               >
-                {isSubmitting ? "Mengirim..." : <>Finalisasi Pendaftaran <CheckCircle2 className="w-4 h-4 ml-1" /></>}
+                {isSubmitting ? "Mengirim..." : <>Daftar Sekarang <CheckCircle2 className="w-4 h-4 ml-1" /></>}
               </Button>
             </div>
-
-            <p className="text-[8px] text-slate-300 mt-8 uppercase tracking-[0.4em]">Bali Bina Insani - Tolerance Boarding School</p>
           </div>
         )}
 
