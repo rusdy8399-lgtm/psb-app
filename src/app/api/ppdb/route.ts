@@ -74,7 +74,7 @@ export async function POST(req: NextRequest) {
       
       // Payment
       namaPengirim: formData.get("namaPengirim")?.toString() || "",
-      tanggalTransfer: formData.get("tanggalTransfer")?.toString() || "",
+      tanggalTransfer: formData.get("tanggalTransfer")?.toString() || new Date().toISOString().split('T')[0],
       paymentAutoVerified: formData.get("paymentAutoVerified") === "true",
     };
 
@@ -93,7 +93,7 @@ export async function POST(req: NextRequest) {
     const random = Math.floor(Math.random() * 9000) + 1000;
     const kodePendaftaran = `REG-2026-${timestamp}-${random}`;
 
-    console.log("PPDB API: Processing files...");
+    console.log("PPDB API: Processing files in parallel...");
     const files = {
       kk: formData.get("fileKK") as File,
       akta: formData.get("fileAkta") as File,
@@ -102,12 +102,21 @@ export async function POST(req: NextRequest) {
       bukti: formData.get("fileBukti") as File,
     };
 
+    // Run all uploads in parallel
+    const [urlKk, urlAkta, urlIjazah, urlFoto, urlBukti] = await Promise.all([
+      saveFile(files.kk, "kk"),
+      saveFile(files.akta, "akta"),
+      saveFile(files.ijazah, "ijazah"),
+      saveFile(files.foto, "foto"),
+      saveFile(files.bukti, "payment"),
+    ]);
+
     const urls = {
-      kk: await saveFile(files.kk, "kk"),
-      akta: await saveFile(files.akta, "akta"),
-      ijazah: await saveFile(files.ijazah, "ijazah"),
-      foto: await saveFile(files.foto, "foto"),
-      bukti: await saveFile(files.bukti, "payment"),
+      kk: urlKk,
+      akta: urlAkta,
+      ijazah: urlIjazah,
+      foto: urlFoto,
+      bukti: urlBukti,
     };
     console.log("PPDB API: Files processed successfully.");
 

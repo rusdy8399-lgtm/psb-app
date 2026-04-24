@@ -52,7 +52,6 @@ export function PPDBForm({ settings }: PPDBFormProps) {
     noHpWali: "",
 
     namaPengirim: "",
-    tanggalTransfer: "",
     pernyataanCorrect: false,
   });
 
@@ -98,7 +97,6 @@ export function PPDBForm({ settings }: PPDBFormProps) {
     }
     if (step === 4) {
       if (!formData.namaPengirim) return "Nama Pengirim wajib diisi";
-      if (!formData.tanggalTransfer) return "Tanggal Transfer wajib diisi";
       if (!files.fileBukti) return "Unggah Bukti Transfer";
     }
     return null;
@@ -141,7 +139,6 @@ export function PPDBForm({ settings }: PPDBFormProps) {
       pekerjaanIbu: "",
       noHpWali: "",
       namaPengirim: "",
-      tanggalTransfer: "",
       pernyataanCorrect: false,
     });
     setFiles({
@@ -579,22 +576,16 @@ export function PPDBForm({ settings }: PPDBFormProps) {
             </div>
 
             <div className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-1.5">
-                  <Label className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">Nama Rek. Pengirim <span className="text-destructive">*</span></Label>
-                  <Input value={formData.namaPengirim} onChange={e => handleInputChange("namaPengirim", e.target.value)} placeholder="Nama yang tertera di bukti" required className="h-10 rounded-lg text-sm font-normal" />
-                </div>
-                <div className="space-y-1.5">
-                  <Label className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">Tanggal Transfer <span className="text-destructive">*</span></Label>
-                  <Input type="date" value={formData.tanggalTransfer} onChange={e => handleInputChange("tanggalTransfer", e.target.value)} required className="h-10 rounded-lg text-sm font-normal" />
-                </div>
+              <div className="space-y-1.5">
+                <Label className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">Nama Rek. Pengirim <span className="text-destructive">*</span></Label>
+                <Input value={formData.namaPengirim} onChange={e => handleInputChange("namaPengirim", e.target.value)} placeholder="Nama yang tertera di bukti" required className="h-10 rounded-lg text-sm font-normal" />
               </div>
 
               <div className="space-y-3">
                 <Label className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">Bukti Transfer (Screenshot/Foto) <span className="text-destructive">*</span></Label>
                 <div className={`relative border border-dashed rounded-xl p-6 transition-all flex flex-col items-center justify-center text-center ${files.fileBukti ? 'border-primary bg-primary/5' : 'border-slate-100'}`}>
                   <input type="file" onChange={e => handleFileChange("fileBukti", e.target.files?.[0] || null)} className="absolute inset-0 opacity-0 cursor-pointer z-10" accept="image/*" />
-                  
+
                   {files.fileBukti ? (
                     <>
                       <CheckCircle2 className="w-7 h-7 text-primary mb-1.5" />
@@ -623,7 +614,7 @@ export function PPDBForm({ settings }: PPDBFormProps) {
                   className="mt-0.5 w-5 h-5 rounded border-primary text-primary"
                 />
                 <Label htmlFor="pernyataan" className="text-[12px] text-slate-600 leading-relaxed cursor-pointer font-normal">
-                  Saya menyatakan bahwa seluruh data yang diisi adalah **benar dan valid**. Data yang sudah dikirim akan masuk ke proses seleksi administratif.
+                  Saya menyatakan bahwa seluruh data yang diisi adalah **benar dan valid**
                 </Label>
               </div>
             </div>
@@ -636,13 +627,13 @@ export function PPDBForm({ settings }: PPDBFormProps) {
 
             <div className="flex flex-col md:flex-row justify-between items-center gap-4 pt-5 border-t border-slate-50">
               <div className="flex items-center gap-4 w-full md:w-auto justify-center md:justify-start">
-                 <button type="button" onClick={prevStep} className="text-slate-400 hover:text-primary transition-colors flex items-center gap-1.5 font-semibold uppercase text-[10px]">
-                   <ChevronLeft className="w-3.5 h-3.5" /> Kembali
-                 </button>
-                 <span className="text-slate-300">|</span>
-                 <button type="button" onClick={resetForm} className="text-destructive/80 hover:text-destructive transition-colors font-semibold uppercase text-[10px]">
-                   Kosongkan
-                 </button>
+                <button type="button" onClick={prevStep} className="text-slate-400 hover:text-primary transition-colors flex items-center gap-1.5 font-semibold uppercase text-[10px]">
+                  <ChevronLeft className="w-3.5 h-3.5" /> Kembali
+                </button>
+                <span className="text-slate-300">|</span>
+                <button type="button" onClick={resetForm} className="text-destructive/80 hover:text-destructive transition-colors font-semibold uppercase text-[10px]">
+                  Kosongkan
+                </button>
               </div>
               <Button
                 type="button"
