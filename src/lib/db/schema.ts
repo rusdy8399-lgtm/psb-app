@@ -98,6 +98,7 @@ export const berkasDokumen = sqliteTable("berkas_dokumen", {
 
 export const kegiatan = sqliteTable("kegiatan", {
   id: text("id").primaryKey(),
+  slug: text("slug").unique(),
   judul: text("judul").notNull(),
   deskripsi: text("deskripsi").notNull(),
   tanggal: text("tanggal").notNull(),

@@ -99,7 +99,7 @@ export function Footer({ settings }: FooterProps) {
                 { label: "Beranda", href: "/" },
                 { label: "Kegiatan", href: "/kegiatan" },
                 { label: "Fasilitas", href: "/fasilitas" },
-                { label: "Daftar PPDB", href: "/ppdb" },
+                { label: "Daftar PPDB", href: "/pendaftaran" },
                 { label: "Login Admin", href: "/login" },
               ].map((link) => (
                 <li key={link.href}>
@@ -114,7 +114,7 @@ export function Footer({ settings }: FooterProps) {
               {settings?.brosurUrl && (
                 <li>
                   <Link
-                    href="/brosur"
+                    href="/download-brosur"
                     className="text-sm text-green-200 hover:text-white hover:translate-x-0.5 transition-all duration-200 inline-flex items-center gap-1.5"
                   >
                     Download Brosur <Download className="w-3 h-3" />

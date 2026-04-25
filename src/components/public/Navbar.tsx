@@ -37,7 +37,7 @@ export function Navbar({ settings }: NavbarProps) {
 
   const schoolName = settings?.namaWeb || "Bali Bina Insani";
 
-  const isFormPage = pathname?.startsWith("/ppdb");
+  const isFormPage = pathname?.startsWith("/pendaftaran");
 
   return (
     <header 
@@ -90,7 +90,7 @@ export function Navbar({ settings }: NavbarProps) {
           </nav>
 
           {/* CTA Button */}
-          <Link href="/ppdb">
+          <Link href="/pendaftaran">
             <Button className="bg-[#1A4D2E] hover:bg-[#133d24] text-white font-sans font-medium px-5 py-2.5 h-auto rounded-xl shadow-md transition-all hover:scale-105 active:scale-95 text-sm border border-gold/20">
               Pendaftaran
             </Button>
@@ -126,7 +126,7 @@ export function Navbar({ settings }: NavbarProps) {
               </Link>
             ))}
             <div className="pt-6 border-t border-slate-100 italic">
-               <Link href="/ppdb" onClick={() => setIsOpen(false)}>
+               <Link href="/pendaftaran" onClick={() => setIsOpen(false)}>
                   <Button className="w-full bg-[#1A4D2E] hover:bg-[#133d24] text-white text-sm md:text-base font-medium px-5 py-3 h-auto rounded-xl shadow-md transition-all">
                     Daftar Sekarang
                   </Button>

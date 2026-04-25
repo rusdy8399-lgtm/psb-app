@@ -116,7 +116,7 @@ export default async function KegiatanPage() {
                       </p>
                     </div>
 
-                    <Link href={`/kegiatan/${item.id}`} className="inline-block pt-4 border-t border-slate-50 mt-auto">
+                    <Link href={`/kegiatan/${item.slug || item.id}`} className="inline-block pt-4 border-t border-slate-50 mt-auto">
                       <Button variant="ghost" className="p-0 h-auto font-bold text-primary group-hover:gap-3 transition-all flex items-center gap-2 text-sm bg-transparent hover:bg-transparent">
                         Baca Selengkapnya <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
                       </Button>

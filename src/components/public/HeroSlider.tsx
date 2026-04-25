@@ -96,7 +96,7 @@ export function HeroSlider({ data, brosurUrl }: { data: SliderData[], brosurUrl?
                     </div>
                     
                     <div className="pt-4 md:pt-6 w-full flex flex-col md:flex-row gap-3">
-                      <Link href="/ppdb" className="w-full md:w-auto">
+                      <Link href="/pendaftaran" className="w-full md:w-auto">
                         <Button className="w-full md:w-auto bg-[#1A4D2E] hover:bg-[#133d24] text-white font-semibold h-[48px] md:h-[52px] rounded-xl transition-all text-[16px] flex gap-3 items-center justify-center group/btn border-none font-sans">
                           Penerimaan Murid Baru
                           <ArrowRight className="hidden md:block w-5 h-5 group-hover/btn:translate-x-1 transition-transform" />
@@ -104,7 +104,7 @@ export function HeroSlider({ data, brosurUrl }: { data: SliderData[], brosurUrl?
                       </Link>
 
                       {brosurUrl && (
-                        <Link href="/brosur" className="w-full md:w-auto">
+                        <Link href="/download-brosur" className="w-full md:w-auto">
                           <Button
                             variant="outline"
                             className="w-full md:w-auto border border-white/40 bg-transparent hover:bg-white/10 text-white font-semibold h-[48px] md:h-[52px] rounded-xl transition-all text-[16px] flex gap-3 items-center justify-center group/brosur font-sans"

@@ -308,7 +308,7 @@ export default async function Home() {
               Bergabunglah bersama kami untuk mencetak generasi yang Qur'ani, Berilmu, dan Berkarakter.
             </p>
             <div className="relative mt-6">
-              <Link href="/ppdb">
+              <Link href="/pendaftaran">
                 <Button className="bg-gold hover:bg-yellow-500 text-[#1A4D2E] font-medium px-5 py-3 h-auto rounded-xl shadow-md hover:scale-105 active:scale-95 transition-all inline-flex items-center justify-center gap-2 text-sm md:text-base w-full sm:w-auto">
                   Klik Disini Untuk Mendaftar <ArrowRight className="w-4 h-4" />
                 </Button>

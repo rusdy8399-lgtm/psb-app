@@ -8,7 +8,7 @@ export function FloatingWA({ waNumber }: { waNumber: string }) {
   const pathname = usePathname();
 
   // Hide on registration page
-  if (pathname === "/ppdb" || pathname?.startsWith("/ppdb/")) {
+  if (pathname === "/pendaftaran" || pathname?.startsWith("/ppdb/")) {
     return null;
   }
 

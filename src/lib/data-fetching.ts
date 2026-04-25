@@ -1,7 +1,7 @@
 import { cache } from "react";
 import { db } from "./db";
 import { heroSection, fasilitas, kegiatan, galeri } from "./db/schema";
-import { eq, asc, desc } from "drizzle-orm";
+import { eq, asc, desc, or } from "drizzle-orm";
 
 /**
  * Request-level deduplicated fetching service.
@@ -39,5 +39,11 @@ export const getGaleriList = cache(async () => {
 export const getKegiatanById = cache(async (id: string) => {
   return await db.query.kegiatan.findFirst({
     where: eq(kegiatan.id, id),
+  });
+});
+
+export const getKegiatanBySlug = cache(async (slugStr: string) => {
+  return await db.query.kegiatan.findFirst({
+    where: or(eq(kegiatan.slug, slugStr), eq(kegiatan.id, slugStr)),
   });
 });

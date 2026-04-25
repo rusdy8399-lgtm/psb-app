@@ -1,4 +1,4 @@
-import { getKegiatanById, getKegiatanList } from "@/lib/data-fetching";
+import { getKegiatanBySlug, getKegiatanList } from "@/lib/data-fetching";
 import { notFound } from "next/navigation";
 
 export const dynamic = "force-dynamic";
@@ -9,13 +9,13 @@ import { ShareButtons } from "@/components/public/ShareButtons";
 import { Metadata } from "next";
 
 interface Props {
-  params: Promise<{ id: string }>;
+  params: Promise<{ slug: string }>;
 }
 
 // Generate Dynamic Metadata for Social Sharing (OG Tags)
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { id } = await params;
-  const item = await getKegiatanById(id);
+  const { slug } = await params;
+  const item = await getKegiatanBySlug(slug);
 
   if (!item) return { title: "Berita Tidak Ditemukan" };
 
@@ -38,9 +38,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function KegiatanDetailPage({ params }: Props) {
-  const { id } = await params;
+  const { slug } = await params;
   
-  const item = await getKegiatanById(id);
+  const item = await getKegiatanBySlug(slug);
 
   if (!item) {
     notFound();
@@ -91,7 +91,7 @@ export default async function KegiatanDetailPage({ params }: Props) {
 
           {/* Share Section at Bottom */}
           <div className="pt-12 border-t border-slate-100">
-             <ShareButtons title={item.judul} url={`/kegiatan/${item.id}`} />
+             <ShareButtons title={item.judul} url={`/kegiatan/${item.slug || item.id}`} />
           </div>
         </div>
       </div>

@@ -211,7 +211,7 @@ export function PPDBForm({ settings }: PPDBFormProps) {
       if (response.ok) {
         const data = await response.json();
         toast.success("Pendaftaran Berhasil Terkirim!");
-        router.push(`/ppdb/sukses?code=${data.kodePendaftaran}`);
+        router.push(`/pendaftaran/sukses?code=${data.kodePendaftaran}`);
       } else {
         const errData: any = await response.json();
         console.error("ERROR API DETAIL:", errData);

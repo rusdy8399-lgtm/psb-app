@@ -92,7 +92,7 @@ export default async function BrosurPage() {
                   </div>
                 )}
 
-                <Link href="/ppdb">
+                <Link href="/pendaftaran">
                   <Button
                     id="btn-daftar-sekarang"
                     variant="outline"
@@ -106,7 +106,7 @@ export default async function BrosurPage() {
 
               {/* Share section */}
               <div className="pt-2">
-                <ShareButtons title={`Download Brosur ${schoolName}`} url="/brosur" />
+                <ShareButtons title={`Download Brosur ${schoolName}`} url="/download-brosur" />
               </div>
             </div>
 
@@ -174,7 +174,7 @@ export default async function BrosurPage() {
             Setelah membaca brosur, langsung daftarkan putra/putri Anda melalui formulir pendaftaran online kami.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Link href="/ppdb">
+            <Link href="/pendaftaran">
               <Button
                 id="btn-ppdb-dari-brosur"
                 className="bg-[#1A4D2E] hover:bg-[#2D7A4F] text-white font-medium px-5 py-3.5 rounded-xl shadow-md hover:-translate-y-0.5 active:scale-95 transition-all duration-200 flex items-center justify-center gap-2 text-sm md:text-base w-full sm:w-auto"
