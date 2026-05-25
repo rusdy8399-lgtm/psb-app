@@ -6,8 +6,7 @@ import { Button } from "@/components/ui/button";
 import dynamic from "next/dynamic";
 
 const ShareButtons = dynamic(
-  () => import("@/components/public/ShareButtons").then((mod) => mod.ShareButtons),
-  { ssr: false }
+  () => import("@/components/public/ShareButtons").then((mod) => mod.ShareButtons)
 );
 
 export const metadata = {

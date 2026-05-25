@@ -4,8 +4,7 @@ import { Footer } from "@/components/public/Footer";
 import dynamic from "next/dynamic";
 
 const FloatingWA = dynamic(
-  () => import("@/components/public/FloatingWA").then((mod) => mod.FloatingWA),
-  { ssr: false }
+  () => import("@/components/public/FloatingWA").then((mod) => mod.FloatingWA)
 );
 
 export default async function PublicLayout({
