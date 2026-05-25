@@ -60,8 +60,6 @@ export async function POST(req: NextRequest) {
       nisn: formData.get("nisn")?.toString() || "",
       noKk: formData.get("noKk")?.toString() || "",
       asalSekolah: formData.get("asalSekolah")?.toString() || "",
-      anakKe: parseInt(formData.get("anakKe")?.toString() || "0") || 0,
-      jumlahSaudara: parseInt(formData.get("jumlahSaudara")?.toString() || "0") || 0,
       
       // Parents
       namaAyah: formData.get("namaAyah")?.toString() || "",
@@ -139,8 +137,6 @@ export async function POST(req: NextRequest) {
         nisn: data.nisn,
         noKk: data.noKk,
         asalSekolah: data.asalSekolah,
-        anakKe: data.anakKe,
-        jumlahSaudara: data.jumlahSaudara,
         status: "Terdaftar",
         confirmedAt: new Date(),
       });

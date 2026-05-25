@@ -201,10 +201,6 @@ export function PendaftarDetailClient({ pendaftar, ortu, berkas, settings }: Pen
                 {renderDataField("NISN", pendaftar.nisn, Fingerprint)}
                 {renderDataField("NIK", pendaftar.nik || pendaftar.noKk)}
                 {renderDataField("Asal Sekolah", pendaftar.asalSekolah)}
-                <div className="grid grid-cols-2 gap-4">
-                  {renderDataField("Anak Ke-", pendaftar.anakKe)}
-                  {renderDataField("Jml Saudara", pendaftar.jumlahSaudara)}
-                </div>
                 <div className="md:col-span-2 mt-2 pt-4 border-t border-gray-50">
                   {renderDataField("Alamat Lengkap", pendaftar.alamat, MapPin)}
                 </div>

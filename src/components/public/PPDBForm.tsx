@@ -42,8 +42,6 @@ export function PPDBForm({ settings }: PPDBFormProps) {
     nisn: "",
     noKk: "",
     asalSekolah: "",
-    anakKe: "",
-    jumlahSaudara: "",
 
     namaAyah: "",
     pekerjaanAyah: "",
@@ -154,8 +152,6 @@ export function PPDBForm({ settings }: PPDBFormProps) {
       nisn: "",
       noKk: "",
       asalSekolah: "",
-      anakKe: "",
-      jumlahSaudara: "",
       namaAyah: "",
       pekerjaanAyah: "",
       penghasilanAyah: "",
@@ -364,17 +360,6 @@ export function PPDBForm({ settings }: PPDBFormProps) {
               <div className="space-y-1.5">
                 <Label className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">Asal Sekolah <span className="text-destructive">*</span></Label>
                 <Input value={formData.asalSekolah} onChange={e => handleInputChange("asalSekolah", e.target.value)} placeholder="Nama Sekolah Sebelumnya" required className="h-10 rounded-lg text-sm font-normal" />
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-1.5">
-                  <Label className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">Anak Ke- <span className="text-slate-300">(Opt)</span></Label>
-                  <Input type="number" value={formData.anakKe} onChange={e => handleInputChange("anakKe", e.target.value)} className="h-10 rounded-lg text-sm font-normal" />
-                </div>
-                <div className="space-y-1.5">
-                  <Label className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">Jml Saudara <span className="text-slate-300">(Opt)</span></Label>
-                  <Input type="number" value={formData.jumlahSaudara} onChange={e => handleInputChange("jumlahSaudara", e.target.value)} className="h-10 rounded-lg text-sm font-normal" />
-                </div>
               </div>
 
               <div className="md:col-span-2 space-y-1.5">
