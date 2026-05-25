@@ -37,7 +37,7 @@ export function HeroSlider({ data, brosurUrl }: { data: SliderData[], brosurUrl?
       className="w-full relative group overflow-hidden border-none"
     >
       <CarouselContent className="-ml-0">
-        {data.map((slide) => (
+        {data.map((slide, index) => (
           <CarouselItem key={slide.id} className="pl-0 border-none outline-none">
             <section className="relative w-full h-[550px] md:h-[650px] flex items-center overflow-hidden bg-[#0d8174]">
               {/* Background Image with Ken Burns effect */}
@@ -47,9 +47,11 @@ export function HeroSlider({ data, brosurUrl }: { data: SliderData[], brosurUrl?
                     src={slide.bgImageUrl}
                     alt={slide.title}
                     fill
-                    priority
+                    preload={index === 0}
+                    fetchPriority={index === 0 ? "high" : "low"}
                     className="object-cover"
                     sizes="100vw"
+                    quality={85}
                   />
                 </div>
                 {/* Gradient Overlay - Kontras Tinggi Mobile First */}
@@ -128,8 +130,8 @@ export function HeroSlider({ data, brosurUrl }: { data: SliderData[], brosurUrl?
                             alt="Visual"
                             fill
                             className="object-contain object-bottom drop-shadow-[0_25px_50px_rgba(0,0,0,0.5)]"
-                            sizes="500px"
-                            priority
+                            sizes="(max-width: 1024px) 1px, 500px"
+                            quality={75}
                           />
                         </div>
                       </div>

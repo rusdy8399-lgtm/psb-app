@@ -70,6 +70,8 @@ export default async function FasilitasPage() {
                             alt={item.nama}
                             fill
                             className="object-cover"
+                            sizes="(max-width: 768px) 100vw, 500px"
+                            quality={75}
                           />
                         </div>
                         <div className="p-6 md:p-8">

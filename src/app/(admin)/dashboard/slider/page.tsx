@@ -16,6 +16,7 @@ import {
 import { toast } from "sonner";
 import Image from "next/image";
 import { AdminTableSkeleton } from "@/components/admin/AdminSkeletons";
+import imageCompression from "browser-image-compression";
 
 interface SliderData {
   id: string;
@@ -64,10 +65,24 @@ export default function SliderCMSPage() {
   }, []);
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>, field: "bgImageUrl" | "fgImageUrl") => {
-    const file = e.target.files?.[0];
+    let file = e.target.files?.[0];
     if (!file) return;
 
     setIsUploading(true);
+
+    if (file.type.startsWith("image/")) {
+      try {
+        const options = {
+          maxSizeMB: 0.2, // Max 200KB
+          maxWidthOrHeight: 1600, // Safe resolution for sliders
+          useWebWorker: true,
+        };
+        file = await imageCompression(file, options);
+      } catch (error) {
+        console.error("Compression error:", error);
+      }
+    }
+
     const uploadData = new FormData();
     uploadData.append("file", file);
 

@@ -112,7 +112,7 @@ export default async function Home() {
                   fill
                   className="object-cover"
                   sizes="(max-width: 768px) 100vw, 50vw"
-                  priority
+                  quality={75}
                 />
               ) : (
                 <div className="w-full h-full bg-slate-100 flex items-center justify-center text-slate-400">

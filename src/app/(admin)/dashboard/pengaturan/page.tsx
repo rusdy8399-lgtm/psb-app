@@ -9,6 +9,7 @@ import { Save, Globe, Settings as SettingsIcon, Info, Upload, ImageIcon, BookOpe
 import { toast } from "sonner";
 import Image from "next/image";
 import { AdminDashboardSkeleton } from "@/components/admin/AdminSkeletons";
+import imageCompression from "browser-image-compression";
 
 export default function PengaturanPage() {
   const [isLoading, setIsLoading] = useState(true);
@@ -86,10 +87,24 @@ export default function PengaturanPage() {
   }, []);
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>, field: string) => {
-    const file = e.target.files?.[0];
+    let file = e.target.files?.[0];
     if (!file) return;
 
     setIsUploading(true);
+
+    if (file.type.startsWith("image/")) {
+      try {
+        const options = {
+          maxSizeMB: 0.2, // Max 200KB
+          maxWidthOrHeight: 1280, // Safe resolution for web logos/illustrations
+          useWebWorker: true,
+        };
+        file = await imageCompression(file, options);
+      } catch (error) {
+        console.error("Compression error:", error);
+      }
+    }
+
     const uploadData = new FormData();
     uploadData.append("file", file);
 

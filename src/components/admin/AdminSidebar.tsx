@@ -80,6 +80,8 @@ export function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
                   alt="School Logo" 
                   fill
                   className="object-cover"
+                  sizes="40px"
+                  quality={75}
                 />
               </div>
               <div>

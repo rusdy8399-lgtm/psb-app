@@ -133,7 +133,8 @@ export default async function BrosurPage() {
                         fill
                         className="object-cover"
                         sizes="300px"
-                        priority
+                        preload={true}
+                        fetchPriority="high"
                       />
                     ) : (
                       <div className="w-full h-full flex flex-col items-center justify-center gap-3 text-slate-300">

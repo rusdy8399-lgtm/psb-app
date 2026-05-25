@@ -73,9 +73,11 @@ export default async function KegiatanDetailPage({ params }: Props) {
             src={item.fotoUrl} 
             alt={item.judul}
             fill
-            priority
+            preload={true}
+            fetchPriority="high"
             className="object-cover"
             sizes="(max-width: 1024px) 100vw, 896px"
+            quality={85}
           />
         </div>
 

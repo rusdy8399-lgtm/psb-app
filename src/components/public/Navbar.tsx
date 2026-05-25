@@ -60,7 +60,8 @@ export function Navbar({ settings }: NavbarProps) {
             src="/logo-navbar.jpg" 
             alt="Bali Bina Insani Tolerance Islamic Boarding School" 
             fill
-            priority
+            loading="eager"
+            quality={85}
             className={`${isFormPage ? "object-cover" : "object-contain"} object-left transition-transform duration-300 group-hover:scale-[1.02]`}
             sizes="(max-width: 768px) 140px, 240px"
           />
