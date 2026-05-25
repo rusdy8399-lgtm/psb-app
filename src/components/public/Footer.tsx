@@ -47,9 +47,9 @@ export function Footer({ settings }: FooterProps) {
 
           {/* Column 1: Brand & Social */}
           <div>
-            <h4 className="text-sm font-semibold tracking-wide text-white mb-2">
+            <p className="text-sm font-semibold tracking-wide text-white mb-2">
               {schoolName}
-            </h4>
+            </p>
             <p className="text-sm text-green-200 leading-relaxed">
               Platform digital modern untuk Sistem Informasi dan Penerimaan Peserta Didik Baru (PPDB) {schoolName}.
             </p>
@@ -91,9 +91,9 @@ export function Footer({ settings }: FooterProps) {
 
           {/* Column 2: Quick Links */}
           <div>
-            <h4 className="text-sm font-semibold tracking-wide text-white mb-3">
+            <p className="text-sm font-semibold tracking-wide text-white mb-3">
               Tautan Cepat
-            </h4>
+            </p>
             <ul className="space-y-2">
               {[
                 { label: "Beranda", href: "/" },
@@ -128,9 +128,9 @@ export function Footer({ settings }: FooterProps) {
 
           {/* Column 3: Contact */}
           <div>
-            <h4 className="text-sm font-semibold tracking-wide text-white mb-3">
+            <p className="text-sm font-semibold tracking-wide text-white mb-3">
               Kontak Kami
-            </h4>
+            </p>
             <ul className="space-y-2">
               <li className="flex items-start gap-3">
                 <MapPin className="w-5 h-5 mt-1 text-green-300 shrink-0" />
