@@ -1,7 +1,7 @@
 import { getKegiatanBySlug, getKegiatanList } from "@/lib/data-fetching";
 import { notFound } from "next/navigation";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 1800; // Cache for 30 minutes
 import { CalendarDays, ArrowRight, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";

@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Image from "next/image";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 1800; // Cache for 30 minutes
 
 export default async function KegiatanPage() {
   const [data, galeriData] = await Promise.all([

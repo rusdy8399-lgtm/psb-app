@@ -91,7 +91,7 @@ export function HeroSlider({ data, brosurUrl }: { data: SliderData[], brosurUrl?
       <CarouselContent className="-ml-0">
         {data.map((slide, index) => (
           <CarouselItem key={slide.id} className="pl-0 border-none outline-none">
-            <section className="relative w-full h-[550px] md:h-[650px] flex items-center overflow-hidden bg-[#0d8174]">
+            <section className="relative w-full h-[550px] md:h-[650px] flex items-center overflow-hidden bg-[#0d8174] contain-layout-paint">
               {/* Background Image with Ken Burns effect */}
               <div className="absolute inset-0 z-0 overflow-hidden">
                 <div className="absolute inset-0 transition-transform duration-[10000ms] group-hover:scale-110 ease-out">
@@ -205,14 +205,14 @@ export function HeroSlider({ data, brosurUrl }: { data: SliderData[], brosurUrl?
         <button 
           onClick={() => api?.scrollPrev()}
           aria-label="Slide sebelumnya"
-          className="pointer-events-auto w-14 h-14 bg-white/10 hover:bg-gold hover:text-[#0d8174] text-white rounded-full flex items-center justify-center transition-all backdrop-blur-md shadow-2xl border border-white/20 hover:scale-110 active:scale-90 cursor-pointer"
+          className="pointer-events-auto w-14 h-14 bg-white/10 hover:bg-gold hover:text-[#0d8174] text-white rounded-full flex items-center justify-center transition-all backdrop-blur-md shadow-2xl border border-white/20 hover:scale-110 active:scale-90 cursor-pointer will-change-transform"
         >
           <ChevronLeft className="w-8 h-8" />
         </button>
         <button 
           onClick={() => api?.scrollNext()}
           aria-label="Slide berikutnya"
-          className="pointer-events-auto w-14 h-14 bg-white/10 hover:bg-gold hover:text-[#0d8174] text-white rounded-full flex items-center justify-center transition-all backdrop-blur-md shadow-2xl border border-white/20 hover:scale-110 active:scale-90 cursor-pointer"
+          className="pointer-events-auto w-14 h-14 bg-white/10 hover:bg-gold hover:text-[#0d8174] text-white rounded-full flex items-center justify-center transition-all backdrop-blur-md shadow-2xl border border-white/20 hover:scale-110 active:scale-90 cursor-pointer will-change-transform"
         >
           <ChevronRight className="w-8 h-8" />
         </button>

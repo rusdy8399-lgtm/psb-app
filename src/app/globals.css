@@ -190,3 +190,13 @@ html {
   content-visibility: auto;
   contain-intrinsic-size: auto 1000px;
 }
+
+/* GPU will-change hardware acceleration hint */
+.will-change-transform {
+  will-change: transform, opacity;
+}
+
+/* CSS Layout Containment */
+.contain-layout-paint {
+  contain: layout paint;
+}

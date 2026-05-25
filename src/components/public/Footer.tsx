@@ -105,6 +105,7 @@ export function Footer({ settings }: FooterProps) {
                 <li key={link.href}>
                   <Link
                     href={link.href}
+                    prefetch={false}
                     className="text-sm text-green-200 hover:text-white hover:translate-x-0.5 transition-all duration-200 inline-block"
                   >
                     {link.label}
@@ -115,6 +116,7 @@ export function Footer({ settings }: FooterProps) {
                 <li>
                   <Link
                     href="/download-brosur"
+                    prefetch={false}
                     className="text-sm text-green-200 hover:text-white hover:translate-x-0.5 transition-all duration-200 inline-flex items-center gap-1.5"
                   >
                     Download Brosur <Download className="w-3 h-3" />

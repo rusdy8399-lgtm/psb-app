@@ -11,6 +11,8 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 
+export const revalidate = 3600; // Cache for 1 hour
+
 export default async function FasilitasPage() {
   const data = await getFasilitas();
 

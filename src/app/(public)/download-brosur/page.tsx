@@ -34,6 +34,8 @@ const highlights = [
   "Pembinaan karakter Islami setiap hari",
 ];
 
+export const revalidate = 3600; // Cache for 1 hour
+
 export default async function BrosurPage() {
   const settings = await getSiteSettings();
   const schoolName = settings?.namaWeb || "Pondok Pesantren Bali Bina Insani";

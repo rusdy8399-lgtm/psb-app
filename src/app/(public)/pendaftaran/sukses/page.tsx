@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState, Suspense } from "react";
 import { toast } from "sonner";
-import { generateCertificate, CertificateData } from "@/lib/pdf/CertificateGenerator";
+import type { CertificateData } from "@/lib/pdf/CertificateGenerator";
 
 function SuksesPageContent() {
   const searchParams = useSearchParams();
@@ -56,6 +56,7 @@ function SuksesPageContent() {
     }
     toast.success("Sedang mengunduh surat keterangan...");
     try {
+      const { generateCertificate } = await import("@/lib/pdf/CertificateGenerator");
       await generateCertificate(data);
     } catch(err) {
       toast.error("Gagal membuat PDF");
