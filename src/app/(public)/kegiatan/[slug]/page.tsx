@@ -5,8 +5,13 @@ export const dynamic = "force-dynamic";
 import { CalendarDays, ArrowRight, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
-import { ShareButtons } from "@/components/public/ShareButtons";
+import dynamic from "next/dynamic";
 import { Metadata } from "next";
+
+const ShareButtons = dynamic(
+  () => import("@/components/public/ShareButtons").then((mod) => mod.ShareButtons),
+  { ssr: false }
+);
 
 interface Props {
   params: Promise<{ slug: string }>;

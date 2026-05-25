@@ -1,7 +1,12 @@
 import { getSettings } from "@/lib/db";
 import { Navbar } from "@/components/public/Navbar";
 import { Footer } from "@/components/public/Footer";
-import { FloatingWA } from "@/components/public/FloatingWA";
+import dynamic from "next/dynamic";
+
+const FloatingWA = dynamic(
+  () => import("@/components/public/FloatingWA").then((mod) => mod.FloatingWA),
+  { ssr: false }
+);
 
 export default async function PublicLayout({
   children,

@@ -24,11 +24,60 @@ interface SliderData {
 
 export function HeroSlider({ data, brosurUrl }: { data: SliderData[], brosurUrl?: string | null }) {
   const [api, setApi] = React.useState<CarouselApi>();
+  const [currentIndex, setCurrentIndex] = React.useState(0);
+  const [hasHydrated, setHasHydrated] = React.useState(false);
   
   // Enable Autoplay with 5s delay, and it won't stop permanently on interaction
   const plugin = React.useRef(
     Autoplay({ delay: 5000, stopOnInteraction: false, stopOnMouseEnter: true })
   );
+
+  React.useEffect(() => {
+    setHasHydrated(true);
+  }, []);
+
+  React.useEffect(() => {
+    if (!api) return;
+    
+    setCurrentIndex(api.selectedScrollSnap());
+    
+    const onSelect = () => {
+      setCurrentIndex(api.selectedScrollSnap());
+    };
+    
+    api.on("select", onSelect);
+    return () => {
+      api.off("select", onSelect);
+    };
+  }, [api]);
+
+  // Pause autoplay if tab is inactive
+  React.useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        plugin.current.stop();
+      } else {
+        plugin.current.play();
+      }
+    };
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, []);
+
+  const shouldRenderImage = (index: number) => {
+    if (index === 0) return true; // Always render slide 0 for LCP and SSR matching
+    if (!hasHydrated) return false; // Prevent hydration mismatch during SSR
+    
+    const len = data.length;
+    const isAdjacent = 
+      Math.abs(index - currentIndex) <= 1 ||
+      (currentIndex === 0 && index === len - 1) ||
+      (currentIndex === len - 1 && index === 0);
+      
+    return isAdjacent;
+  };
 
   return (
     <Carousel
@@ -43,16 +92,18 @@ export function HeroSlider({ data, brosurUrl }: { data: SliderData[], brosurUrl?
               {/* Background Image with Ken Burns effect */}
               <div className="absolute inset-0 z-0 overflow-hidden">
                 <div className="absolute inset-0 transition-transform duration-[10000ms] group-hover:scale-110 ease-out">
-                  <Image
-                    src={slide.bgImageUrl}
-                    alt={slide.title}
-                    fill
-                    preload={index === 0}
-                    fetchPriority={index === 0 ? "high" : "low"}
-                    className="object-cover"
-                    sizes="100vw"
-                    quality={85}
-                  />
+                  {shouldRenderImage(index) && (
+                    <Image
+                      src={slide.bgImageUrl}
+                      alt={slide.title}
+                      fill
+                      preload={index === 0}
+                      fetchPriority={index === 0 ? "high" : "low"}
+                      className="object-cover"
+                      sizes="100vw"
+                      quality={85}
+                    />
+                  )}
                 </div>
                 {/* Gradient Overlay - Kontras Tinggi Mobile First */}
                 <div className="absolute inset-0 bg-gradient-to-b from-black/40 to-black/60 md:bg-gradient-to-r md:from-black/80 md:via-black/40 md:to-transparent z-10" />
@@ -125,14 +176,16 @@ export function HeroSlider({ data, brosurUrl }: { data: SliderData[], brosurUrl?
                          {/* Optional Glow beneath image */}
                          <div className="absolute inset-0 bg-gold/20 rounded-full blur-[100px] animate-pulse" />
                         <div className="w-full h-full relative z-20 animate-float image-shimmer">
-                          <Image
-                            src={slide.fgImageUrl}
-                            alt="Visual"
-                            fill
-                            className="object-contain object-bottom drop-shadow-[0_25px_50px_rgba(0,0,0,0.5)]"
-                            sizes="(max-width: 1024px) 1px, 500px"
-                            quality={75}
-                          />
+                          {shouldRenderImage(index) && (
+                            <Image
+                              src={slide.fgImageUrl}
+                              alt="Visual"
+                              fill
+                              className="object-contain object-bottom drop-shadow-[0_25px_50px_rgba(0,0,0,0.5)]"
+                              sizes="(max-width: 1024px) 1px, 500px"
+                              quality={75}
+                            />
+                          )}
                         </div>
                       </div>
                     </div>
@@ -167,7 +220,7 @@ export function HeroSlider({ data, brosurUrl }: { data: SliderData[], brosurUrl?
             key={i}
             onClick={() => api?.scrollTo(i)}
             className={`rounded-full transition-all duration-500 bg-white/40 hover:bg-white/80 ${
-              api?.selectedScrollSnap() === i ? "bg-white w-6 md:w-12 h-[4px] md:h-1.5" : "w-[6px] md:w-3 h-[4px] md:h-1.5"
+              currentIndex === i ? "bg-white w-6 md:w-12 h-[4px] md:h-1.5" : "w-[6px] md:w-3 h-[4px] md:h-1.5"
             }`}
           />
         ))}

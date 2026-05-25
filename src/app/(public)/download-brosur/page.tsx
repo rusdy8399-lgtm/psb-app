@@ -3,7 +3,12 @@ import Link from "next/link";
 import Image from "next/image";
 import { Download, ArrowRight, CheckCircle2, Share2, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { ShareButtons } from "@/components/public/ShareButtons";
+import dynamic from "next/dynamic";
+
+const ShareButtons = dynamic(
+  () => import("@/components/public/ShareButtons").then((mod) => mod.ShareButtons),
+  { ssr: false }
+);
 
 export const metadata = {
   title: "Download Brosur PSB | Pondok Pesantren Bali Bina Insani",

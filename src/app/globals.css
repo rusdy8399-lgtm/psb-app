@@ -146,25 +146,32 @@
   @apply inline-block py-2 px-6 rounded-full bg-primary/20 text-primary-light text-[10px] md:text-xs font-bold tracking-[0.3em] uppercase mb-4 border border-primary/30 backdrop-blur-md shadow-md font-heading transition-all hover:border-gold/40;
 }
 
-/* Image Shimmer Loading Effect */
-@keyframes shimmer {
-  0% {
-    background-position: -1000px 0;
-  }
-
-  100% {
-    background-position: 1000px 0;
-  }
+/* Image Shimmer Loading Effect (GPU-Accelerated) */
+.image-shimmer {
+  position: relative;
+  overflow: hidden;
+  background-color: #f6f7f8;
 }
 
-.image-shimmer {
-  background: #f6f7f8;
-  background-image: linear-gradient(to right,
-      #f6f7f8 0%,
-      #edeef1 20%,
-      #f6f7f8 40%,
-      #f6f7f8 100%);
-  background-repeat: no-repeat;
-  background-size: 1000px 100%;
-  animation: shimmer 2s infinite linear;
+.image-shimmer::after {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  transform: translateX(-100%);
+  background-image: linear-gradient(
+    90deg,
+    rgba(246, 247, 248, 0) 0%,
+    rgba(237, 238, 241, 0.8) 50%,
+    rgba(246, 247, 248, 0) 100%
+  );
+  animation: shimmer 1.6s infinite;
+  content: '';
+}
+
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
 }
