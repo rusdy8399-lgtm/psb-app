@@ -175,3 +175,18 @@
     transform: translateX(100%);
   }
 }
+
+/* Scroll Behavior & Tap Highlight */
+html {
+  scroll-behavior: smooth;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Content Visibility Optimization */
+.content-visibility-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 1000px;
+}

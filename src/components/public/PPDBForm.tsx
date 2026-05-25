@@ -273,7 +273,7 @@ export function PPDBForm({ settings }: PPDBFormProps) {
             <div className="w-14 h-14 bg-primary/5 rounded-full flex items-center justify-center mx-auto mb-4 text-primary">
               <Users className="w-7 h-7" />
             </div>
-            <h3 className="text-lg font-bold text-slate-800 mb-1">Pilih Jenjang Sekolah</h3>
+            <h2 className="text-lg font-bold text-slate-800 mb-1">Pilih Jenjang Sekolah</h2>
             <p className="text-sm text-slate-500 mb-6">Pilih jenjang pendidikan yang ingin Anda daftarkan.</p>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4 max-w-md mx-auto">
@@ -313,10 +313,10 @@ export function PPDBForm({ settings }: PPDBFormProps) {
         {/* STEP 1: PART A - DATA SANTRI */}
         {step === 1 && (
           <div className="bg-white p-6 md:p-8 rounded-2xl border border-slate-100 shadow-lg shadow-primary/5 animate-in slide-in-from-right-8 duration-500">
-            <h3 className="text-base font-bold text-primary mb-6 flex items-center gap-2.5 border-b border-primary/5 pb-3.5">
+            <h2 className="text-base font-bold text-primary mb-6 flex items-center gap-2.5 border-b border-primary/5 pb-3.5">
               <span className="w-7 h-7 rounded-lg bg-primary/5 flex items-center justify-center"><User className="w-3.5 h-3.5" /></span>
               Bagian A: Data Calon Santri
-            </h3>
+            </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
               <div className="space-y-1.5">
                 <Label className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">Nama Lengkap <span className="text-destructive">*</span></Label>
@@ -388,10 +388,10 @@ export function PPDBForm({ settings }: PPDBFormProps) {
         {/* STEP 2: PART B - ORANG TUA/WALI */}
         {step === 2 && (
           <div className="bg-white p-6 md:p-8 rounded-2xl border border-slate-100 shadow-lg shadow-primary/5 animate-in slide-in-from-right-8 duration-500">
-            <h3 className="text-base font-bold text-primary mb-6 flex items-center gap-2.5 border-b border-primary/5 pb-3.5">
+            <h2 className="text-base font-bold text-primary mb-6 flex items-center gap-2.5 border-b border-primary/5 pb-3.5">
               <span className="w-7 h-7 rounded-lg bg-primary/5 flex items-center justify-center"><Users className="w-3.5 h-3.5" /></span>
               Bagian B: Data Orang Tua / Wali
-            </h3>
+            </h2>
 
             <div className="space-y-6">
               {/* Data Ayah */}
@@ -464,10 +464,10 @@ export function PPDBForm({ settings }: PPDBFormProps) {
         {/* STEP 3: PART C - ADMINISTRASI (UPLOAD) */}
         {step === 3 && (
           <div className="bg-white p-6 md:p-8 rounded-2xl border border-slate-100 shadow-lg shadow-primary/5 animate-in slide-in-from-right-8 duration-500">
-            <h3 className="text-base font-bold text-primary mb-6 flex items-center gap-2.5 border-b border-primary/5 pb-3.5">
+            <h2 className="text-base font-bold text-primary mb-6 flex items-center gap-2.5 border-b border-primary/5 pb-3.5">
               <span className="w-7 h-7 rounded-lg bg-primary/5 flex items-center justify-center"><FolderOpen className="w-3.5 h-3.5" /></span>
               Bagian C: Berkas Administrasi
-            </h3>
+            </h2>
 
             <div className="space-y-6">
               <div className="space-y-1.5">
@@ -560,10 +560,10 @@ export function PPDBForm({ settings }: PPDBFormProps) {
         {/* STEP 4: PART D - PEMBAYARAN */}
         {step === 4 && (
           <div className="bg-white p-6 md:p-8 rounded-2xl border border-slate-100 shadow-lg shadow-primary/5 animate-in slide-in-from-right-8 duration-500">
-            <h3 className="text-base font-bold text-primary mb-6 flex items-center gap-2.5 border-b border-primary/5 pb-3.5">
+            <h2 className="text-base font-bold text-primary mb-6 flex items-center gap-2.5 border-b border-primary/5 pb-3.5">
               <span className="w-7 h-7 rounded-lg bg-primary/5 flex items-center justify-center"><Wallet className="w-3.5 h-3.5" /></span>
               Bagian D: Detail Pembayaran
-            </h3>
+            </h2>
 
             <div className="bg-slate-50 p-5 rounded-xl border border-slate-100 mb-6 overflow-hidden relative">
               <div className="absolute top-0 right-0 p-5 opacity-[0.03]">

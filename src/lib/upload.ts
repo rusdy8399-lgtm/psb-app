@@ -31,6 +31,7 @@ export async function uploadToFirebase(file: File, folder: string): Promise<stri
     // Upload
     const result = await uploadBytes(storageRef, bytes, {
       contentType: file.type || 'application/octet-stream',
+      cacheControl: "public,max-age=31536000,immutable",
     });
 
     console.log(`Firebase Upload: Success ref: ${result.metadata.fullPath}`);

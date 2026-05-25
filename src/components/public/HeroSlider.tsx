@@ -11,7 +11,6 @@ import {
   CarouselItem,
   type CarouselApi,
 } from "@/components/ui/carousel";
-import Autoplay from "embla-carousel-autoplay";
 
 interface SliderData {
   id: string;
@@ -26,14 +25,17 @@ export function HeroSlider({ data, brosurUrl }: { data: SliderData[], brosurUrl?
   const [api, setApi] = React.useState<CarouselApi>();
   const [currentIndex, setCurrentIndex] = React.useState(0);
   const [hasHydrated, setHasHydrated] = React.useState(false);
-  
-  // Enable Autoplay with 5s delay, and it won't stop permanently on interaction
-  const plugin = React.useRef(
-    Autoplay({ delay: 5000, stopOnInteraction: false, stopOnMouseEnter: true })
-  );
+  const [autoplayPlugin, setAutoplayPlugin] = React.useState<any>(null);
 
   React.useEffect(() => {
     setHasHydrated(true);
+    
+    // Lazy load Embla Autoplay only on the client side
+    import("embla-carousel-autoplay").then((mod) => {
+      setAutoplayPlugin(() =>
+        mod.default({ delay: 5000, stopOnInteraction: false, stopOnMouseEnter: true })
+      );
+    });
   }, []);
 
   React.useEffect(() => {
@@ -54,17 +56,18 @@ export function HeroSlider({ data, brosurUrl }: { data: SliderData[], brosurUrl?
   // Pause autoplay if tab is inactive
   React.useEffect(() => {
     const handleVisibilityChange = () => {
+      if (!autoplayPlugin) return;
       if (document.hidden) {
-        plugin.current.stop();
+        autoplayPlugin.stop();
       } else {
-        plugin.current.play();
+        autoplayPlugin.play();
       }
     };
     document.addEventListener("visibilitychange", handleVisibilityChange);
     return () => {
       document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
-  }, []);
+  }, [autoplayPlugin]);
 
   const shouldRenderImage = (index: number) => {
     if (index === 0) return true; // Always render slide 0 for LCP and SSR matching
@@ -82,7 +85,7 @@ export function HeroSlider({ data, brosurUrl }: { data: SliderData[], brosurUrl?
   return (
     <Carousel
       setApi={setApi}
-      plugins={[plugin.current]}
+      plugins={autoplayPlugin ? [autoplayPlugin] : []}
       className="w-full relative group overflow-hidden border-none"
     >
       <CarouselContent className="-ml-0">
@@ -201,28 +204,35 @@ export function HeroSlider({ data, brosurUrl }: { data: SliderData[], brosurUrl?
       <div className="hidden md:flex absolute inset-x-0 top-1/2 -translate-y-1/2 z-30 justify-between px-6 pointer-events-none">
         <button 
           onClick={() => api?.scrollPrev()}
-          className="pointer-events-auto w-14 h-14 bg-white/10 hover:bg-gold hover:text-[#0d8174] text-white rounded-full flex items-center justify-center transition-all backdrop-blur-md shadow-2xl border border-white/20 hover:scale-110 active:scale-90"
+          aria-label="Slide sebelumnya"
+          className="pointer-events-auto w-14 h-14 bg-white/10 hover:bg-gold hover:text-[#0d8174] text-white rounded-full flex items-center justify-center transition-all backdrop-blur-md shadow-2xl border border-white/20 hover:scale-110 active:scale-90 cursor-pointer"
         >
           <ChevronLeft className="w-8 h-8" />
         </button>
         <button 
           onClick={() => api?.scrollNext()}
-          className="pointer-events-auto w-14 h-14 bg-white/10 hover:bg-gold hover:text-[#0d8174] text-white rounded-full flex items-center justify-center transition-all backdrop-blur-md shadow-2xl border border-white/20 hover:scale-110 active:scale-90"
+          aria-label="Slide berikutnya"
+          className="pointer-events-auto w-14 h-14 bg-white/10 hover:bg-gold hover:text-[#0d8174] text-white rounded-full flex items-center justify-center transition-all backdrop-blur-md shadow-2xl border border-white/20 hover:scale-110 active:scale-90 cursor-pointer"
         >
           <ChevronRight className="w-8 h-8" />
         </button>
       </div>
 
-      {/* Progress Bars (Dots) - Smaller and closer on mobile */}
-      <div className="absolute bottom-6 md:bottom-10 left-1/2 -translate-x-1/2 z-30 flex gap-1.5 md:gap-3">
+      {/* Progress Bars (Dots) - Touch Target Compliant (48x48px) but visually styled as tiny dots */}
+      <div className="absolute bottom-6 md:bottom-10 left-1/2 -translate-x-1/2 z-30 flex gap-0.5 md:gap-1">
         {data.map((_, i) => (
           <button
             key={i}
             onClick={() => api?.scrollTo(i)}
-            className={`rounded-full transition-all duration-500 bg-white/40 hover:bg-white/80 ${
-              currentIndex === i ? "bg-white w-6 md:w-12 h-[4px] md:h-1.5" : "w-[6px] md:w-3 h-[4px] md:h-1.5"
-            }`}
-          />
+            aria-label={`Buka slide ${i + 1}`}
+            className="w-12 h-12 flex items-center justify-center focus:outline-none group/dot cursor-pointer bg-transparent border-none p-0"
+          >
+            <span
+              className={`rounded-full transition-all duration-500 bg-white/40 group-hover/dot:bg-white/80 ${
+                currentIndex === i ? "bg-white w-6 md:w-12 h-[4px] md:h-1.5" : "w-[6px] md:w-3 h-[4px] md:h-1.5"
+              }`}
+            />
+          </button>
         ))}
       </div>
     </Carousel>

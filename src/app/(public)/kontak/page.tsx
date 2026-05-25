@@ -16,7 +16,7 @@ export default function KontakPage() {
         <div className="grid md:grid-cols-5 gap-12">
           <div className="md:col-span-2 space-y-8">
             <div className="bg-white p-8 rounded-2xl border border-border shadow-sm">
-              <h3 className="text-xl font-bold font-heading text-primary mb-6">Informasi Kontak</h3>
+              <h2 className="text-xl font-bold font-heading text-primary mb-6">Informasi Kontak</h2>
               
               <div className="space-y-6">
                 <div className="flex items-start gap-4">
@@ -24,7 +24,7 @@ export default function KontakPage() {
                     <MapPin className="w-5 h-5" />
                   </div>
                   <div>
-                    <h4 className="font-semibold text-foreground mb-1">Alamat Pesantren</h4>
+                    <h3 className="font-semibold text-foreground mb-1">Alamat Pesantren</h3>
                     <p className="text-sm text-muted-foreground">Jl. Raya Bali Bina Insani, Kabupaten Tabanan, Provinsi Bali, Indonesia</p>
                   </div>
                 </div>
@@ -34,7 +34,7 @@ export default function KontakPage() {
                     <Phone className="w-5 h-5" />
                   </div>
                   <div>
-                    <h4 className="font-semibold text-foreground mb-1">Telepon / WhatsApp</h4>
+                    <h3 className="font-semibold text-foreground mb-1">Telepon / WhatsApp</h3>
                     <p className="text-sm text-muted-foreground">+62 812 3456 7890</p>
                   </div>
                 </div>
@@ -44,7 +44,7 @@ export default function KontakPage() {
                     <Mail className="w-5 h-5" />
                   </div>
                   <div>
-                    <h4 className="font-semibold text-foreground mb-1">Email</h4>
+                    <h3 className="font-semibold text-foreground mb-1">Email</h3>
                     <p className="text-sm text-muted-foreground">info@balibinainsani.sch.id</p>
                   </div>
                 </div>
@@ -54,7 +54,7 @@ export default function KontakPage() {
 
           <div className="md:col-span-3">
             <div className="bg-white p-8 rounded-2xl border border-border shadow-sm">
-              <h3 className="text-2xl font-bold font-heading text-primary mb-6">Kirim Pesan</h3>
+              <h2 className="text-2xl font-bold font-heading text-primary mb-6">Kirim Pesan</h2>
               <form className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">

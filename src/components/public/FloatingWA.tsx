@@ -16,7 +16,8 @@ export function FloatingWA({ waNumber }: { waNumber: string }) {
     <Link
       href={`https://wa.me/${waNumber}`}
       target="_blank"
-      className="fixed bottom-[80px] right-4 md:bottom-6 md:right-6 z-50 flex items-center gap-2 bg-[#25D366] hover:bg-[#128C7E] text-white px-3 md:px-5 h-[44px] md:h-auto py-0 md:py-3 rounded-[1rem] shadow-md transition-all hover:-translate-y-1"
+      aria-label="Hubungi kami melalui WhatsApp"
+      className="fixed bottom-[80px] right-4 md:bottom-6 md:right-6 z-50 flex items-center gap-2 bg-[#25D366] hover:bg-[#128C7E] text-white px-3 md:px-5 h-[48px] md:h-auto py-0 md:py-3 rounded-[1rem] shadow-md transition-all hover:-translate-y-1 cursor-pointer"
     >
       <MessageCircle className="w-5 h-5 fill-white" />
       <span className="font-medium text-[13px] md:text-sm">Hubungi Admin</span>

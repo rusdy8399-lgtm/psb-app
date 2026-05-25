@@ -75,8 +75,8 @@ export function Navbar({ settings }: NavbarProps) {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className={`text-base font-medium tracking-normal transition-all hover:text-green-700 relative py-1 group/link font-sans ${
-                      pathname === link.href ? "text-green-700" : "text-gray-600"
+                    className={`text-base font-medium tracking-normal transition-all hover:text-[#1A4D2E] relative py-1 group/link font-sans ${
+                      pathname === link.href ? "text-[#1A4D2E]" : "text-gray-600"
                     }`}
                   >
                     {link.name}
@@ -101,8 +101,9 @@ export function Navbar({ settings }: NavbarProps) {
         {/* Mobile menu button */}
         {!isFormPage && (
           <button
-            className="md:hidden p-1.5 text-slate-800 focus:outline-none transition-colors rounded-xl hover:bg-slate-50"
+            className="md:hidden p-3 min-w-[48px] min-h-[48px] flex items-center justify-center text-slate-800 focus:outline-none transition-colors rounded-xl hover:bg-slate-50 cursor-pointer"
             onClick={() => setIsOpen(!isOpen)}
+            aria-label={isOpen ? "Tutup menu navigasi" : "Buka menu navigasi"}
           >
             {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
           </button>
@@ -119,7 +120,7 @@ export function Navbar({ settings }: NavbarProps) {
                 href={link.href}
                 onClick={() => setIsOpen(false)}
                 className={`text-base md:text-lg font-medium tracking-normal transition-colors flex items-center justify-between ${
-                  pathname === link.href ? "text-green-700 border-l-4 border-gold pl-4" : "text-gray-600 hover:text-green-700 pl-4 border-l-4 border-transparent"
+                  pathname === link.href ? "text-[#1A4D2E] border-l-4 border-gold pl-4" : "text-gray-600 hover:text-[#1A4D2E] pl-4 border-l-4 border-transparent"
                 }`}
               >
                 {link.name}

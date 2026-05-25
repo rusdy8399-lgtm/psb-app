@@ -65,7 +65,7 @@ export default async function Home() {
 
             {/* Left Column: Text Content */}
             <div className="space-y-5">
-              <span className="text-xs uppercase tracking-wide text-green-600 font-semibold">
+              <span className="text-xs uppercase tracking-wide text-green-700 font-semibold">
                 Profile Pesantren
               </span>
               <h2 className="text-xl md:text-2xl lg:text-3xl font-semibold text-gray-800 leading-tight">
@@ -128,8 +128,8 @@ export default async function Home() {
           </div>
 
           {/* Program Unggulan - 3 columns */}
-          <div className="mt-10">
-            <p className="text-xs uppercase tracking-wide text-green-600 font-semibold mb-4">Program Unggulan</p>
+          <div className="mt-10 content-visibility-auto">
+            <h2 className="text-xs uppercase tracking-wide text-green-700 font-semibold mb-4">Program Unggulan</h2>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               {([
                 {
@@ -153,12 +153,12 @@ export default async function Home() {
               ] as const).map((item, idx) => (
                 <div key={idx} className="rounded-xl border border-gray-100 shadow-sm p-5 bg-white hover:shadow-md hover:-translate-y-0.5 transition-all">
                   <div className="w-12 h-12 bg-green-50 rounded-xl flex items-center justify-center mb-3">
-                    <item.Icon className="w-6 h-6 text-green-600" />
+                    <item.Icon className="w-6 h-6 text-green-700" />
                   </div>
-                  <span className="inline-block text-[10px] font-semibold uppercase tracking-wide text-green-600 bg-green-50 px-2 py-0.5 rounded-full mb-2">
+                  <span className="inline-block text-[10px] font-semibold uppercase tracking-wide text-green-700 bg-green-50 px-2 py-0.5 rounded-full mb-2">
                     {item.badge}
                   </span>
-                  <h4 className="text-sm font-semibold text-gray-800 mb-1.5">{item.title}</h4>
+                  <h3 className="text-sm font-semibold text-gray-800 mb-1.5">{item.title}</h3>
                   <p className="text-sm text-gray-500 leading-relaxed">{item.desc}</p>
                 </div>
               ))}
@@ -169,10 +169,10 @@ export default async function Home() {
       </section>
 
       {/* Jenjang Pendidikan */}
-      <section className="py-12 bg-white border-t border-gray-100">
+      <section className="py-12 bg-white border-t border-gray-100 content-visibility-auto">
         <div className="max-w-6xl mx-auto px-4">
           <div className="mb-8">
-            <span className="text-xs uppercase tracking-wide text-green-600 font-semibold">Jenjang Pendidikan</span>
+            <h2 className="text-xs uppercase tracking-wide text-green-700 font-semibold">Jenjang Pendidikan</h2>
             <p className="text-sm md:text-base text-gray-500 leading-relaxed mt-1.5 max-w-xl">
               Pondok Pesantren Bali Bina Insani menyelenggarakan pendidikan formal setingkat SMP dan SMA di bawah naungan Kementerian Agama.
             </p>
@@ -190,13 +190,13 @@ export default async function Home() {
                     </div>
                   ) : (
                     <div className="w-14 h-14 rounded-2xl bg-green-50 border border-green-100 flex flex-col items-center justify-center shrink-0">
-                      <span className="text-xs font-bold text-green-600 leading-none">MTs</span>
-                      <span className="text-[9px] text-green-400 mt-0.5">Negeri / Swasta</span>
+                      <span className="text-xs font-bold text-green-700 leading-none">MTs</span>
+                      <span className="text-[9px] text-slate-500 mt-0.5">Negeri / Swasta</span>
                     </div>
                   )}
                   <div>
                     <h3 className="text-lg font-semibold text-gray-800 leading-tight">Madrasah Tsanawiyah</h3>
-                    <span className="inline-block text-[11px] font-semibold text-green-600 bg-green-50 px-2 py-0.5 rounded-full mt-1">
+                    <span className="inline-block text-[11px] font-semibold text-green-700 bg-green-50 px-2 py-0.5 rounded-full mt-1">
                       Setara SMP · 3 Tahun (Kelas 7–9)
                     </span>
                   </div>
@@ -231,7 +231,7 @@ export default async function Home() {
                   ) : (
                     <div className="w-14 h-14 rounded-2xl bg-[#1A4D2E]/5 border border-[#1A4D2E]/10 flex flex-col items-center justify-center shrink-0">
                       <span className="text-xs font-bold text-[#1A4D2E] leading-none">MA</span>
-                      <span className="text-[9px] text-green-600/60 mt-0.5">Negeri / Swasta</span>
+                      <span className="text-[9px] text-slate-500 mt-0.5">Negeri / Swasta</span>
                     </div>
                   )}
                   <div>
@@ -263,11 +263,11 @@ export default async function Home() {
       </section>
 
       {/* Kenapa Memilih Kami - Consistent with Tentang Kami style */}
-      <section className="py-12 bg-slate-50 border-t border-gray-100">
+      <section className="py-12 bg-slate-50 border-t border-gray-100 content-visibility-auto">
         <div className="max-w-6xl mx-auto px-4">
           {/* Header */}
           <div className="mb-8">
-            <span className="text-xs uppercase tracking-wide text-green-600 font-semibold">Keunggulan Kami</span>
+            <span className="text-xs uppercase tracking-wide text-green-700 font-semibold">Keunggulan Kami</span>
             <h2 className="text-xl md:text-2xl lg:text-3xl font-semibold text-gray-800 leading-tight mt-1">Kenapa Memilih Kami?</h2>
             <p className="text-sm md:text-base text-gray-600 leading-relaxed mt-2 max-w-xl">
               Kami berkomitmen memberikan pendidikan terbaik dengan keseimbangan ilmu agama, ilmu umum, dan pembentukan karakter.
@@ -282,7 +282,7 @@ export default async function Home() {
               { title: "Karakter Islami", desc: "Pembiasaan ibadah sunnah dan adab islami setiap hari.", icon: Trophy },
             ].map((item, idx) => (
               <div key={idx} className="bg-white p-5 rounded-xl shadow-sm border border-gray-100 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 group">
-                <div className="w-10 h-10 rounded-lg bg-green-50 text-green-600 flex items-center justify-center mb-4 group-hover:bg-green-600 group-hover:text-white transition-all duration-300">
+                <div className="w-10 h-10 rounded-lg bg-green-50 text-green-700 flex items-center justify-center mb-4 group-hover:bg-green-600 group-hover:text-white transition-all duration-300">
                   <item.icon className="w-5 h-5" />
                 </div>
                 <h3 className="text-sm font-semibold text-gray-800 mb-1.5">{item.title}</h3>
@@ -294,7 +294,7 @@ export default async function Home() {
       </section>
 
       {/* CTA Section - Compact */}
-      <section className="py-12 bg-white">
+      <section className="py-12 bg-white content-visibility-auto">
         <div className="max-w-4xl mx-auto px-4">
           <div className="bg-[#0f6c5e] rounded-3xl p-10 md:py-14 md:px-16 text-center relative overflow-hidden shadow-lg">
             {/* Subtle blur decorations */}

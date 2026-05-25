@@ -16,6 +16,12 @@ const poppins = Poppins({
   display: "swap",
 });
 
+export const viewport = {
+  themeColor: "#1A4D2E",
+  width: "device-width",
+  initialScale: 1,
+};
+
 export const metadata: Metadata = {
   title: {
     default: "Pesantren Bali | Pondok Pesantren Bali Bina Insani | Pesantren Terbaik",
@@ -37,6 +43,20 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: "/favicon.ico",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+  alternates: {
+    canonical: "/",
   },
 };
 

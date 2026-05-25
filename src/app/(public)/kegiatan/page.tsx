@@ -17,9 +17,10 @@ export default async function KegiatanPage() {
 
   return (
     <div className="bg-slate-50 min-h-screen">
+      <h1 className="sr-only">Galeri dan Kegiatan Pondok Pesantren Bali Bina Insani</h1>
 
       {/* ── Galeri Kegiatan ─────────────────────────── */}
-      <section className="py-12 bg-white border-b border-slate-100">
+      <section className="py-12 bg-white border-b border-slate-100 content-visibility-auto">
         <div className="max-w-7xl mx-auto px-6">
           {/* Header */}
           <div className="text-center mb-8">
@@ -73,12 +74,12 @@ export default async function KegiatanPage() {
       </section>
 
       {/* ── Daftar Berita & Kegiatan ─────────────────── */}
-      <section className="py-16 md:py-24">
+      <section className="py-16 md:py-24 content-visibility-auto">
         <div className="container mx-auto px-4 max-w-7xl">
           <div className="text-center mb-10 animate-in fade-in slide-in-from-top-4 duration-700">
-            <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold text-slate-900 leading-tight">
+            <h2 className="text-2xl md:text-4xl lg:text-5xl font-bold text-slate-900 leading-tight">
               Aktivitas Santri <span className="text-primary">Terbaru</span>
-            </h1>
+            </h2>
             <p className="text-slate-500 text-sm md:text-base lg:text-lg max-w-2xl mx-auto leading-relaxed mt-2">
               Ikuti berbagai kegiatan edukatif, keagamaan, dan prestasi santri di Pondok Pesantren Bali Bina Insani.
             </p>
@@ -108,9 +109,9 @@ export default async function KegiatanPage() {
 
                   <div className="p-8 flex-1 flex flex-col justify-between">
                     <div>
-                      <h2 className="text-lg md:text-xl font-bold font-sans text-slate-800 mb-4 line-clamp-2 leading-snug group-hover:text-primary transition-colors">
+                      <h3 className="text-lg md:text-xl font-bold font-sans text-slate-800 mb-4 line-clamp-2 leading-snug group-hover:text-primary transition-colors">
                         {item.judul}
-                      </h2>
+                      </h3>
                       <p className="text-slate-500 text-sm leading-relaxed line-clamp-3 mb-6 font-sans">
                         {item.deskripsi}
                       </p>
