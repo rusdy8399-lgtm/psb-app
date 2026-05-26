@@ -239,8 +239,8 @@ export default function KegiatanCMSPage() {
       </div>
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="max-w-2xl overflow-y-auto max-h-[90vh] rounded-[24px] border-none shadow-2xl p-0">
-          <DialogHeader className="p-8 bg-slate-50/50 border-b border-slate-100">
+        <DialogContent className="max-w-5xl w-[95vw] overflow-hidden rounded-[24px] border-none shadow-2xl p-0 bg-slate-50 max-h-[92vh] flex flex-col">
+          <DialogHeader className="p-6 md:p-8 bg-white border-b border-slate-100 shrink-0">
             <DialogTitle className="font-heading text-xl font-bold flex items-center gap-3 text-slate-800">
                <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
                 <CalendarDays className="w-5 h-5" /> 
@@ -248,71 +248,111 @@ export default function KegiatanCMSPage() {
                {editingItem ? "Edit Data Kegiatan" : "Tambah Kegiatan Baru"}
             </DialogTitle>
           </DialogHeader>
-          <form onSubmit={handleSave} className="p-8 space-y-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-               <div className="space-y-2.5">
-                  <Label className="font-bold text-slate-700 text-sm ml-1">Judul Kegiatan</Label>
-                  <Input 
+          <form onSubmit={handleSave} className="flex-1 overflow-y-auto p-6 md:p-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Left Column: Paper Sheet Editor (2/3 width) */}
+            <div className="lg:col-span-2 space-y-4">
+              <div className="bg-white shadow-[0_4px_24px_rgba(0,0,0,0.03)] border border-slate-200/80 rounded-2xl p-8 md:p-10 min-h-[500px] flex flex-col relative transition-all duration-300 hover:shadow-[0_8px_32px_rgba(0,0,0,0.05)]">
+                {/* Paper Header / Title Input */}
+                <div className="relative mb-4">
+                  <input 
                     required 
                     value={formData.judul} 
                     onChange={(e) => setFormData({...formData, judul: e.target.value})} 
-                    placeholder="Masukkan judul kegiatan..." 
-                    className="h-12 rounded-xl border-slate-200 bg-slate-50/30 focus:bg-white shadow-none focus:ring-2 focus:ring-primary/10"
+                    placeholder="Ketik Judul Kegiatan / Berita di sini..." 
+                    className="w-full text-2xl md:text-3xl font-bold text-slate-800 placeholder:text-slate-200 border-none outline-none focus:outline-none focus:ring-0 p-0 bg-transparent font-sans"
                   />
-               </div>
-               <div className="space-y-2.5">
-                  <Label className="font-bold text-slate-700 text-sm ml-1">Tanggal Kegiatan</Label>
-                  <Input 
-                    type="date" 
-                    required 
-                    value={formData.tanggal} 
-                    onChange={(e) => setFormData({...formData, tanggal: e.target.value})} 
-                    className="h-12 rounded-xl border-slate-200 bg-slate-50/30 focus:bg-white shadow-none focus:ring-2 focus:ring-primary/10"
-                  />
-               </div>
-            </div>
+                </div>
+                
+                {/* Divider */}
+                <div className="h-[2px] bg-slate-100 w-full mb-6" />
 
-            <div className="space-y-2.5">
-              <Label className="font-bold text-slate-700 text-sm ml-1">Deskripsi Lengkap</Label>
-              <Textarea 
-                required 
-                value={formData.deskripsi} 
-                onChange={(e) => setFormData({...formData, deskripsi: e.target.value})} 
-                placeholder="Tuliskan deskripsi kegiatan secara detail..."
-                className="min-h-[150px] rounded-xl border-slate-200 bg-slate-50/30 focus:bg-white shadow-none focus:ring-2 focus:ring-primary/10"
-              />
+                {/* Paper Body / Textarea Editor */}
+                <textarea
+                  required
+                  value={formData.deskripsi}
+                  onChange={(e) => setFormData({...formData, deskripsi: e.target.value})}
+                  placeholder="Tuliskan isi redaksi berita atau deskripsi kegiatan secara lengkap dan leluasa di sini..."
+                  className="w-full flex-1 min-h-[350px] text-base text-slate-700 leading-relaxed placeholder:text-slate-300 border-none outline-none focus:outline-none focus:ring-0 p-0 resize-none bg-transparent font-sans"
+                />
+              </div>
             </div>
+            
+            {/* Right Column: Settings & Meta Sidebar (1/3 width) */}
+            <div className="lg:col-span-1 flex flex-col gap-6">
+              {/* Publication Settings Panel */}
+              <div className="bg-white border border-slate-200/60 rounded-2xl p-6 shadow-[0_4px_24px_rgba(0,0,0,0.02)] space-y-6">
+                <div>
+                  <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-4 flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-primary animate-pulse" /> Detail Publikasi
+                  </h3>
+                  
+                  <div className="space-y-4">
+                    {/* Tanggal */}
+                    <div className="space-y-2">
+                      <Label className="font-bold text-slate-700 text-xs ml-1">Tanggal Kegiatan</Label>
+                      <Input 
+                        type="date" 
+                        required 
+                        value={formData.tanggal} 
+                        onChange={(e) => setFormData({...formData, tanggal: e.target.value})} 
+                        className="h-11 rounded-xl border-slate-200 bg-slate-50/30 focus:bg-white shadow-none focus:ring-2 focus:ring-primary/10 text-sm"
+                      />
+                    </div>
 
-            <div className="space-y-4 p-6 bg-[#FAFAF8] rounded-2xl border border-slate-100">
-               <Label className="font-bold text-slate-700 text-sm flex items-center gap-2 mb-2">
-                 <div className="w-1.5 h-1.5 rounded-full bg-primary" /> Foto Kegiatan
-               </Label>
-               <div className="flex flex-col md:flex-row gap-6 items-start md:items-center">
-                  <div className="relative group overflow-hidden rounded-xl aspect-video w-full md:w-56 bg-slate-200 border border-slate-300 shadow-inner">
-                     {formData.fotoUrl ? (
-                        <img src={formData.fotoUrl} className="w-full h-full object-cover" alt="prev" />
-                     ) : (
-                        <div className="absolute inset-0 flex items-center justify-center text-slate-400"><ImageIcon className="w-8 h-8 opacity-20" /></div>
-                     )}
-                     <label className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 cursor-pointer backdrop-blur-sm">
-                        <Upload className="text-white w-8 h-8 mb-2 animate-bounce" />
-                        <span className="text-white text-[10px] font-bold uppercase tracking-widest">Ganti Foto</span>
-                        <input type="file" className="hidden" accept="image/*" onChange={handleFileUpload} disabled={isUploading} />
-                     </label>
+                    {/* Foto Upload */}
+                    <div className="space-y-3 pt-2">
+                      <Label className="font-bold text-slate-700 text-xs ml-1">Foto Kegiatan</Label>
+                      <div className="relative group overflow-hidden rounded-xl aspect-video w-full bg-slate-100 border border-slate-200 shadow-inner flex items-center justify-center">
+                        {formData.fotoUrl ? (
+                          <img src={formData.fotoUrl} className="w-full h-full object-cover" alt="preview" />
+                        ) : (
+                          <div className="flex flex-col items-center gap-2 text-slate-400">
+                            <ImageIcon className="w-8 h-8 opacity-30" />
+                            <span className="text-[10px] font-bold uppercase tracking-wider opacity-60">Belum ada foto</span>
+                          </div>
+                        )}
+                        <label className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 cursor-pointer backdrop-blur-sm">
+                          <Upload className="text-white w-6 h-6 mb-1 animate-bounce" />
+                          <span className="text-white text-[10px] font-bold uppercase tracking-widest">Ganti Foto</span>
+                          <input type="file" className="hidden" accept="image/*" onChange={handleFileUpload} disabled={isUploading} />
+                        </label>
+                      </div>
+                      <div className="space-y-2">
+                        <Input 
+                          value={formData.fotoUrl} 
+                          onChange={(e) => setFormData({...formData, fotoUrl: e.target.value})} 
+                          placeholder="URL Foto..." 
+                          className="h-9 text-[10px] font-mono rounded-lg border-slate-200" 
+                        />
+                        <p className="text-[9px] text-slate-400 font-medium leading-relaxed">
+                          * Klik area preview foto di atas untuk mengunggah dari komputer Anda.
+                        </p>
+                      </div>
+                    </div>
                   </div>
-                  <div className="flex-1 space-y-3">
-                     <Input value={formData.fotoUrl} onChange={(e) => setFormData({...formData, fotoUrl: e.target.value})} placeholder="URL Foto..." className="h-9 text-[10px] font-mono rounded-lg border-slate-200" />
-                     <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest opacity-60">Klik area preview untuk mengunggah berkas.</p>
-                  </div>
-               </div>
+                </div>
+              </div>
+              
+              {/* Actions Panel */}
+              <div className="bg-white border border-slate-200/60 rounded-2xl p-5 shadow-[0_4px_24px_rgba(0,0,0,0.02)] flex flex-col gap-3">
+                <Button 
+                  type="submit" 
+                  className="w-full h-12 bg-primary hover:bg-[#143d24] font-bold rounded-xl shadow-lg shadow-primary/10 transition-all active:scale-[0.98]"
+                  disabled={isUploading}
+                >
+                  {isUploading ? "Mengunggah..." : (editingItem ? "Simpan Perubahan" : "Posting Kegiatan")}
+                </Button>
+                <Button 
+                  type="button" 
+                  variant="outline" 
+                  onClick={() => setIsDialogOpen(false)} 
+                  className="w-full h-12 font-bold rounded-xl border-slate-200 text-slate-600 hover:bg-slate-50"
+                  disabled={isUploading}
+                >
+                  Batal
+                </Button>
+              </div>
             </div>
-
-            <DialogFooter className="pt-8 border-t border-slate-100 flex gap-3">
-              <Button type="button" variant="outline" onClick={() => setIsDialogOpen(false)} className="h-12 font-bold rounded-xl border-slate-200 px-8 text-slate-600 hover:bg-slate-50" disabled={isUploading}>Batal</Button>
-              <Button type="submit" className="h-12 bg-primary hover:bg-[#143d24] font-bold rounded-xl px-10 shadow-lg shadow-primary/20 transition-all active:scale-[0.98]" disabled={isUploading}>
-                {isUploading ? "Mengunggah..." : (editingItem ? "Simpan Perubahan" : "Posting Kegiatan")}
-              </Button>
-            </DialogFooter>
           </form>
         </DialogContent>
       </Dialog>
