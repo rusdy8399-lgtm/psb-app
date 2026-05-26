@@ -73,7 +73,7 @@ export default async function BrosurPage() {
               <ul className="space-y-2.5">
                 {highlights.map((item, i) => (
                   <li key={i} className="flex items-center gap-3 text-sm text-slate-600">
-                    <CheckCircle2 className="w-4 h-4 text-green-500 shrink-0" />
+                    <CheckCircle2 className="w-4 h-4 text-green-700 shrink-0" />
                     {item}
                   </li>
                 ))}

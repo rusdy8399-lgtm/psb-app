@@ -74,7 +74,7 @@ function SuksesPageContent() {
         <div className="bg-white p-8 md:p-12 rounded-3xl border border-border shadow-2xl relative overflow-hidden transition-all hover:shadow-primary/5">
           <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-primary via-primary-light to-gold"></div>
           
-          <div className="w-24 h-24 bg-green-50 text-green-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-inner animate-in zoom-in duration-500">
+          <div className="w-24 h-24 bg-green-50 text-green-700 rounded-full flex items-center justify-center mx-auto mb-6 shadow-inner animate-in zoom-in duration-500">
             <CheckCircle className="w-12 h-12" />
           </div>
           
