@@ -30,6 +30,10 @@ export function HeroSlider({ data, brosurUrl }: { data: SliderData[], brosurUrl?
   React.useEffect(() => {
     setHasHydrated(true);
     
+    // Dynamic CSS Loading
+    import("@/styles/carousel.css");
+    import("@/styles/animations.css");
+    
     // Lazy load Embla Autoplay only on the client side
     import("embla-carousel-autoplay").then((mod) => {
       setAutoplayPlugin(() =>

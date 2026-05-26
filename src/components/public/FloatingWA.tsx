@@ -3,9 +3,25 @@
 import Link from "next/link";
 import { MessageCircle } from "lucide-react";
 import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export function FloatingWA({ waNumber }: { waNumber: string }) {
   const pathname = usePathname();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+    if (typeof window !== "undefined") {
+      const idle = (window as any).requestIdleCallback || ((cb: any) => setTimeout(cb, 1));
+      idle(() => {
+        import("@/styles/animations.css");
+      });
+    }
+  }, []);
+
+  if (!mounted) {
+    return null;
+  }
 
   // Hide on registration page
   if (pathname === "/pendaftaran" || pathname?.startsWith("/ppdb/")) {
