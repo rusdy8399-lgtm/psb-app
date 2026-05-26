@@ -239,7 +239,7 @@ export default function KegiatanCMSPage() {
       </div>
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="max-w-5xl w-[95vw] overflow-hidden rounded-[24px] border-none shadow-2xl p-0 bg-slate-50 max-h-[92vh] flex flex-col">
+        <DialogContent className="max-w-5xl w-[95vw] sm:max-w-5xl overflow-hidden rounded-[24px] border-none shadow-2xl p-0 bg-slate-50 max-h-[92vh] flex flex-col">
           <DialogHeader className="p-6 md:p-8 bg-white border-b border-slate-100 shrink-0">
             <DialogTitle className="font-heading text-xl font-bold flex items-center gap-3 text-slate-800">
                <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
