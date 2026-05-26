@@ -3,7 +3,6 @@
   position: relative;
   overflow: hidden;
   background-color: #f6f7f8;
-  contain: layout paint;
 }
 
 .image-shimmer::after {
@@ -12,7 +11,7 @@
   right: 0;
   bottom: 0;
   left: 0;
-  transform: translate3d(-100%, 0, 0);
+  transform: translateX(-100%);
   background-image: linear-gradient(
     90deg,
     rgba(246, 247, 248, 0) 0%,
@@ -21,27 +20,24 @@
   );
   animation: shimmer 1.6s infinite;
   content: '';
-  will-change: transform;
 }
 
 @keyframes shimmer {
   100% {
-    transform: translate3d(100%, 0, 0);
+    transform: translateX(100%);
   }
 }
 
 /* Float Keyframe & Utility for Hero Image */
 @keyframes float {
   0%, 100% {
-    transform: translate3d(0, 0, 0);
+    transform: translateY(0);
   }
   50% {
-    transform: translate3d(0, -10px, 0);
+    transform: translateY(-10px);
   }
 }
 
 .animate-float {
   animation: float 6s ease-in-out infinite;
-  will-change: transform;
-  transform: translate3d(0, 0, 0);
 }
