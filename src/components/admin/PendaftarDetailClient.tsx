@@ -199,7 +199,7 @@ export function PendaftarDetailClient({ pendaftar, ortu, berkas, settings }: Pen
                 {renderDataField("Tempat, Tanggal Lahir", `${pendaftar.tempatLahir}, ${pendaftar.tanggalLahir}`, Calendar)}
                 {renderDataField("Jenis Kelamin", pendaftar.jenisKelamin)}
                 {renderDataField("NISN", pendaftar.nisn, Fingerprint)}
-                {renderDataField("NIK", pendaftar.nik || pendaftar.noKk)}
+                {renderDataField("NIK", pendaftar.nik)}
                 {renderDataField("Asal Sekolah", pendaftar.asalSekolah)}
                 <div className="md:col-span-2 mt-2 pt-4 border-t border-gray-50">
                   {renderDataField("Alamat Lengkap", pendaftar.alamat, MapPin)}

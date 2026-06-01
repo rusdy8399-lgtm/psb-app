@@ -114,7 +114,6 @@ export function PPDBForm({ settings }: PPDBFormProps) {
       if (!/^(\+62|62|0)8[1-9][0-9]{6,11}$/.test(formData.noHpWali)) return "Format nomor WhatsApp tidak valid";
     }
     if (step === 3) {
-      if (!formData.noKk) return "Nomor Kartu Keluarga wajib diisi";
       // Document files are now optional for faster registration
     }
     if (step === 4) {
@@ -470,11 +469,6 @@ export function PPDBForm({ settings }: PPDBFormProps) {
             </h2>
 
             <div className="space-y-6">
-              <div className="space-y-1.5">
-                <Label className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">No. Kartu Keluarga <span className="text-destructive">*</span></Label>
-                <Input value={formData.noKk} onChange={e => handleInputChange("noKk", e.target.value)} placeholder="Kartu Keluarga (16 digit)" required className="h-10 rounded-lg text-sm font-normal" />
-              </div>
-
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                 {/* KK Upload */}
                 <div className="space-y-2">
