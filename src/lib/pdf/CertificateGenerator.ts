@@ -177,12 +177,10 @@ export const generateCertificate = async (data: CertificateData) => {
   const qrSize = 35;
 
   try {
-    // Generate the verification URL
-    const adminUrl = data.id 
-      ? `${window.location.origin}/dashboard/pendaftar/${data.id}`
-      : `${window.location.origin}/ppdb/sukses?code=${data.kodePendaftaran}`;
+    // WhatsApp Group URL decoded from user's upload
+    const waGroupUrl = "https://chat.whatsapp.com/Kx5FYg94wFZJCD44EPakmB";
     
-    const qrDataUrl = await QRCode.toDataURL(adminUrl, {
+    const qrDataUrl = await QRCode.toDataURL(waGroupUrl, {
       margin: 1,
       width: 256,
       errorCorrectionLevel: 'M'
@@ -192,7 +190,7 @@ export const generateCertificate = async (data: CertificateData) => {
     
     doc.setFontSize(8);
     doc.setTextColor(150, 150, 150);
-    doc.text("Scan for Verification", 15, qrY + qrSize + 5);
+    doc.text("Grup WhatsApp Wali Santri", 15, qrY + qrSize + 5);
   } catch (qrErr) {
     console.error("QR Code Generation failed", qrErr);
     // Draw placeholder if QR fails
