@@ -2,16 +2,21 @@ import { S3Client, PutObjectCommand, DeleteObjectCommand } from "@aws-sdk/client
 
 let r2ClientInstance: S3Client | null = null;
 
+function cleanEnv(val?: string): string {
+  if (!val) return "";
+  return val.trim().replace(/^["']|["']$/g, "");
+}
+
 /**
  * Checks whether all required Cloudflare R2 environment variables are defined.
  */
 export function isR2Configured(): boolean {
-  return Boolean(
-    process.env.R2_ACCOUNT_ID &&
-    process.env.R2_ACCESS_KEY_ID &&
-    process.env.R2_SECRET_ACCESS_KEY &&
-    process.env.R2_BUCKET_NAME
-  );
+  const accountId = cleanEnv(process.env.R2_ACCOUNT_ID);
+  const accessKeyId = cleanEnv(process.env.R2_ACCESS_KEY_ID);
+  const secretAccessKey = cleanEnv(process.env.R2_SECRET_ACCESS_KEY);
+  const bucket = cleanEnv(process.env.R2_BUCKET_NAME);
+
+  return Boolean(accountId && accessKeyId && secretAccessKey && bucket);
 }
 
 /**
@@ -19,9 +24,9 @@ export function isR2Configured(): boolean {
  */
 export function getR2Client(): S3Client {
   if (!r2ClientInstance) {
-    const accountId = process.env.R2_ACCOUNT_ID;
-    const accessKeyId = process.env.R2_ACCESS_KEY_ID;
-    const secretAccessKey = process.env.R2_SECRET_ACCESS_KEY;
+    const accountId = cleanEnv(process.env.R2_ACCOUNT_ID);
+    const accessKeyId = cleanEnv(process.env.R2_ACCESS_KEY_ID);
+    const secretAccessKey = cleanEnv(process.env.R2_SECRET_ACCESS_KEY);
 
     if (!accountId || !accessKeyId || !secretAccessKey) {
       throw new Error(
@@ -45,7 +50,7 @@ export function getR2Client(): S3Client {
  * Generates the public URL for an object stored in R2.
  */
 export function getR2PublicUrl(key: string): string {
-  const publicBaseUrl = (process.env.R2_PUBLIC_URL || "").replace(/\/+$/, "");
+  const publicBaseUrl = cleanEnv(process.env.R2_PUBLIC_URL).replace(/\/+$/, "");
   const cleanKey = key.replace(/^\/+/, "");
 
   if (publicBaseUrl) {
@@ -53,8 +58,8 @@ export function getR2PublicUrl(key: string): string {
   }
 
   // Fallback endpoint if public URL/domain is not specified
-  const accountId = process.env.R2_ACCOUNT_ID;
-  const bucket = process.env.R2_BUCKET_NAME;
+  const accountId = cleanEnv(process.env.R2_ACCOUNT_ID);
+  const bucket = cleanEnv(process.env.R2_BUCKET_NAME);
   return `https://${bucket}.${accountId}.r2.cloudflarestorage.com/${cleanKey}`;
 }
 
@@ -64,7 +69,7 @@ export function getR2PublicUrl(key: string): string {
 export function extractR2Key(keyOrUrl: string): string {
   if (!keyOrUrl) return "";
 
-  const publicBaseUrl = (process.env.R2_PUBLIC_URL || "").replace(/\/+$/, "");
+  const publicBaseUrl = cleanEnv(process.env.R2_PUBLIC_URL).replace(/\/+$/, "");
   if (publicBaseUrl && keyOrUrl.startsWith(publicBaseUrl)) {
     return keyOrUrl.replace(`${publicBaseUrl}/`, "").replace(/^\/+/, "");
   }
@@ -87,16 +92,20 @@ export async function uploadBufferToR2(params: {
   key: string;
   contentType: string;
 }): Promise<string> {
-  const bucket = process.env.R2_BUCKET_NAME;
+  const bucket = cleanEnv(process.env.R2_BUCKET_NAME);
   if (!bucket) {
     throw new Error("Cloudflare R2 Bucket Name (R2_BUCKET_NAME) is not set.");
   }
 
   const client = getR2Client();
+  const bodyBuffer = Buffer.isBuffer(params.buffer)
+    ? params.buffer
+    : Buffer.from(params.buffer);
+
   const command = new PutObjectCommand({
     Bucket: bucket,
     Key: params.key,
-    Body: params.buffer,
+    Body: bodyBuffer,
     ContentType: params.contentType,
     CacheControl: "public, max-age=31536000, immutable",
   });
@@ -109,7 +118,7 @@ export async function uploadBufferToR2(params: {
  * Deletes an object from Cloudflare R2 bucket given its key or public URL.
  */
 export async function deleteObjectFromR2(keyOrUrl: string): Promise<void> {
-  const bucket = process.env.R2_BUCKET_NAME;
+  const bucket = cleanEnv(process.env.R2_BUCKET_NAME);
   if (!bucket) {
     throw new Error("Cloudflare R2 Bucket Name (R2_BUCKET_NAME) is not set.");
   }

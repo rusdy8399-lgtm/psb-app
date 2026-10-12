@@ -64,6 +64,7 @@ export default function KegiatanCMSPage() {
     if (!file) return;
 
     setIsUploading(true);
+    const originalName = file.name || "kegiatan.jpg";
 
     if (file.type.startsWith("image/")) {
       try {
@@ -79,7 +80,7 @@ export default function KegiatanCMSPage() {
     }
 
     const uploadData = new FormData();
-    uploadData.append("file", file);
+    uploadData.append("file", file, originalName);
 
     try {
       const response = await fetch("/api/upload", {
@@ -92,7 +93,8 @@ export default function KegiatanCMSPage() {
         setFormData(prev => ({ ...prev, fotoUrl: url }));
         toast.success("Foto berhasil diunggah");
       } else {
-        toast.error("Gagal mengunggah foto");
+        const errorData = await response.json().catch(() => null);
+        toast.error(errorData?.message || errorData?.error || "Gagal mengunggah foto");
       }
     } catch (error) {
       toast.error("Terjadi kesalahan saat upload");

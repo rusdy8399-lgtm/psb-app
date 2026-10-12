@@ -20,7 +20,19 @@ const remotePatterns: Array<{
     },
     {
       protocol: "https",
+      hostname: "*.r2.dev",
+    },
+    {
+      protocol: "https",
       hostname: "**.r2.dev",
+    },
+    {
+      protocol: "https",
+      hostname: "pub-af3908bb47c74f1b9fd5abb374744939.r2.dev",
+    },
+    {
+      protocol: "https",
+      hostname: "*.r2.cloudflarestorage.com",
     },
     {
       protocol: "https",

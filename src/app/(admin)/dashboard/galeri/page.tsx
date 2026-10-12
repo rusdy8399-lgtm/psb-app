@@ -33,7 +33,7 @@ export default function GaleriCMSPage() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<GaleriData | null>(null);
   const [isUploading, setIsUploading] = useState(false);
-  
+
   // Form State
   const [formData, setFormData] = useState({
     judul: "",
@@ -64,6 +64,7 @@ export default function GaleriCMSPage() {
     if (!file) return;
 
     setIsUploading(true);
+    const originalName = file.name || "galeri.jpg";
 
     if (file.type.startsWith("image/")) {
       try {
@@ -79,7 +80,7 @@ export default function GaleriCMSPage() {
     }
 
     const uploadData = new FormData();
-    uploadData.append("file", file);
+    uploadData.append("file", file, originalName);
 
     try {
       const response = await fetch("/api/upload", {
@@ -92,7 +93,8 @@ export default function GaleriCMSPage() {
         setFormData(prev => ({ ...prev, fotoUrl: url }));
         toast.success("Foto berhasil diunggah");
       } else {
-        toast.error("Gagal mengunggah foto");
+        const errorData = await response.json().catch(() => null);
+        toast.error(errorData?.message || errorData?.error || "Gagal mengunggah foto");
       }
     } catch (error) {
       toast.error("Terjadi kesalahan saat upload");
@@ -148,7 +150,7 @@ export default function GaleriCMSPage() {
 
   const handleDelete = async (id: string) => {
     if (!confirm("Hapus foto galeri ini?")) return;
-    
+
     try {
       const response = await fetch(`/api/admin/galeri/${id}`, { method: "DELETE" });
       if (response.ok) {
@@ -165,10 +167,10 @@ export default function GaleriCMSPage() {
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center p-8 bg-white rounded-2xl border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.02)] gap-4">
         <div>
           <h2 className="text-2xl font-bold font-heading text-slate-800 tracking-tight flex items-center gap-3">
-             <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
-                <Images className="w-5 h-5" /> 
-             </div>
-             Manajemen Galeri Foto
+            <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
+              <Images className="w-5 h-5" />
+            </div>
+            Manajemen Galeri Foto
           </h2>
           <p className="text-sm text-slate-500 mt-1">Kelola koleksi dokumentasi foto pesantren secara sistematis.</p>
         </div>
@@ -198,10 +200,10 @@ export default function GaleriCMSPage() {
                       <TableCell className="pl-6">
                         <div className="relative w-16 h-10 overflow-hidden rounded-xl border border-slate-200 bg-slate-100 shadow-sm transition-transform duration-300 group-hover:scale-105 flex items-center justify-center">
                           {item.fotoUrl ? (
-                            <Image 
-                              src={item.fotoUrl} 
-                              alt={item.judul} 
-                              fill 
+                            <Image
+                              src={item.fotoUrl}
+                              alt={item.judul}
+                              fill
                               className="object-cover"
                               sizes="64px"
                             />
@@ -215,9 +217,9 @@ export default function GaleriCMSPage() {
                         <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1.5 opacity-60 line-clamp-1 max-w-md">{item.deskripsi}</p>
                       </TableCell>
                       <TableCell>
-                         <span className="text-[10px] font-bold tracking-widest uppercase text-slate-500 bg-slate-100 px-2 py-1 rounded-md">
-                           {item.tanggal}
-                         </span>
+                        <span className="text-[10px] font-bold tracking-widest uppercase text-slate-500 bg-slate-100 px-2 py-1 rounded-md">
+                          {item.tanggal}
+                        </span>
                       </TableCell>
                       <TableCell className="text-right pr-6">
                         <div className="flex justify-end gap-1">
@@ -246,68 +248,68 @@ export default function GaleriCMSPage() {
         <DialogContent className="max-w-2xl overflow-y-auto max-h-[90vh] rounded-[24px] border-none shadow-2xl p-0">
           <DialogHeader className="p-8 bg-slate-50/50 border-b border-slate-100">
             <DialogTitle className="font-heading text-xl font-bold flex items-center gap-3 text-slate-800">
-               <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
-                <Images className="w-5 h-5" /> 
-               </div>
-               {editingItem ? "Edit Foto Galeri" : "Tambah Foto Baru"}
+              <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
+                <Images className="w-5 h-5" />
+              </div>
+              {editingItem ? "Edit Foto Galeri" : "Tambah Foto Baru"}
             </DialogTitle>
           </DialogHeader>
           <form onSubmit={handleSave} className="p-8 space-y-8">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-               <div className="space-y-2.5">
-                  <Label className="font-bold text-slate-700 text-sm ml-1">Judul Foto</Label>
-                  <Input 
-                    required 
-                    value={formData.judul} 
-                    onChange={(e) => setFormData({...formData, judul: e.target.value})} 
-                    placeholder="Masukkan judul foto..." 
-                    className="h-12 rounded-xl border-slate-200 bg-slate-50/30 focus:bg-white shadow-none focus:ring-2 focus:ring-primary/10"
-                  />
-               </div>
-               <div className="space-y-2.5">
-                  <Label className="font-bold text-slate-700 text-sm ml-1">Tanggal</Label>
-                  <Input 
-                    type="date" 
-                    required 
-                    value={formData.tanggal} 
-                    onChange={(e) => setFormData({...formData, tanggal: e.target.value})} 
-                    className="h-12 rounded-xl border-slate-200 bg-slate-50/30 focus:bg-white shadow-none focus:ring-2 focus:ring-primary/10"
-                  />
-               </div>
+              <div className="space-y-2.5">
+                <Label className="font-bold text-slate-700 text-sm ml-1">Judul Foto</Label>
+                <Input
+                  required
+                  value={formData.judul}
+                  onChange={(e) => setFormData({ ...formData, judul: e.target.value })}
+                  placeholder="Masukkan judul foto..."
+                  className="h-12 rounded-xl border-slate-200 bg-slate-50/30 focus:bg-white shadow-none focus:ring-2 focus:ring-primary/10"
+                />
+              </div>
+              <div className="space-y-2.5">
+                <Label className="font-bold text-slate-700 text-sm ml-1">Tanggal</Label>
+                <Input
+                  type="date"
+                  required
+                  value={formData.tanggal}
+                  onChange={(e) => setFormData({ ...formData, tanggal: e.target.value })}
+                  className="h-12 rounded-xl border-slate-200 bg-slate-50/30 focus:bg-white shadow-none focus:ring-2 focus:ring-primary/10"
+                />
+              </div>
             </div>
 
             <div className="space-y-2.5">
               <Label className="font-bold text-slate-700 text-sm ml-1">Deskripsi Tambahan (Opsional)</Label>
-              <Textarea 
-                value={formData.deskripsi} 
-                onChange={(e) => setFormData({...formData, deskripsi: e.target.value})} 
+              <Textarea
+                value={formData.deskripsi}
+                onChange={(e) => setFormData({ ...formData, deskripsi: e.target.value })}
                 placeholder="Berikan deskripsi singkat untuk foto ini..."
                 className="min-h-[150px] rounded-xl border-slate-200 bg-slate-50/30 focus:bg-white shadow-none focus:ring-2 focus:ring-primary/10"
               />
             </div>
 
             <div className="space-y-4 p-6 bg-[#FAFAF8] rounded-2xl border border-slate-100">
-               <Label className="font-bold text-slate-700 text-sm flex items-center gap-2 mb-2">
-                 <div className="w-1.5 h-1.5 rounded-full bg-primary" /> Unggah Foto Galeri
-               </Label>
-               <div className="flex flex-col md:flex-row gap-6 items-start md:items-center">
-                  <div className="relative group overflow-hidden rounded-xl aspect-video w-full md:w-56 bg-slate-200 border border-slate-300 shadow-inner">
-                     {formData.fotoUrl ? (
-                        <img src={formData.fotoUrl} className="w-full h-full object-cover" alt="prev" />
-                     ) : (
-                        <div className="absolute inset-0 flex items-center justify-center text-slate-400"><ImageIcon className="w-8 h-8 opacity-20" /></div>
-                     )}
-                     <label className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 cursor-pointer backdrop-blur-sm">
-                        <Upload className="text-white w-8 h-8 mb-2 animate-bounce" />
-                        <span className="text-white text-[10px] font-bold uppercase tracking-widest">Ganti Foto</span>
-                        <input type="file" className="hidden" accept="image/*" onChange={handleFileUpload} disabled={isUploading} />
-                     </label>
-                  </div>
-                  <div className="flex-1 space-y-3">
-                     <Input required value={formData.fotoUrl} onChange={(e) => setFormData({...formData, fotoUrl: e.target.value})} placeholder="URL Foto..." className="h-9 text-[10px] font-mono rounded-lg border-slate-200" />
-                     <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest opacity-60">Klik area preview untuk mengunggah dokumentasi.</p>
-                  </div>
-               </div>
+              <Label className="font-bold text-slate-700 text-sm flex items-center gap-2 mb-2">
+                <div className="w-1.5 h-1.5 rounded-full bg-primary" /> Unggah Foto Galeri
+              </Label>
+              <div className="flex flex-col md:flex-row gap-6 items-start md:items-center">
+                <div className="relative group overflow-hidden rounded-xl aspect-video w-full md:w-56 bg-slate-200 border border-slate-300 shadow-inner">
+                  {formData.fotoUrl ? (
+                    <img src={formData.fotoUrl} className="w-full h-full object-cover" alt="prev" />
+                  ) : (
+                    <div className="absolute inset-0 flex items-center justify-center text-slate-400"><ImageIcon className="w-8 h-8 opacity-20" /></div>
+                  )}
+                  <label className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 cursor-pointer backdrop-blur-sm">
+                    <Upload className="text-white w-8 h-8 mb-2 animate-bounce" />
+                    <span className="text-white text-[10px] font-bold uppercase tracking-widest">Ganti Foto</span>
+                    <input type="file" className="hidden" accept="image/*" onChange={handleFileUpload} disabled={isUploading} />
+                  </label>
+                </div>
+                <div className="flex-1 space-y-3">
+                  <Input required value={formData.fotoUrl} onChange={(e) => setFormData({ ...formData, fotoUrl: e.target.value })} placeholder="URL Foto..." className="h-9 text-[10px] font-mono rounded-lg border-slate-200" />
+                  <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest opacity-60">Klik area preview untuk mengunggah dokumentasi.</p>
+                </div>
+              </div>
             </div>
 
             <DialogFooter className="pt-8 border-t border-slate-100 flex gap-3">

@@ -6,19 +6,24 @@ export const dynamic = "force-dynamic";
 export async function POST(req: NextRequest) {
   try {
     const formData = await req.formData();
-    const file = formData.get("file") as File;
+    const file = formData.get("file");
 
-    if (!file) {
-      return NextResponse.json({ error: "No file uploaded" }, { status: 400 });
+    if (!file || typeof file === "string") {
+      return NextResponse.json(
+        { error: "File tidak ditemukan atau format tidak valid" },
+        { status: 400 }
+      );
     }
 
     // Upload to primary storage (Cloudflare R2, fallback to Firebase)
-    const url = await uploadToStorage(file, "admin-uploads");
+    const url = await uploadToStorage(file as Blob, "admin-uploads");
 
     console.log(`File uploaded successfully: ${url}`);
     return NextResponse.json({ url });
-  } catch (error) {
+  } catch (error: unknown) {
+    const message =
+      error instanceof Error ? error.message : "Terjadi kesalahan saat mengunggah file";
     console.error("Upload error:", error);
-    return NextResponse.json({ error: "File upload failed" }, { status: 500 });
+    return NextResponse.json({ error: message, message }, { status: 500 });
   }
 }

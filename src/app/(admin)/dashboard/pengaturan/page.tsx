@@ -91,6 +91,7 @@ export default function PengaturanPage() {
     if (!file) return;
 
     setIsUploading(true);
+    const originalName = file.name || "media.jpg";
 
     if (file.type.startsWith("image/")) {
       try {
@@ -106,7 +107,7 @@ export default function PengaturanPage() {
     }
 
     const uploadData = new FormData();
-    uploadData.append("file", file);
+    uploadData.append("file", file, originalName);
 
     try {
       const response = await fetch("/api/upload", {
@@ -119,7 +120,8 @@ export default function PengaturanPage() {
         setFormData(prev => ({ ...prev, [field]: url }));
         toast.success("File berhasil diunggah");
       } else {
-        toast.error("Gagal mengunggah file");
+        const errorData = await response.json().catch(() => null);
+        toast.error(errorData?.message || errorData?.error || "Gagal mengunggah file");
       }
     } catch (error) {
       toast.error("Terjadi kesalahan saat upload");

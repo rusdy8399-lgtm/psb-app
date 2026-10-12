@@ -69,6 +69,7 @@ export default function SliderCMSPage() {
     if (!file) return;
 
     setIsUploading(true);
+    const originalName = file.name || "slider.jpg";
 
     if (file.type.startsWith("image/")) {
       try {
@@ -84,7 +85,7 @@ export default function SliderCMSPage() {
     }
 
     const uploadData = new FormData();
-    uploadData.append("file", file);
+    uploadData.append("file", file, originalName);
 
     try {
       const response = await fetch("/api/upload", {
@@ -97,7 +98,8 @@ export default function SliderCMSPage() {
         setFormData(prev => ({ ...prev, [field]: url }));
         toast.success("Gambar berhasil diunggah");
       } else {
-        toast.error("Gagal mengunggah gambar");
+        const errorData = await response.json().catch(() => null);
+        toast.error(errorData?.message || errorData?.error || "Gagal mengunggah gambar");
       }
     } catch (error) {
       toast.error("Terjadi kesalahan saat upload");
@@ -211,6 +213,7 @@ export default function SliderCMSPage() {
                             fill 
                             className="object-cover"
                             sizes="112px"
+                            unoptimized
                           />
                         ) : (
                           <ImageIcon className="w-6 h-6 text-slate-300" />
