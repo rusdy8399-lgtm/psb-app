@@ -140,15 +140,31 @@ export function Footer({ settings }: FooterProps) {
               </li>
               <li className="flex items-start gap-3">
                 <Phone className="w-5 h-5 mt-0.5 text-green-300 shrink-0" />
-                <span className="text-sm text-green-200">
-                  {settings?.noWa || "+62 812 3456 7890"}
-                </span>
+                {settings?.noWa ? (
+                  <a
+                    href={`https://wa.me/${settings.noWa.replace(/\D/g, "")}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm text-green-200 hover:text-white transition-colors"
+                  >
+                    {settings.noWa}
+                  </a>
+                ) : (
+                  <span className="text-sm text-green-200">+62 812 3456 7890</span>
+                )}
               </li>
               <li className="flex items-start gap-3">
                 <Mail className="w-5 h-5 mt-0.5 text-green-300 shrink-0" />
-                <span className="text-sm text-green-200">
-                  {settings?.email || "info@balibinainsani.sch.id"}
-                </span>
+                {settings?.email ? (
+                  <a
+                    href={`mailto:${settings.email}`}
+                    className="text-sm text-green-200 hover:text-white transition-colors"
+                  >
+                    {settings.email}
+                  </a>
+                ) : (
+                  <span className="text-sm text-green-200">info@balibinainsani.sch.id</span>
+                )}
               </li>
             </ul>
           </div>
@@ -157,7 +173,7 @@ export function Footer({ settings }: FooterProps) {
 
         {/* Divider & Copyright */}
         <div className="border-t border-green-800 mt-6 pt-4 flex flex-col md:flex-row justify-between items-center gap-1 text-xs text-green-300">
-          <p>© {year} Pondok Pesantren Bali Bina Insani. All rights reserved.</p>
+          <p>© {year} {schoolName}. All rights reserved.</p>
           <p>Dikelola oleh Panitia PPDB Online</p>
         </div>
       </div>

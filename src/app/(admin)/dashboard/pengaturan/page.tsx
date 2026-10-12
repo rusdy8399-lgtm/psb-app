@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Save, Globe, Settings as SettingsIcon, Info, Upload, ImageIcon, BookOpen, PenTool, Download, FileText } from "lucide-react";
+import { Save, Globe, Settings as SettingsIcon, Info, Upload, ImageIcon, BookOpen, PenTool, Download, FileText, ExternalLink, CheckCircle2 } from "lucide-react";
 import { toast } from "sonner";
 import Image from "next/image";
 import { AdminDashboardSkeleton } from "@/components/admin/AdminSkeletons";
@@ -15,6 +15,7 @@ export default function PengaturanPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
+  const [uploadingField, setUploadingField] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     namaWeb: "",
     logoUrl: "",
@@ -91,14 +92,17 @@ export default function PengaturanPage() {
     if (!file) return;
 
     setIsUploading(true);
+    setUploadingField(field);
+    const toastId = toast.loading("Mengunggah berkas ke Cloudflare R2...");
     const originalName = file.name || "media.jpg";
 
-    if (file.type.startsWith("image/")) {
+    if (file.type.startsWith("image/") && file.size > 500 * 1024 && !file.type.includes("svg")) {
       try {
         const options = {
-          maxSizeMB: 0.2, // Max 200KB
-          maxWidthOrHeight: 1280, // Safe resolution for web logos/illustrations
+          maxSizeMB: 0.5,
+          maxWidthOrHeight: 1600,
           useWebWorker: true,
+          fileType: file.type,
         };
         file = await imageCompression(file, options);
       } catch (error) {
@@ -118,21 +122,23 @@ export default function PengaturanPage() {
       if (response.ok) {
         const { url } = await response.json();
         setFormData(prev => ({ ...prev, [field]: url }));
-        toast.success("File berhasil diunggah");
+        toast.success("File berhasil diunggah & tersimpan di Cloudflare R2!", { id: toastId });
       } else {
         const errorData = await response.json().catch(() => null);
-        toast.error(errorData?.message || errorData?.error || "Gagal mengunggah file");
+        toast.error(errorData?.message || errorData?.error || "Gagal mengunggah file", { id: toastId });
       }
     } catch (error) {
-      toast.error("Terjadi kesalahan saat upload");
+      toast.error("Terjadi kesalahan saat upload", { id: toastId });
     } finally {
       setIsUploading(false);
+      setUploadingField(null);
     }
   };
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSaving(true);
+    const toastId = toast.loading("Menyimpan dan menerapkan ke website publik...");
     try {
       const response = await fetch("/api/admin/settings", {
         method: "POST",
@@ -141,12 +147,12 @@ export default function PengaturanPage() {
       });
 
       if (response.ok) {
-        toast.success("Pengaturan berhasil disimpan");
+        toast.success("Pengaturan berhasil disimpan & diterapkan ke website publik!", { id: toastId });
       } else {
-        toast.error("Gagal menyimpan pengaturan");
+        toast.error("Gagal menyimpan pengaturan", { id: toastId });
       }
     } catch (error) {
-      toast.error("Terjadi kesalahan koneksi");
+      toast.error("Terjadi kesalahan koneksi", { id: toastId });
     } finally {
       setIsSaving(false);
     }
@@ -168,9 +174,17 @@ export default function PengaturanPage() {
           </h2>
           <p className="text-sm text-slate-500 mt-1 font-medium">Sesuaikan identitas sekolah, visi misi, dan aset digital secara real-time.</p>
         </div>
-        <Button onClick={handleSave} disabled={isSaving || isUploading} className="w-full md:w-auto gap-2 bg-primary hover:bg-[#143d24] h-12 px-10 font-bold rounded-xl shadow-lg shadow-primary/20 transition-all active:scale-[0.98]">
-          {isSaving ? "Menyimpan..." : <><Save className="w-5 h-5" /> Update Website</>}
-        </Button>
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full md:w-auto">
+          <a href="/" target="_blank" rel="noopener noreferrer">
+            <Button type="button" variant="outline" className="w-full sm:w-auto gap-2 border-slate-200 text-slate-700 hover:bg-slate-50 h-12 px-6 font-semibold rounded-xl transition-all shadow-sm">
+              <ExternalLink className="w-4 h-4 text-primary" />
+              Lihat Website Publik
+            </Button>
+          </a>
+          <Button onClick={handleSave} disabled={isSaving || isUploading} className="w-full sm:w-auto gap-2 bg-primary hover:bg-[#143d24] h-12 px-8 font-bold rounded-xl shadow-lg shadow-primary/20 transition-all active:scale-[0.98]">
+            {isSaving ? "Menyimpan..." : <><Save className="w-5 h-5" /> Update Website</>}
+          </Button>
+        </div>
       </div>
 
       <form onSubmit={handleSave} className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -217,7 +231,14 @@ export default function PengaturanPage() {
                 </div>
                 <div className="flex-1 space-y-2">
                   <Input value={formData.logoUrl} onChange={(e) => setFormData({ ...formData, logoUrl: e.target.value })} placeholder="URL Logo..." className="h-8 text-[10px] font-mono rounded-lg border-slate-200" />
-                  <p className="text-[9px] text-slate-400 font-bold uppercase tracking-widest pl-1">Klik kotak untuk upload</p>
+                  <div className="flex items-center justify-between">
+                    <p className="text-[9px] text-slate-400 font-bold uppercase tracking-widest pl-1">
+                      {uploadingField === "logoUrl" ? "Mengunggah ke R2..." : "Klik kotak untuk upload"}
+                    </p>
+                    {formData.logoUrl?.includes("r2") && (
+                      <span className="text-[8px] bg-emerald-50 text-emerald-700 px-1.5 py-0.5 rounded font-mono font-semibold">Cloudflare R2</span>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
@@ -338,6 +359,15 @@ export default function PengaturanPage() {
                 className="h-12 rounded-xl border-slate-200 bg-slate-50/30 focus:bg-white shadow-none focus:ring-2 focus:ring-primary/10 transition-all" 
               />
             </div>
+            <div className="space-y-2.5">
+              <Label className="font-bold text-slate-700 text-sm ml-1">YouTube Channel</Label>
+              <Input 
+                value={formData.ytUrl} 
+                onChange={(e) => setFormData({ ...formData, ytUrl: e.target.value })} 
+                placeholder="https://youtube.com/..." 
+                className="h-12 rounded-xl border-slate-200 bg-slate-50/30 focus:bg-white shadow-none focus:ring-2 focus:ring-primary/10 transition-all" 
+              />
+            </div>
           </div>
         </section>
 
@@ -391,7 +421,17 @@ export default function PengaturanPage() {
                   <Textarea 
                     value={formData.heroTitle} 
                     onChange={(e) => setFormData({ ...formData, heroTitle: e.target.value })} 
-                    className="bg-white/10 border-white/20 text-white min-h-[100px] rounded-xl focus:bg-white/20 focus:ring-0 font-bold text-lg" 
+                    className="bg-white/10 border-white/20 text-white min-h-[90px] rounded-xl focus:bg-white/20 focus:ring-0 font-bold text-base" 
+                  />
+                </div>
+
+                <div className="space-y-3">
+                  <Label className="text-white/70 font-bold text-sm ml-1 tracking-widest uppercase">Sub-headline Hero (Deskripsi)</Label>
+                  <Textarea 
+                    value={formData.heroSubtitle} 
+                    onChange={(e) => setFormData({ ...formData, heroSubtitle: e.target.value })} 
+                    placeholder="Deskripsi singkat hero banner..." 
+                    className="bg-white/10 border-white/20 text-white min-h-[80px] rounded-xl focus:bg-white/20 focus:ring-0 text-sm" 
                   />
                 </div>
 

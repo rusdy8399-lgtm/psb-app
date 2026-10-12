@@ -63,8 +63,8 @@ export function Navbar({ settings }: NavbarProps) {
           isFormPage ? "h-[36px] w-[36px] overflow-hidden rounded-full" : "h-[32px] md:h-[68px] w-[140px] md:w-[240px]"
         }`}>
           <Image 
-            src="/logo-navbar.jpg" 
-            alt="Bali Bina Insani Tolerance Islamic Boarding School" 
+            src={settings?.logoUrl || "/logo-navbar.jpg"} 
+            alt={schoolName} 
             fill
             loading="eager"
             quality={85}

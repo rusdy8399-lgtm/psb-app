@@ -1,15 +1,25 @@
 import { MapPin, Phone, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { getSiteSettings } from "@/lib/data-fetching";
 
-export default function KontakPage() {
+export const revalidate = 3600;
+
+export default async function KontakPage() {
+  const settings = await getSiteSettings();
+  const schoolName = settings?.namaWeb || "Pondok Pesantren Bali Bina Insani";
+  const alamat = settings?.alamat || "Jl. Raya Meliling Timpag, Kerambitan, Tabanan, Bali";
+  const noWa = settings?.noWa || "+62 812 3456 7890";
+  const email = settings?.email || "info@balibinainsani.sch.id";
+  const cleanWa = noWa.replace(/\D/g, "");
+
   return (
     <div className="bg-background min-h-screen py-16">
       <div className="container mx-auto px-4 max-w-6xl">
         <div className="text-center max-w-2xl mx-auto mb-16">
           <h1 className="text-4xl font-heading font-bold text-primary mb-4">Hubungi Kami</h1>
           <p className="text-muted-foreground">
-            Punya pertanyaan mengenai pendaftaran santri baru atau program pendidikan pesantren? Jangan ragu hubungi kami.
+            Punya pertanyaan mengenai pendaftaran santri baru atau program pendidikan di {schoolName}? Jangan ragu hubungi kami.
           </p>
         </div>
 
@@ -25,7 +35,7 @@ export default function KontakPage() {
                   </div>
                   <div>
                     <h3 className="font-semibold text-foreground mb-1">Alamat Pesantren</h3>
-                    <p className="text-sm text-muted-foreground">Jl. Raya Bali Bina Insani, Kabupaten Tabanan, Provinsi Bali, Indonesia</p>
+                    <p className="text-sm text-muted-foreground leading-relaxed">{alamat}</p>
                   </div>
                 </div>
 
@@ -35,7 +45,14 @@ export default function KontakPage() {
                   </div>
                   <div>
                     <h3 className="font-semibold text-foreground mb-1">Telepon / WhatsApp</h3>
-                    <p className="text-sm text-muted-foreground">+62 812 3456 7890</p>
+                    <a 
+                      href={`https://wa.me/${cleanWa}`} 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      className="text-sm text-primary hover:underline font-medium block"
+                    >
+                      {noWa}
+                    </a>
                   </div>
                 </div>
 
@@ -45,7 +62,12 @@ export default function KontakPage() {
                   </div>
                   <div>
                     <h3 className="font-semibold text-foreground mb-1">Email</h3>
-                    <p className="text-sm text-muted-foreground">info@balibinainsani.sch.id</p>
+                    <a 
+                      href={`mailto:${email}`} 
+                      className="text-sm text-primary hover:underline font-medium block"
+                    >
+                      {email}
+                    </a>
                   </div>
                 </div>
               </div>

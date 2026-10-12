@@ -564,16 +564,19 @@ export function PPDBForm({ settings }: PPDBFormProps) {
                 <CreditCard className="w-20 h-20" />
               </div>
               <div className="flex items-center gap-1.5 text-gold font-bold text-[9px] uppercase tracking-widest mb-2">
-                <AlertCircle className="w-3 h-3" /> Rekening PSB
+                <AlertCircle className="w-3 h-3" /> Rekening Pembayaran PSB
               </div>
-              <div className="flex justify-between items-end">
-                <div>
-                  <p className="text-slate-400 text-[9px] font-bold uppercase mb-0.5">BRI (002)</p>
-                  <p className="text-base font-black text-primary tracking-tight">0573-0100-1017-300</p>
-                  <p className="text-[10px] font-semibold text-slate-400 mt-0.5">a.n. PSB BALI BINA INSANI</p>
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-3">
+                <div className="space-y-1">
+                  <p className="text-sm md:text-base font-bold text-primary tracking-tight whitespace-pre-line">
+                    {rekening}
+                  </p>
+                  <p className="text-[10px] font-semibold text-slate-400">
+                    Silakan transfer sesuai nominal yang ditentukan.
+                  </p>
                 </div>
-                <div className="bg-white border border-slate-100 px-3 py-1.5 rounded-lg text-primary font-bold text-xs shadow-sm">
-                  Rp {Number(biaya.toString().replace(/\./g, '').replace(/,/g, '')).toLocaleString('id-ID')}
+                <div className="bg-white border border-slate-200 px-3.5 py-2 rounded-xl text-primary font-black text-sm shadow-sm whitespace-nowrap">
+                  Rp {(Number(biaya.toString().replace(/\D/g, "")) || 200000).toLocaleString("id-ID")}
                 </div>
               </div>
             </div>
