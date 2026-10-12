@@ -35,14 +35,18 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    // Revalidate public layouts & pages so updates appear immediately
-    revalidatePath("/", "layout");
-    revalidatePath("/");
-    revalidatePath("/kontak");
-    revalidatePath("/pendaftaran");
-    revalidatePath("/download-brosur");
-    revalidatePath("/fasilitas");
-    revalidatePath("/kegiatan");
+    // Safe revalidation: prevents server error if revalidate store is unavailable
+    try {
+      revalidatePath("/", "layout");
+      revalidatePath("/");
+      revalidatePath("/kontak");
+      revalidatePath("/pendaftaran");
+      revalidatePath("/download-brosur");
+      revalidatePath("/fasilitas");
+      revalidatePath("/kegiatan");
+    } catch (revalidateErr) {
+      console.warn("Revalidation warning (safe to ignore):", revalidateErr);
+    }
 
     return NextResponse.json({ success: true, updated: true });
   } catch (error) {
