@@ -3,7 +3,7 @@
 import * as React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ChevronLeft, ChevronRight, ArrowRight, FileText } from "lucide-react";
+import { ChevronLeft, ChevronRight, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Carousel,
@@ -25,6 +25,7 @@ export function HeroSlider({ data, brosurUrl }: { data: SliderData[], brosurUrl?
   const [api, setApi] = React.useState<CarouselApi>();
   const [currentIndex, setCurrentIndex] = React.useState(0);
   const [hasHydrated, setHasHydrated] = React.useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [autoplayPlugin, setAutoplayPlugin] = React.useState<any>(null);
 
   React.useEffect(() => {
@@ -99,7 +100,7 @@ export function HeroSlider({ data, brosurUrl }: { data: SliderData[], brosurUrl?
               {/* Background Image with Ken Burns effect */}
               <div className="absolute inset-0 z-0 overflow-hidden">
                 <div className="absolute inset-0 transition-transform duration-[10000ms] group-hover:scale-110 ease-out">
-                  {shouldRenderImage(index) && (
+                  {shouldRenderImage(index) && slide.bgImageUrl && (
                     <Image
                       src={slide.bgImageUrl}
                       alt={slide.title}

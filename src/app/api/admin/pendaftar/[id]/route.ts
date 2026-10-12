@@ -3,7 +3,7 @@ import { pendaftar, berkasDokumen } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
-import { deleteFromFirebase } from "@/lib/upload";
+import { deleteFromStorage } from "@/lib/upload";
 
 export const dynamic = "force-dynamic";
 
@@ -23,7 +23,7 @@ export async function DELETE(
     });
 
     if (berkas) {
-      console.log("Admin API: Cleaning up Firebase files...");
+      console.log("Admin API: Cleaning up storage files...");
       
       const fileUrls = [
         berkas.kkUrl,
@@ -34,7 +34,7 @@ export async function DELETE(
       ];
 
       // Delete files in parallel (don't block for each one, but wait for all)
-      await Promise.all(fileUrls.map(url => deleteFromFirebase(url)));
+      await Promise.all(fileUrls.map(url => deleteFromStorage(url)));
     }
 
     // 2. Delete from database (Cascading will handle ortu_wakil and berkas_dokumen)

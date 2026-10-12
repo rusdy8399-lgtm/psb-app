@@ -74,7 +74,7 @@ export function PendaftarDetailClient({ pendaftar, ortu, berkas, settings }: Pen
   };
 
   const handleDelete = async () => {
-    if (!window.confirm("Apakah Anda yakin ingin menghapus pendaftaran ini secara permanen? Seluruh berkas di Firebase juga akan dihapus.")) {
+    if (!window.confirm("Apakah Anda yakin ingin menghapus pendaftaran ini secara permanen? Seluruh berkas pendaftaran juga akan dihapus.")) {
       return;
     }
 

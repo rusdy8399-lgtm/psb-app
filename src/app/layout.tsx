@@ -75,6 +75,9 @@ export default function RootLayout({
         <link rel="preconnect" href="https://images.unsplash.com" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://api.dicebear.com" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://firebasestorage.googleapis.com" crossOrigin="anonymous" />
+        {process.env.R2_PUBLIC_URL && (
+          <link rel="preconnect" href={process.env.R2_PUBLIC_URL} crossOrigin="anonymous" />
+        )}
       </head>
       <body className="min-h-full flex flex-col font-sans">{children}</body>
     </html>

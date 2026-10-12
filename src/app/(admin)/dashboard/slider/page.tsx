@@ -203,14 +203,18 @@ export default function SliderCMSPage() {
                   <TableRow key={s.id} className="hover:bg-slate-50/50 transition-colors border-b border-slate-50 last:border-none group">
                     <TableCell className="font-bold text-center text-slate-300 pl-6">{s.order}</TableCell>
                     <TableCell>
-                      <div className="relative w-28 h-16 overflow-hidden rounded-xl border border-slate-200 shadow-sm bg-slate-100 group-hover:scale-105 transition-transform duration-300">
-                        <Image 
-                          src={s.bgImageUrl} 
-                          alt="bg" 
-                          fill 
-                          className="object-cover"
-                          sizes="112px"
-                        />
+                      <div className="relative w-28 h-16 overflow-hidden rounded-xl border border-slate-200 shadow-sm bg-slate-100 group-hover:scale-105 transition-transform duration-300 flex items-center justify-center">
+                        {s.bgImageUrl ? (
+                          <Image 
+                            src={s.bgImageUrl} 
+                            alt="bg" 
+                            fill 
+                            className="object-cover"
+                            sizes="112px"
+                          />
+                        ) : (
+                          <ImageIcon className="w-6 h-6 text-slate-300" />
+                        )}
                       </div>
                     </TableCell>
                     <TableCell>

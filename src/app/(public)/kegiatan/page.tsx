@@ -39,16 +39,20 @@ export default async function KegiatanPage() {
                 {galleryItems.map((item) => (
                   <div
                     key={item.id}
-                    className="rounded-xl overflow-hidden block group relative bg-slate-100 aspect-square image-shimmer"
+                    className="rounded-xl overflow-hidden block group relative bg-slate-100 aspect-square image-shimmer flex items-center justify-center"
                     title={item.judul}
                   >
-                    <Image
-                      src={item.fotoUrl!}
-                      alt={item.judul}
-                      fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-300"
-                      sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
-                    />
+                    {item.fotoUrl ? (
+                      <Image
+                        src={item.fotoUrl}
+                        alt={item.judul}
+                        fill
+                        className="object-cover group-hover:scale-105 transition-transform duration-300"
+                        sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
+                      />
+                    ) : (
+                      <Images className="w-8 h-8 text-slate-300" />
+                    )}
                     {/* Hover overlay with title */}
                     <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-3">
                       <p className="text-white text-xs font-medium line-clamp-2 leading-snug">
@@ -93,14 +97,18 @@ export default async function KegiatanPage() {
                   className="group bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 border border-slate-100 flex flex-col h-full animate-in fade-in zoom-in-95 duration-500"
                   style={{ animationDelay: `${idx * 100}ms` }}
                 >
-                  <div className="relative h-64 overflow-hidden image-shimmer">
-                    <Image
-                      src={item.fotoUrl}
-                      alt={item.judul}
-                      fill
-                      className="object-cover transition-transform duration-700 group-hover:scale-110"
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    />
+                  <div className="relative h-64 overflow-hidden image-shimmer bg-slate-100 flex items-center justify-center">
+                    {item.fotoUrl ? (
+                      <Image
+                        src={item.fotoUrl}
+                        alt={item.judul}
+                        fill
+                        className="object-cover transition-transform duration-700 group-hover:scale-110"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      />
+                    ) : (
+                      <Images className="w-12 h-12 text-slate-300" />
+                    )}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                     <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-md text-primary px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider shadow-sm border border-white/20">
                       {item.tanggal}

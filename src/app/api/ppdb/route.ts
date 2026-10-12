@@ -3,18 +3,18 @@ import { db } from "@/lib/db";
 import { pendaftar, ortuWakil, berkasDokumen } from "@/lib/db/schema";
 import crypto from "crypto";
 import { Resend } from "resend";
-import { uploadToFirebase } from "@/lib/upload";
+import { uploadToStorage } from "@/lib/upload";
 
 export const dynamic = "force-dynamic";
 
 
 const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
 
-// Helper to save files to Firebase
+// Helper to save files to storage
 async function saveFile(file: any, subDir: string) {
   if (!file || typeof file === "string" || file.size === 0) return null;
   try {
-    return await uploadToFirebase(file, `ppdb/${subDir}`);
+    return await uploadToStorage(file, `ppdb/${subDir}`);
   } catch (error: any) {
     throw new Error(`Gagal upload berkas ${subDir}: ${error.message}`);
   }

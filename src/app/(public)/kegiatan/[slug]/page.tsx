@@ -43,7 +43,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function KegiatanDetailPage({ params }: Props) {
   const { slug } = await params;
-  
+
   const item = await getKegiatanBySlug(slug);
 
   if (!item) {
@@ -54,8 +54,8 @@ export default async function KegiatanDetailPage({ params }: Props) {
     <div className="bg-white min-h-screen py-12 md:py-20 font-sans">
       <div className="container mx-auto px-4 max-w-4xl">
         {/* Navigation */}
-        <Link 
-          href="/kegiatan" 
+        <Link
+          href="/kegiatan"
           className="inline-flex items-center gap-2 text-slate-400 hover:text-primary transition-colors mb-8 font-bold uppercase text-xs tracking-widest group"
         >
           <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" /> Kembali ke List Kegiatan
@@ -72,18 +72,20 @@ export default async function KegiatanDetailPage({ params }: Props) {
         </div>
 
         {/* Featured Image */}
-        <div className="relative aspect-video rounded-[32px] overflow-hidden mb-12 shadow-xl shadow-primary/5 border border-slate-100">
-          <Image 
-            src={item.fotoUrl} 
-            alt={item.judul}
-            fill
-            preload={true}
-            fetchPriority="high"
-            className="object-cover"
-            sizes="(max-width: 1024px) 100vw, 896px"
-            quality={85}
-          />
-        </div>
+        {item.fotoUrl && (
+          <div className="relative aspect-video rounded-[32px] overflow-hidden mb-12 shadow-xl shadow-primary/5 border border-slate-100">
+            <Image
+              src={item.fotoUrl}
+              alt={item.judul}
+              fill
+              preload={true}
+              fetchPriority="high"
+              className="object-cover"
+              sizes="(max-width: 1024px) 100vw, 896px"
+              quality={85}
+            />
+          </div>
+        )}
 
         {/* Content */}
         <div className="max-w-2xl mx-auto">
@@ -97,7 +99,7 @@ export default async function KegiatanDetailPage({ params }: Props) {
 
           {/* Share Section at Bottom */}
           <div className="pt-12 border-t border-slate-100">
-             <ShareButtons title={item.judul} url={`/kegiatan/${item.slug || item.id}`} />
+            <ShareButtons title={item.judul} url={`/kegiatan/${item.slug || item.id}`} />
           </div>
         </div>
       </div>

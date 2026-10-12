@@ -1,5 +1,5 @@
 import { getFasilitas } from "@/lib/data-fetching";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Building2 } from "lucide-react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import {
@@ -36,14 +36,18 @@ export default async function FasilitasPage() {
                 className="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 border border-slate-100 flex flex-col h-full animate-in fade-in slide-in-from-bottom-8 duration-500"
                 style={{ animationDelay: `${idx * 100}ms` }}
               >
-                <div className="relative w-full h-36 overflow-hidden image-shimmer">
-                  <Image
-                    src={item.fotoUrl}
-                    alt={item.nama}
-                    fill
-                    className="object-cover transition-transform duration-500 group-hover:scale-105"
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                  />
+                <div className="relative w-full h-36 overflow-hidden image-shimmer bg-slate-100 flex items-center justify-center">
+                  {item.fotoUrl ? (
+                    <Image
+                      src={item.fotoUrl}
+                      alt={item.nama}
+                      fill
+                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    />
+                  ) : (
+                    <Building2 className="w-10 h-10 text-slate-300" />
+                  )}
                   <div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
                 </div>
                 
@@ -66,16 +70,18 @@ export default async function FasilitasPage() {
                         Lihat Detail <ArrowRight className="w-3 h-3 transition-transform group-hover:translate-x-1" />
                       </DialogTrigger>
                       <DialogContent className="max-w-lg overflow-hidden rounded-[24px] p-0 border-0 shadow-2xl">
-                        <div className="w-full h-56 md:h-64 relative image-shimmer">
-                          <Image
-                            src={item.fotoUrl}
-                            alt={item.nama}
-                            fill
-                            className="object-cover"
-                            sizes="(max-width: 768px) 100vw, 500px"
-                            quality={75}
-                          />
-                        </div>
+                        {item.fotoUrl && (
+                          <div className="w-full h-56 md:h-64 relative image-shimmer">
+                            <Image
+                              src={item.fotoUrl}
+                              alt={item.nama}
+                              fill
+                              className="object-cover"
+                              sizes="(max-width: 768px) 100vw, 500px"
+                              quality={75}
+                            />
+                          </div>
+                        )}
                         <div className="p-6 md:p-8">
                           <DialogHeader>
                             <DialogTitle className="text-xl md:text-2xl font-bold font-heading text-slate-800">{item.nama}</DialogTitle>
