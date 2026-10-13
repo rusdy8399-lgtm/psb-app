@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -17,7 +17,7 @@ import {
 import { toast } from "sonner";
 import Image from "next/image";
 import { AdminTableSkeleton } from "@/components/admin/AdminSkeletons";
-import imageCompression from "browser-image-compression";
+import { uploadClientFile } from "@/lib/client-upload";
 
 interface FasilitasData {
   id: string;
@@ -32,6 +32,7 @@ export default function FasilitasCMSPage() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<FasilitasData | null>(null);
   const [isUploading, setIsUploading] = useState(false);
+  const uploadControllerRef = useRef<AbortController | null>(null);
   
   // Form State
   const [formData, setFormData] = useState({
@@ -58,47 +59,43 @@ export default function FasilitasCMSPage() {
   }, []);
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    let file = e.target.files?.[0];
+    const file = e.target.files?.[0];
     if (!file) return;
 
-    setIsUploading(true);
-    const originalName = file.name || "fasilitas.jpg";
-
-    if (file.type.startsWith("image/")) {
-      try {
-        const options = {
-          maxSizeMB: 0.2,
-          maxWidthOrHeight: 1280,
-          useWebWorker: true,
-        };
-        file = await imageCompression(file, options);
-      } catch (error) {
-        console.error("Compression error:", error);
-      }
+    if (uploadControllerRef.current) {
+      uploadControllerRef.current.abort();
     }
+    const controller = new AbortController();
+    uploadControllerRef.current = controller;
 
-    const uploadData = new FormData();
-    uploadData.append("file", file, originalName);
+    setIsUploading(true);
+    const toastId = toast.loading("Mengunggah foto fasilitas...");
 
     try {
-      const response = await fetch("/api/upload", {
-        method: "POST",
-        body: uploadData,
-      });
-
-      if (response.ok) {
-        const { url } = await response.json();
-        setFormData(prev => ({ ...prev, fotoUrl: url }));
-        toast.success("Foto berhasil diunggah");
+      const url = await uploadClientFile(file, { signal: controller.signal });
+      setFormData(prev => ({ ...prev, fotoUrl: url }));
+      toast.success("Foto berhasil diunggah", { id: toastId });
+    } catch (error: unknown) {
+      const msg = error instanceof Error ? error.message : "Gagal mengunggah foto";
+      if (!msg.includes("dibatalkan")) {
+        toast.error(msg, { id: toastId });
       } else {
-        const errorData = await response.json().catch(() => null);
-        toast.error(errorData?.message || errorData?.error || "Gagal mengunggah foto");
+        toast.dismiss(toastId);
       }
-    } catch (error) {
-      toast.error("Terjadi kesalahan saat upload");
     } finally {
       setIsUploading(false);
+      uploadControllerRef.current = null;
+      e.target.value = "";
     }
+  };
+
+  const handleCloseDialog = () => {
+    if (uploadControllerRef.current) {
+      uploadControllerRef.current.abort();
+      uploadControllerRef.current = null;
+      setIsUploading(false);
+    }
+    setIsDialogOpen(false);
   };
 
   const handleOpenDialog = (item: FasilitasData | null = null) => {
@@ -234,7 +231,10 @@ export default function FasilitasCMSPage() {
         )}
       </div>
 
-      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+      <Dialog open={isDialogOpen} onOpenChange={(open) => {
+        if (!open) handleCloseDialog();
+        else setIsDialogOpen(true);
+      }}>
         <DialogContent className="max-w-2xl overflow-y-auto max-h-[90vh] rounded-[24px] border-none shadow-2xl p-0">
           <DialogHeader className="p-8 bg-slate-50/50 border-b border-slate-100">
             <DialogTitle className="font-heading text-xl font-bold flex items-center gap-3 text-slate-800">
@@ -291,7 +291,9 @@ export default function FasilitasCMSPage() {
             </div>
 
             <DialogFooter className="pt-8 border-t border-slate-100 flex gap-3">
-              <Button type="button" variant="outline" onClick={() => setIsDialogOpen(false)} className="h-12 font-bold rounded-xl border-slate-200 px-8 text-slate-600 hover:bg-slate-50" disabled={isUploading}>Batal</Button>
+              <Button type="button" variant="outline" onClick={handleCloseDialog} className="h-12 font-bold rounded-xl border-slate-200 px-8 text-slate-600 hover:bg-slate-50">
+                Batal
+              </Button>
               <Button type="submit" className="h-12 bg-primary hover:bg-[#143d24] font-bold rounded-xl px-10 shadow-lg shadow-primary/20 transition-all active:scale-[0.98]" disabled={isUploading}>
                 {isUploading ? "Mengunggah..." : (editingItem ? "Simpan Perbaikan" : "Publish Fasilitas")}
               </Button>

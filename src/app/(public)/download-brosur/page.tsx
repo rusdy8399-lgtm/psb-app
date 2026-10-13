@@ -1,9 +1,10 @@
 import { getSiteSettings } from "@/lib/data-fetching";
 import Link from "next/link";
-import Image from "next/image";
-import { Download, ArrowRight, CheckCircle2, Share2, FileText } from "lucide-react";
+import { Download, ArrowRight, CheckCircle2, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import dynamic from "next/dynamic";
+import { BrosurPreview } from "@/components/public/BrosurPreview";
+import { resolveMediaUrl } from "@/lib/r2";
 
 const ShareButtons = dynamic(
   () => import("@/components/public/ShareButtons").then((mod) => mod.ShareButtons)
@@ -39,7 +40,7 @@ export const revalidate = 3600; // Cache for 1 hour
 export default async function BrosurPage() {
   const settings = await getSiteSettings();
   const schoolName = settings?.namaWeb || "Pondok Pesantren Bali Bina Insani";
-  const brosurUrl = settings?.brosurUrl;
+  const brosurUrl = resolveMediaUrl(settings?.brosurUrl);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-green-50/30">
@@ -123,48 +124,31 @@ export default async function BrosurPage() {
                 <div className="absolute -right-3 -bottom-3 w-full h-full bg-green-100/70 rounded-2xl" />
                 <div className="absolute -right-1.5 -bottom-1.5 w-full h-full bg-green-200/50 rounded-2xl" />
 
-                {/* Main card — fully clickable */}
-                <a
-                  href={brosurUrl ?? "#"}
-                  target={brosurUrl ? "_blank" : undefined}
-                  rel="noopener noreferrer"
-                  className="relative block bg-white rounded-2xl shadow-md border border-slate-100 overflow-hidden cursor-pointer transition-all duration-300 hover:scale-[1.02] hover:shadow-xl"
-                >
-                  {/* Cover image */}
-                  <div className="relative w-full h-[320px] bg-slate-100">
-                    {settings?.heroImageUrl ? (
-                      <Image
-                        src={settings.heroImageUrl}
-                        alt={`Cover Brosur ${schoolName}`}
-                        fill
-                        className="object-cover"
-                        sizes="300px"
-                        preload={true}
-                        fetchPriority="high"
-                      />
-                    ) : (
-                      <div className="w-full h-full flex flex-col items-center justify-center gap-3 text-slate-300">
-                        <FileText className="w-14 h-14" />
-                        <p className="text-xs font-medium tracking-wide">Brosur belum tersedia</p>
-                      </div>
-                    )}
-                    {/* Overlay gradient at bottom for text legibility */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
-                  </div>
+                {/* Main card */}
+                <div className="relative block bg-white rounded-2xl shadow-md border border-slate-100 overflow-hidden transition-all duration-300 hover:shadow-xl">
+                  {/* Preview Area */}
+                  <BrosurPreview url={brosurUrl} schoolName={schoolName} />
 
                   {/* Card info footer */}
-                  <div className="p-5 flex items-center justify-between">
+                  <div className="p-5 flex items-center justify-between bg-white border-t border-slate-50">
                     <div>
                       <p className="text-sm font-semibold text-slate-800 leading-tight">{schoolName}</p>
                       <p className="text-xs text-slate-400 mt-0.5">Kabupaten Tabanan, Bali</p>
                     </div>
                     {brosurUrl && (
-                      <div className="w-10 h-10 bg-[#1A4D2E] rounded-xl flex items-center justify-center shadow-md shrink-0">
-                        <Download className="w-4.5 h-4.5 text-white" />
-                      </div>
+                      <a
+                        href={brosurUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        download
+                        className="w-10 h-10 bg-[#1A4D2E] hover:bg-[#2D7A4F] text-white rounded-xl flex items-center justify-center shadow-md shrink-0 transition-all duration-200 hover:scale-105 active:scale-95"
+                        title="Download Brosur PDF"
+                      >
+                        <Download className="w-4.5 h-4.5" />
+                      </a>
                     )}
                   </div>
-                </a>
+                </div>
               </div>
             </div>
           </div>

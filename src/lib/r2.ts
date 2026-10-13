@@ -48,19 +48,19 @@ export function getR2Client(): S3Client {
 
 /**
  * Generates the public URL for an object stored in R2.
+ * Uses custom domain if configured on Cloudflare, otherwise routes through internal proxy route.
  */
 export function getR2PublicUrl(key: string): string {
   const publicBaseUrl = cleanEnv(process.env.R2_PUBLIC_URL).replace(/\/+$/, "");
   const cleanKey = key.replace(/^\/+/, "");
 
-  if (publicBaseUrl) {
+  // If a valid custom domain is configured (not the blocked *.r2.dev dev subdomain)
+  if (publicBaseUrl && !publicBaseUrl.includes(".r2.dev")) {
     return `${publicBaseUrl}/${cleanKey}`;
   }
 
-  // Fallback endpoint if public URL/domain is not specified
-  const accountId = cleanEnv(process.env.R2_ACCOUNT_ID);
-  const bucket = cleanEnv(process.env.R2_BUCKET_NAME);
-  return `https://${bucket}.${accountId}.r2.cloudflarestorage.com/${cleanKey}`;
+  // Use reliable same-origin proxy route with valid SSL certificate
+  return `/api/media/${cleanKey}`;
 }
 
 /**
@@ -82,6 +82,52 @@ export function extractR2Key(keyOrUrl: string): string {
     // If not a URL, it's already a key path
     return keyOrUrl.replace(/^\/+/, "");
   }
+}
+
+/**
+ * Resolves any media URL (from DB or env) to a valid, accessible URL.
+ * Automatically resolves blocked *.r2.dev URLs to active custom domain or proxy route.
+ */
+export function resolveMediaUrl(urlOrKey?: string | null): string {
+  if (!urlOrKey) return "";
+
+  // Already an internal media proxy URL or absolute path without protocol
+  if (urlOrKey.startsWith("/api/media/")) {
+    return urlOrKey;
+  }
+
+  const publicBaseUrl = cleanEnv(process.env.R2_PUBLIC_URL).replace(/\/+$/, "");
+  const hasValidCustomDomain = Boolean(publicBaseUrl && !publicBaseUrl.includes(".r2.dev"));
+
+  // If starts with active custom domain, return as-is
+  if (hasValidCustomDomain && urlOrKey.startsWith(publicBaseUrl)) {
+    return urlOrKey;
+  }
+
+  // Detect R2 dev URL (*.r2.dev) or S3 direct endpoint
+  const isR2Url =
+    urlOrKey.includes(".r2.dev") ||
+    urlOrKey.includes(".r2.cloudflarestorage.com");
+
+  if (isR2Url) {
+    const key = extractR2Key(urlOrKey);
+    if (key) {
+      if (hasValidCustomDomain) {
+        return `${publicBaseUrl}/${key}`;
+      }
+      return `/api/media/${key}`;
+    }
+  }
+
+  // Handle bare keys like admin-uploads/... or ppdb/...
+  if (urlOrKey.startsWith("admin-uploads/") || urlOrKey.startsWith("ppdb/")) {
+    if (hasValidCustomDomain) {
+      return `${publicBaseUrl}/${urlOrKey}`;
+    }
+    return `/api/media/${urlOrKey}`;
+  }
+
+  return urlOrKey;
 }
 
 /**

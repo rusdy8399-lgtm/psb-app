@@ -13,7 +13,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Checkbox } from "@/components/ui/checkbox";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import imageCompression from 'browser-image-compression';
+import { fastPrepareImage } from "@/lib/client-upload";
 
 interface PPDBFormProps {
   settings: {
@@ -73,23 +73,10 @@ export function PPDBForm({ settings }: PPDBFormProps) {
       return;
     }
 
-    // Only compress if it's an image
-    if (file.type.startsWith('image/')) {
-      try {
-        const options = {
-          maxSizeMB: 0.3, // Compress to max ~300KB
-          maxWidthOrHeight: 1280, // Safe readable resolution
-          useWebWorker: true
-        };
-        const compressedFile = await imageCompression(file, options);
-        setFiles(prev => ({ ...prev, [field]: compressedFile }));
-      } catch (error) {
-        console.error("Compression error:", error);
-        // Fallback to original if compression fails
-        setFiles(prev => ({ ...prev, [field]: file }));
-      }
-    } else {
-      // For PDFs or non-images, just save as is
+    try {
+      const processed = await fastPrepareImage(file, 1600, 0.82);
+      setFiles(prev => ({ ...prev, [field]: processed }));
+    } catch {
       setFiles(prev => ({ ...prev, [field]: file }));
     }
   };

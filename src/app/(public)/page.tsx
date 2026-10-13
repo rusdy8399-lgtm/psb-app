@@ -8,7 +8,7 @@ import { BookOpen, Users, Trophy, GraduationCap, ArrowRight, Library, Languages 
 export const revalidate = 3600; // Cache for 1 hour
 
 export const metadata = {
-  title: "Pesantren Bali | Pesantren Terbaik & Terakreditasi | Bina Insani",
+  title: "Pesantren Bali | Pesantren Terbaik & Terakreditasi | Pondok Pesantren Bali Bina Insani",
   description: "Selamat Datang di Pesantren Bali Bina Insani (Est. 1991). Pilihan pesantren terbaik di Bali untuk pendidikan Islam terpadu, Tahfidz, dan karakter mulia. Daftar sekarang!",
   openGraph: {
     title: "Pesantren Bali | Pondok Pesantren Bali Bina Insani",

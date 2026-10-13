@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -17,7 +17,7 @@ import {
 import { toast } from "sonner";
 import Image from "next/image";
 import { AdminTableSkeleton } from "@/components/admin/AdminSkeletons";
-import imageCompression from "browser-image-compression";
+import { uploadClientFile } from "@/lib/client-upload";
 
 interface KegiatanData {
   id: string;
@@ -33,12 +33,13 @@ export default function KegiatanCMSPage() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<KegiatanData | null>(null);
   const [isUploading, setIsUploading] = useState(false);
+  const uploadControllerRef = useRef<AbortController | null>(null);
   
   // Form State
   const [formData, setFormData] = useState({
     judul: "",
     deskripsi: "",
-    tanggal: "",
+    tanggal: new Date().toISOString().split('T')[0],
     fotoUrl: "",
   });
 
@@ -60,47 +61,43 @@ export default function KegiatanCMSPage() {
   }, []);
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    let file = e.target.files?.[0];
+    const file = e.target.files?.[0];
     if (!file) return;
 
-    setIsUploading(true);
-    const originalName = file.name || "kegiatan.jpg";
-
-    if (file.type.startsWith("image/")) {
-      try {
-        const options = {
-          maxSizeMB: 0.2,
-          maxWidthOrHeight: 1280,
-          useWebWorker: true,
-        };
-        file = await imageCompression(file, options);
-      } catch (error) {
-        console.error("Compression error:", error);
-      }
+    if (uploadControllerRef.current) {
+      uploadControllerRef.current.abort();
     }
+    const controller = new AbortController();
+    uploadControllerRef.current = controller;
 
-    const uploadData = new FormData();
-    uploadData.append("file", file, originalName);
+    setIsUploading(true);
+    const toastId = toast.loading("Mengunggah foto kegiatan...");
 
     try {
-      const response = await fetch("/api/upload", {
-        method: "POST",
-        body: uploadData,
-      });
-
-      if (response.ok) {
-        const { url } = await response.json();
-        setFormData(prev => ({ ...prev, fotoUrl: url }));
-        toast.success("Foto berhasil diunggah");
+      const url = await uploadClientFile(file, { signal: controller.signal });
+      setFormData(prev => ({ ...prev, fotoUrl: url }));
+      toast.success("Foto berhasil diunggah", { id: toastId });
+    } catch (error: unknown) {
+      const msg = error instanceof Error ? error.message : "Gagal mengunggah foto";
+      if (!msg.includes("dibatalkan")) {
+        toast.error(msg, { id: toastId });
       } else {
-        const errorData = await response.json().catch(() => null);
-        toast.error(errorData?.message || errorData?.error || "Gagal mengunggah foto");
+        toast.dismiss(toastId);
       }
-    } catch (error) {
-      toast.error("Terjadi kesalahan saat upload");
     } finally {
       setIsUploading(false);
+      uploadControllerRef.current = null;
+      e.target.value = "";
     }
+  };
+
+  const handleCloseDialog = () => {
+    if (uploadControllerRef.current) {
+      uploadControllerRef.current.abort();
+      uploadControllerRef.current = null;
+      setIsUploading(false);
+    }
+    setIsDialogOpen(false);
   };
 
   const handleOpenDialog = (item: KegiatanData | null = null) => {
@@ -244,7 +241,10 @@ export default function KegiatanCMSPage() {
         )}
       </div>
 
-      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+      <Dialog open={isDialogOpen} onOpenChange={(open) => {
+        if (!open) handleCloseDialog();
+        else setIsDialogOpen(true);
+      }}>
         <DialogContent className="max-w-5xl w-[95vw] sm:max-w-5xl overflow-hidden rounded-[24px] border-none shadow-2xl p-0 bg-slate-50 max-h-[92vh] flex flex-col">
           <DialogHeader className="p-6 md:p-8 bg-white border-b border-slate-100 shrink-0">
             <DialogTitle className="font-heading text-xl font-bold flex items-center gap-3 text-slate-800">
@@ -351,9 +351,8 @@ export default function KegiatanCMSPage() {
                 <Button 
                   type="button" 
                   variant="outline" 
-                  onClick={() => setIsDialogOpen(false)} 
+                  onClick={handleCloseDialog} 
                   className="w-full h-12 font-bold rounded-xl border-slate-200 text-slate-600 hover:bg-slate-50"
-                  disabled={isUploading}
                 >
                   Batal
                 </Button>

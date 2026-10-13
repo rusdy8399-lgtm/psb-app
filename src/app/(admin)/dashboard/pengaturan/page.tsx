@@ -9,7 +9,7 @@ import { Save, Globe, Settings as SettingsIcon, Info, Upload, ImageIcon, BookOpe
 import { toast } from "sonner";
 import Image from "next/image";
 import { AdminDashboardSkeleton } from "@/components/admin/AdminSkeletons";
-import imageCompression from "browser-image-compression";
+import { uploadClientFile } from "@/lib/client-upload";
 
 export default function PengaturanPage() {
   const [isLoading, setIsLoading] = useState(true);
@@ -88,50 +88,24 @@ export default function PengaturanPage() {
   }, []);
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>, field: string) => {
-    let file = e.target.files?.[0];
+    const file = e.target.files?.[0];
     if (!file) return;
 
     setIsUploading(true);
     setUploadingField(field);
     const toastId = toast.loading("Mengunggah berkas ke Cloudflare R2...");
-    const originalName = file.name || "media.jpg";
-
-    if (file.type.startsWith("image/") && file.size > 500 * 1024 && !file.type.includes("svg")) {
-      try {
-        const options = {
-          maxSizeMB: 0.5,
-          maxWidthOrHeight: 1600,
-          useWebWorker: true,
-          fileType: file.type,
-        };
-        file = await imageCompression(file, options);
-      } catch (error) {
-        console.error("Compression error:", error);
-      }
-    }
-
-    const uploadData = new FormData();
-    uploadData.append("file", file, originalName);
 
     try {
-      const response = await fetch("/api/upload", {
-        method: "POST",
-        body: uploadData,
-      });
-
-      if (response.ok) {
-        const { url } = await response.json();
-        setFormData(prev => ({ ...prev, [field]: url }));
-        toast.success("File berhasil diunggah & tersimpan di Cloudflare R2!", { id: toastId });
-      } else {
-        const errorData = await response.json().catch(() => null);
-        toast.error(errorData?.message || errorData?.error || "Gagal mengunggah file", { id: toastId });
-      }
-    } catch (error) {
-      toast.error("Terjadi kesalahan saat upload", { id: toastId });
+      const url = await uploadClientFile(file);
+      setFormData(prev => ({ ...prev, [field]: url }));
+      toast.success("File berhasil diunggah & tersimpan di Cloudflare R2!", { id: toastId });
+    } catch (error: unknown) {
+      const msg = error instanceof Error ? error.message : "Gagal mengunggah file";
+      toast.error(msg, { id: toastId });
     } finally {
       setIsUploading(false);
       setUploadingField(null);
+      e.target.value = "";
     }
   };
 
