@@ -15,7 +15,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Upload to primary storage (Cloudflare R2, fallback to Firebase)
+    // Upload to storage (Cloudflare R2)
     const url = await uploadToStorage(file as Blob, "admin-uploads");
 
     console.log(`File uploaded successfully: ${url}`);

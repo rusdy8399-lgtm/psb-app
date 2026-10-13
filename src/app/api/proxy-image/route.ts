@@ -12,7 +12,7 @@ export async function GET(req: NextRequest) {
     }
 
     // Safety: only allow certain domains if necessary, but for now we proxy all
-    // to ensure accessibility of various storage providers (Firebase, etc.)
+    // to ensure accessibility of various storage providers (Cloudflare R2, etc.)
     
     const response = await fetch(imageUrl);
     if (!response.ok) {

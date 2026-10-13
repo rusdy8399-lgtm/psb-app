@@ -1,10 +1,8 @@
-import { ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
-import { storage } from "./firebase";
 import { v4 as uuidv4 } from "uuid";
 import { isR2Configured, uploadBufferToR2, deleteObjectFromR2 } from "./r2";
 
 /**
- * Uploads a file to storage (Cloudflare R2 as primary, fallback to Firebase Storage).
+ * Uploads a file to Cloudflare R2 storage.
  * @param file The file or blob object (from FormData)
  * @param folder The folder path in the bucket (e.g., 'ppdb/kk', 'admin-uploads')
  * @returns Promise<string> The public download URL
@@ -55,33 +53,13 @@ export async function uploadToStorage(file: File | Blob, folder: string): Promis
     }
   }
 
-  // Fallback to Firebase Storage ONLY if Firebase is actually configured
-  if (process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET) {
-    const displayName = (file as { name?: string }).name || fileName;
-    console.log(`Storage Upload (Firebase Fallback): Starting for ${displayName} -> ${fullPath}`);
-    try {
-      const storageRef = ref(storage, fullPath);
-      const result = await uploadBytes(storageRef, buffer, {
-        contentType,
-        cacheControl: "public,max-age=31536000,immutable",
-      });
-      const downloadURL = await getDownloadURL(result.ref);
-      console.log(`Firebase Upload: Success -> ${downloadURL}`);
-      return downloadURL;
-    } catch (error: unknown) {
-      console.error(`Firebase Upload: FAILED for ${displayName}`, error);
-      throw error;
-    }
-  }
-
   throw new Error(
-    "Layanan storage belum terkonfigurasi. Pastikan R2_ACCOUNT_ID, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY, dan R2_BUCKET_NAME sudah diisi di Vercel/Environment Variables."
+    "Layanan Cloudflare R2 belum terkonfigurasi. Pastikan R2_ACCOUNT_ID, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY, dan R2_BUCKET_NAME sudah diisi di Environment Variables."
   );
 }
 
 /**
- * Deletes a file from storage given its URL.
- * Automatically detects whether the URL belongs to Cloudflare R2 or Firebase Storage.
+ * Deletes a file from Cloudflare R2 storage given its URL.
  * @param url The public URL of the file
  */
 export async function deleteFromStorage(url: string | null | undefined): Promise<void> {
@@ -89,7 +67,7 @@ export async function deleteFromStorage(url: string | null | undefined): Promise
     return;
   }
 
-  // 1. Check if the URL belongs to Cloudflare R2
+  // Check if the URL belongs to Cloudflare R2
   const r2PublicUrl = process.env.R2_PUBLIC_URL || "";
   const isR2Url =
     (r2PublicUrl && url.startsWith(r2PublicUrl)) ||
@@ -108,23 +86,9 @@ export async function deleteFromStorage(url: string | null | undefined): Promise
     }
   }
 
-  // 2. Check if the URL belongs to Firebase Storage
   if (url.includes("firebasestorage.googleapis.com")) {
-    try {
-      console.log(`Firebase Delete: Deleting ${url}`);
-      const storageRef = ref(storage, url);
-      await deleteObject(storageRef);
-      console.log(`Firebase Delete: Success for ${url}`);
-      return;
-    } catch (error: unknown) {
-      const err = error as { code?: string };
-      if (err?.code === "storage/object-not-found") {
-        console.warn(`Firebase Delete: File not found (already deleted?): ${url}`);
-        return;
-      }
-      console.error(`Firebase Delete: FAILED for ${url}`, error);
-      return;
-    }
+    console.log(`Storage Delete: Skipping legacy Firebase URL: ${url}`);
+    return;
   }
 
   console.log(`Storage Delete: Skipping unrecognized URL scheme: ${url}`);
