@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Plus, Edit, Trash2, CalendarDays, Upload, ImageIcon } from "lucide-react";
+import { Plus, Edit, Trash2, CalendarDays, Upload, ImageIcon, Newspaper } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -165,14 +165,14 @@ export default function KegiatanCMSPage() {
         <div>
           <h2 className="text-2xl font-bold font-heading text-slate-800 tracking-tight flex items-center gap-3">
              <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
-                <CalendarDays className="w-5 h-5" /> 
+                <Newspaper className="w-5 h-5" /> 
              </div>
-             Manajemen Kegiatan
+             Manajemen Kabar Pesantren
           </h2>
-          <p className="text-sm text-slate-500 mt-1">Kelola daftar kegiatan dan berita terbaru pesantren secara dinamis.</p>
+          <p className="text-sm text-slate-500 mt-1">Kelola berita, liputan prestasi, dan agenda kegiatan pesantren secara dinamis.</p>
         </div>
         <Button onClick={() => handleOpenDialog()} className="gap-2 bg-primary hover:bg-[#143d24] h-11 px-6 font-bold rounded-xl shadow-lg shadow-primary/10 transition-all active:scale-[0.98]">
-          <Plus className="w-4 h-4" /> Tambah Kegiatan
+          <Plus className="w-4 h-4" /> Tambah Berita Baru
         </Button>
       </div>
 
@@ -185,7 +185,7 @@ export default function KegiatanCMSPage() {
               <TableHeader className="bg-slate-50/50 border-b border-slate-100 h-14">
                 <TableRow className="hover:bg-transparent border-none">
                   <TableHead className="w-24 font-bold text-[10px] uppercase tracking-widest text-slate-400 pl-6">Foto</TableHead>
-                  <TableHead className="font-bold text-[10px] uppercase tracking-widest text-slate-400">Judul Kegiatan</TableHead>
+                  <TableHead className="font-bold text-[10px] uppercase tracking-widest text-slate-400">Judul Berita</TableHead>
                   <TableHead className="font-bold text-[10px] uppercase tracking-widest text-slate-400">Tanggal</TableHead>
                   <TableHead className="text-right font-bold text-[10px] uppercase tracking-widest text-slate-400 pr-8">Aksi</TableHead>
                 </TableRow>
@@ -249,9 +249,9 @@ export default function KegiatanCMSPage() {
           <DialogHeader className="p-6 md:p-8 bg-white border-b border-slate-100 shrink-0">
             <DialogTitle className="font-heading text-xl font-bold flex items-center gap-3 text-slate-800">
                <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
-                <CalendarDays className="w-5 h-5" /> 
+                <Newspaper className="w-5 h-5" /> 
                </div>
-               {editingItem ? "Edit Data Kegiatan" : "Tambah Kegiatan Baru"}
+               {editingItem ? "Edit Berita Kegiatan" : "Tambah Berita Baru"}
             </DialogTitle>
           </DialogHeader>
           <form onSubmit={handleSave} className="flex-1 overflow-y-auto p-6 md:p-8 grid grid-cols-1 lg:grid-cols-3 gap-8">

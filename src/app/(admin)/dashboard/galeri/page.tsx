@@ -169,7 +169,7 @@ export default function GaleriCMSPage() {
             </div>
             Manajemen Galeri Foto
           </h2>
-          <p className="text-sm text-slate-500 mt-1">Kelola koleksi dokumentasi foto pesantren secara sistematis.</p>
+          <p className="text-sm text-slate-500 mt-1">Kelola koleksi dokumentasi foto santri yang ditampilkan pada halaman Galeri Foto (/galeri).</p>
         </div>
         <Button onClick={() => handleOpenDialog()} className="gap-2 bg-primary hover:bg-[#143d24] h-11 px-6 font-bold rounded-xl shadow-lg shadow-primary/10 transition-all active:scale-[0.98]">
           <Plus className="w-4 h-4" /> Tambah Foto

@@ -36,7 +36,7 @@ export default async function FasilitasPage() {
                 className="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 border border-slate-100 flex flex-col h-full animate-in fade-in slide-in-from-bottom-8 duration-500"
                 style={{ animationDelay: `${idx * 100}ms` }}
               >
-                <div className="relative w-full h-36 overflow-hidden image-shimmer bg-slate-100 flex items-center justify-center">
+                <div className="relative w-full h-36 overflow-hidden bg-slate-100 flex items-center justify-center">
                   {item.fotoUrl ? (
                     <Image
                       src={item.fotoUrl}
@@ -71,7 +71,7 @@ export default async function FasilitasPage() {
                       </DialogTrigger>
                       <DialogContent className="max-w-lg overflow-hidden rounded-[24px] p-0 border-0 shadow-2xl">
                         {item.fotoUrl && (
-                          <div className="w-full h-56 md:h-64 relative image-shimmer">
+                          <div className="w-full h-56 md:h-64 relative bg-slate-100">
                             <Image
                               src={item.fotoUrl}
                               alt={item.nama}

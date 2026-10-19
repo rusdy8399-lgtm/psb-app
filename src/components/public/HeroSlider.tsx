@@ -183,7 +183,7 @@ export function HeroSlider({ data, brosurUrl }: { data: SliderData[], brosurUrl?
                       <div className="relative w-[500px] h-[500px] group-hover:rotate-1 transition-transform duration-1000">
                          {/* Optional Glow beneath image */}
                          <div className="absolute inset-0 bg-gold/20 rounded-full blur-[100px] animate-pulse" />
-                        <div className="w-full h-full relative z-20 animate-float image-shimmer">
+                        <div className="w-full h-full relative z-20 animate-float">
                           {shouldRenderImage(index) && (
                             <Image
                               src={slide.fgImageUrl}

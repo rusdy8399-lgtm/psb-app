@@ -30,6 +30,7 @@ export async function POST(req: NextRequest) {
     };
     await db.insert(galeri).values(newData);
     revalidatePath("/", "layout");
+    revalidatePath("/galeri");
     return NextResponse.json(newData);
   } catch (error) {
     return NextResponse.json({ error: "Failed to create galeri" }, { status: 500 });

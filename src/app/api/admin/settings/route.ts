@@ -44,6 +44,7 @@ export async function POST(req: NextRequest) {
       revalidatePath("/download-brosur");
       revalidatePath("/fasilitas");
       revalidatePath("/kegiatan");
+      revalidatePath("/galeri");
     } catch (revalidateErr) {
       console.warn("Revalidation warning (safe to ignore):", revalidateErr);
     }

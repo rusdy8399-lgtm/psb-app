@@ -104,7 +104,7 @@ export default async function Home() {
             </div>
 
             {/* Right Column: Image */}
-            <div className="rounded-2xl overflow-hidden h-[400px] shadow-md border border-gray-100 relative image-shimmer">
+            <div className="rounded-2xl overflow-hidden h-[400px] shadow-md border border-gray-100 relative bg-slate-100">
               {settings?.heroImageUrl ? (
                 <Image
                   src={settings.heroImageUrl}

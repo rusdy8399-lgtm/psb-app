@@ -14,6 +14,7 @@ import {
   Loader2,
   Images,
   Globe,
+  Newspaper,
   X
 } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
@@ -50,7 +51,7 @@ export function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
     { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
     { name: "Pendaftar", href: "/dashboard/pendaftar", icon: Users },
     { name: "Slider Beranda", href: "/dashboard/slider", icon: ImageIcon },
-    { name: "Kegiatan", href: "/dashboard/kegiatan", icon: CalendarDays },
+    { name: "Kabar Pesantren", href: "/dashboard/kegiatan", icon: Newspaper },
     { name: "Galeri Foto", href: "/dashboard/galeri", icon: Images },
     { name: "Fasilitas", href: "/dashboard/fasilitas", icon: Building2 },
     { name: "Pengaturan", href: "/dashboard/pengaturan", icon: Settings },

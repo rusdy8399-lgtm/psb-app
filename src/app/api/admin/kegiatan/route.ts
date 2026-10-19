@@ -49,6 +49,10 @@ export async function POST(req: NextRequest) {
     };
     await db.insert(kegiatan).values(newData);
     revalidatePath("/", "layout");
+    revalidatePath("/kegiatan");
+    if (newData.slug) {
+      revalidatePath(`/kegiatan/${newData.slug}`);
+    }
     return NextResponse.json(newData);
   } catch (error) {
     return NextResponse.json({ error: "Failed to create kegiatan" }, { status: 500 });
