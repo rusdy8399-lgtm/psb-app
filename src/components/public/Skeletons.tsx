@@ -8,18 +8,19 @@ export function Skeleton({ className }: { className?: string }) {
 
 export function HeroSkeleton() {
   return (
-    <div className="w-full h-[calc(100dvh-56px)] min-h-[500px] md:h-[650px] bg-slate-100 relative overflow-hidden flex items-center">
-      <div className="container mx-auto px-6 md:px-12 flex flex-col md:flex-row items-center justify-between">
-        <div className="w-full md:max-w-[600px] space-y-6">
+    <div className="w-full flex flex-col md:flex-row md:items-center md:h-[650px] bg-slate-100 relative overflow-hidden">
+      <div className="w-full aspect-[16/9] md:hidden bg-slate-200 animate-pulse" />
+      <div className="container mx-auto px-5 pt-6 pb-14 md:px-12 md:py-0 flex flex-col md:flex-row items-center justify-between">
+        <div className="w-full md:max-w-[600px] space-y-4 md:space-y-6">
           <Skeleton className="h-6 w-32" />
-          <div className="space-y-4">
-            <Skeleton className="h-12 w-full md:w-[500px]" />
-            <Skeleton className="h-12 w-3/4 md:w-[400px]" />
-            <Skeleton className="h-20 w-full" />
+          <div className="space-y-3 md:space-y-4">
+            <Skeleton className="h-8 md:h-12 w-full md:w-[500px]" />
+            <Skeleton className="h-8 md:h-12 w-3/4 md:w-[400px]" />
+            <Skeleton className="h-14 w-full" />
           </div>
-          <div className="flex gap-4 pt-4">
-            <Skeleton className="h-14 w-40 rounded-2xl" />
-            <Skeleton className="h-14 w-40 rounded-2xl" />
+          <div className="flex flex-col sm:flex-row gap-3 pt-2">
+            <Skeleton className="h-12 w-full sm:w-40 rounded-xl" />
+            <Skeleton className="h-12 w-full sm:w-40 rounded-xl" />
           </div>
         </div>
         <div className="hidden md:block w-[400px] h-[400px]">

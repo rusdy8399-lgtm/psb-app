@@ -96,10 +96,10 @@ export function HeroSlider({ data, brosurUrl }: { data: SliderData[], brosurUrl?
       <CarouselContent className="-ml-0">
         {data.map((slide, index) => (
           <CarouselItem key={slide.id} className="pl-0 border-none outline-none">
-            <section className="relative w-full h-[calc(100dvh-56px)] min-h-[500px] md:h-[650px] flex items-center overflow-hidden bg-[#0d8174] contain-layout-paint">
-              {/* Background Image with Ken Burns effect */}
-              <div className="absolute inset-0 z-0 overflow-hidden">
-                <div className="absolute inset-0 transition-transform duration-[10000ms] group-hover:scale-110 ease-out">
+            <section className="relative w-full flex flex-col md:flex-row md:items-center overflow-hidden bg-[#0d8174] md:h-[650px] contain-layout-paint">
+              {/* Photo Container: Dedicated 16:9 Aspect Ratio on Mobile (Uncropped, like UMJ) & Fullcover Background on Desktop */}
+              <div className="relative w-full aspect-[16/9] sm:aspect-[2/1] md:aspect-auto md:absolute md:inset-0 z-0 overflow-hidden shrink-0 shadow-sm md:shadow-none">
+                <div className="w-full h-full md:absolute md:inset-0 transition-transform duration-[10000ms] group-hover:scale-105 ease-out">
                   {shouldRenderImage(index) && slide.bgImageUrl && (
                     <Image
                       src={slide.bgImageUrl}
@@ -107,29 +107,30 @@ export function HeroSlider({ data, brosurUrl }: { data: SliderData[], brosurUrl?
                       fill
                       preload={index === 0}
                       fetchPriority={index === 0 ? "high" : "low"}
-                      className="object-cover"
-                      sizes="100vw"
+                      className="object-cover object-center"
+                      sizes="(max-width: 768px) 100vw, 1920px"
                       quality={85}
                     />
                   )}
                 </div>
-                {/* Gradient Overlay - Kontras Tinggi Mobile First */}
-                <div className="absolute inset-0 bg-gradient-to-b from-black/40 to-black/60 md:bg-gradient-to-r md:from-black/80 md:via-black/40 md:to-transparent z-10" />
-                <div className="absolute inset-0 bg-[#0d8174]/10 hidden md:block z-0" />
+                {/* Gradient Overlay for Desktop (and soft gradient for mobile image base) */}
+                <div className="hidden md:block absolute inset-0 bg-gradient-to-r from-black/85 via-black/50 to-transparent z-10" />
+                <div className="md:hidden absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-black/10 z-10 pointer-events-none" />
               </div>
 
-              <div className="container relative mx-auto px-6 md:px-12 z-20 h-full flex items-center">
-                <div className="flex flex-col md:flex-row items-center w-full justify-between mb-8 md:mb-0 mt-8 md:mt-0">
-                  {/* Text Content - Vertical Stack Mobile First */}
-                  <div className="w-full md:max-w-[600px] flex flex-col items-start text-left space-y-4 md:space-y-6 animate-in fade-in slide-in-from-left-12 duration-1000">
+              {/* Text Content & Action Buttons */}
+              <div className="container relative mx-auto px-5 pt-6 pb-14 md:px-12 md:py-0 z-20 md:h-full flex items-center">
+                <div className="flex flex-col md:flex-row items-center w-full justify-between">
+                  {/* Text Content */}
+                  <div className="w-full md:max-w-[600px] flex flex-col items-start text-left space-y-3 md:space-y-6 animate-in fade-in slide-in-from-left-12 duration-1000">
                     {slide.badge && (
-                      <span className="badge-gold-elegan text-[12px] uppercase tracking-[1.5px] font-bold font-sans">
+                      <span className="badge-gold-elegan text-[11px] md:text-[12px] uppercase tracking-[1.5px] font-bold font-sans">
                         {slide.badge}
                       </span>
                     )}
 
-                    <div className="space-y-2 md:space-y-4">
-                      <h1 className="text-[28px] md:text-[32px] font-sans font-bold text-white leading-[1.2] tracking-normal mb-2">
+                    <div className="space-y-1.5 md:space-y-4">
+                      <h1 className="text-[24px] sm:text-[28px] md:text-[32px] font-sans font-bold text-white leading-[1.25] tracking-normal mb-1">
                         {slide.title.includes('<br />') ? (
                           slide.title.split('<br />').map((t, i) => (
                             <React.Fragment key={i}>
@@ -142,7 +143,7 @@ export function HeroSlider({ data, brosurUrl }: { data: SliderData[], brosurUrl?
                       </h1>
 
                       {slide.subtitle && (
-                        <p className="text-[14px] md:text-[16px] text-white/80 font-sans font-normal max-w-[500px] leading-relaxed line-clamp-2 md:line-clamp-none">
+                        <p className="text-[13px] sm:text-[14px] md:text-[16px] text-white/85 font-sans font-normal max-w-[500px] leading-relaxed line-clamp-2 md:line-clamp-none">
                           {slide.subtitle?.includes('<br />') ? (
                             slide.subtitle.split('<br />').map((s, i) => (
                               <React.Fragment key={i}>
@@ -156,19 +157,19 @@ export function HeroSlider({ data, brosurUrl }: { data: SliderData[], brosurUrl?
                       )}
                     </div>
 
-                    <div className="pt-4 md:pt-6 w-full flex flex-col md:flex-row gap-3">
-                      <Link href="/pendaftaran" className="w-full md:w-auto">
-                        <Button className="w-full md:w-auto bg-[#1A4D2E] hover:bg-[#133d24] text-white font-semibold h-[48px] md:h-[52px] rounded-xl transition-all text-[16px] flex gap-3 items-center justify-center group/btn border-none font-sans">
+                    <div className="pt-2 md:pt-6 w-full flex flex-col sm:flex-row gap-2.5 md:gap-3">
+                      <Link href="/pendaftaran" className="w-full sm:w-auto">
+                        <Button className="w-full sm:w-auto bg-[#1A4D2E] hover:bg-[#133d24] text-white font-semibold h-[46px] md:h-[52px] rounded-xl transition-all text-[15px] md:text-[16px] flex gap-3 items-center justify-center group/btn border-none font-sans shadow-md">
                           Penerimaan Murid Baru
                           <ArrowRight className="hidden md:block w-5 h-5 group-hover/btn:translate-x-1 transition-transform" />
                         </Button>
                       </Link>
 
                       {brosurUrl && (
-                        <Link href="/download-brosur" className="w-full md:w-auto">
+                        <Link href="/download-brosur" className="w-full sm:w-auto">
                           <Button
                             variant="outline"
-                            className="w-full md:w-auto border border-white/40 bg-transparent hover:bg-white/10 text-white font-semibold h-[48px] md:h-[52px] rounded-xl transition-all text-[16px] flex gap-3 items-center justify-center group/brosur font-sans"
+                            className="w-full sm:w-auto border border-white/40 bg-white/5 hover:bg-white/15 text-white font-semibold h-[46px] md:h-[52px] rounded-xl transition-all text-[15px] md:text-[16px] flex gap-3 items-center justify-center group/brosur font-sans"
                           >
                             Download Brosur
                           </Button>
@@ -224,7 +225,7 @@ export function HeroSlider({ data, brosurUrl }: { data: SliderData[], brosurUrl?
       </div>
 
       {/* Progress Bars (Dots) - Touch Target Compliant (48x48px) but visually styled as tiny dots */}
-      <div className="absolute bottom-6 md:bottom-10 left-1/2 -translate-x-1/2 z-30 flex gap-0.5 md:gap-1">
+      <div className="absolute bottom-3 md:bottom-10 left-1/2 -translate-x-1/2 z-30 flex gap-0.5 md:gap-1">
         {data.map((_, i) => (
           <button
             key={i}
