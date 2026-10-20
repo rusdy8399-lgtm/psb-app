@@ -78,7 +78,7 @@ export default function RootLayout({
           <link rel="preconnect" href={process.env.R2_PUBLIC_URL} crossOrigin="anonymous" />
         )}
       </head>
-      <body className="min-h-full flex flex-col font-sans">{children}</body>
+      <body className="min-h-full flex flex-col font-sans overflow-x-hidden">{children}</body>
     </html>
   );
 }

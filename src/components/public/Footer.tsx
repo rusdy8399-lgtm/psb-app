@@ -174,7 +174,7 @@ export function Footer({ settings }: FooterProps) {
         {/* Divider & Copyright */}
         <div className="border-t border-green-800 mt-6 pt-4 flex flex-col md:flex-row justify-between items-center gap-1 text-xs text-green-300">
           <p>© {year} {schoolName}. All rights reserved.</p>
-          <p>Dikelola oleh Panitia PPDB Online</p>
+          <p>Dikelola oleh Tim IT Bali Bina Insani</p>
         </div>
       </div>
     </footer>

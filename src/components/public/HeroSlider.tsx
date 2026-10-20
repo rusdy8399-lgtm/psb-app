@@ -30,11 +30,11 @@ export function HeroSlider({ data, brosurUrl }: { data: SliderData[], brosurUrl?
 
   React.useEffect(() => {
     setHasHydrated(true);
-    
+
     // Dynamic CSS Loading
     import("@/styles/carousel.css");
     import("@/styles/animations.css");
-    
+
     // Lazy load Embla Autoplay only on the client side
     import("embla-carousel-autoplay").then((mod) => {
       setAutoplayPlugin(() =>
@@ -45,13 +45,13 @@ export function HeroSlider({ data, brosurUrl }: { data: SliderData[], brosurUrl?
 
   React.useEffect(() => {
     if (!api) return;
-    
+
     setCurrentIndex(api.selectedScrollSnap());
-    
+
     const onSelect = () => {
       setCurrentIndex(api.selectedScrollSnap());
     };
-    
+
     api.on("select", onSelect);
     return () => {
       api.off("select", onSelect);
@@ -77,13 +77,13 @@ export function HeroSlider({ data, brosurUrl }: { data: SliderData[], brosurUrl?
   const shouldRenderImage = (index: number) => {
     if (index === 0) return true; // Always render slide 0 for LCP and SSR matching
     if (!hasHydrated) return false; // Prevent hydration mismatch during SSR
-    
+
     const len = data.length;
-    const isAdjacent = 
+    const isAdjacent =
       Math.abs(index - currentIndex) <= 1 ||
       (currentIndex === 0 && index === len - 1) ||
       (currentIndex === len - 1 && index === 0);
-      
+
     return isAdjacent;
   };
 
@@ -96,7 +96,7 @@ export function HeroSlider({ data, brosurUrl }: { data: SliderData[], brosurUrl?
       <CarouselContent className="-ml-0">
         {data.map((slide, index) => (
           <CarouselItem key={slide.id} className="pl-0 border-none outline-none">
-            <section className="relative w-full h-[550px] md:h-[650px] flex items-center overflow-hidden bg-[#0d8174] contain-layout-paint">
+            <section className="relative w-full h-[calc(100dvh-56px)] min-h-[500px] md:h-[650px] flex items-center overflow-hidden bg-[#0d8174] contain-layout-paint">
               {/* Background Image with Ken Burns effect */}
               <div className="absolute inset-0 z-0 overflow-hidden">
                 <div className="absolute inset-0 transition-transform duration-[10000ms] group-hover:scale-110 ease-out">
@@ -117,7 +117,7 @@ export function HeroSlider({ data, brosurUrl }: { data: SliderData[], brosurUrl?
                 <div className="absolute inset-0 bg-gradient-to-b from-black/40 to-black/60 md:bg-gradient-to-r md:from-black/80 md:via-black/40 md:to-transparent z-10" />
                 <div className="absolute inset-0 bg-[#0d8174]/10 hidden md:block z-0" />
               </div>
-              
+
               <div className="container relative mx-auto px-6 md:px-12 z-20 h-full flex items-center">
                 <div className="flex flex-col md:flex-row items-center w-full justify-between mb-8 md:mb-0 mt-8 md:mt-0">
                   {/* Text Content - Vertical Stack Mobile First */}
@@ -127,7 +127,7 @@ export function HeroSlider({ data, brosurUrl }: { data: SliderData[], brosurUrl?
                         {slide.badge}
                       </span>
                     )}
-                    
+
                     <div className="space-y-2 md:space-y-4">
                       <h1 className="text-[28px] md:text-[32px] font-sans font-bold text-white leading-[1.2] tracking-normal mb-2">
                         {slide.title.includes('<br />') ? (
@@ -140,7 +140,7 @@ export function HeroSlider({ data, brosurUrl }: { data: SliderData[], brosurUrl?
                           slide.title
                         )}
                       </h1>
-                      
+
                       {slide.subtitle && (
                         <p className="text-[14px] md:text-[16px] text-white/80 font-sans font-normal max-w-[500px] leading-relaxed line-clamp-2 md:line-clamp-none">
                           {slide.subtitle?.includes('<br />') ? (
@@ -155,7 +155,7 @@ export function HeroSlider({ data, brosurUrl }: { data: SliderData[], brosurUrl?
                         </p>
                       )}
                     </div>
-                    
+
                     <div className="pt-4 md:pt-6 w-full flex flex-col md:flex-row gap-3">
                       <Link href="/pendaftaran" className="w-full md:w-auto">
                         <Button className="w-full md:w-auto bg-[#1A4D2E] hover:bg-[#133d24] text-white font-semibold h-[48px] md:h-[52px] rounded-xl transition-all text-[16px] flex gap-3 items-center justify-center group/btn border-none font-sans">
@@ -181,8 +181,8 @@ export function HeroSlider({ data, brosurUrl }: { data: SliderData[], brosurUrl?
                   {slide.fgImageUrl && (
                     <div className="md:w-1/2 h-full hidden md:flex items-end justify-end relative animate-in fade-in zoom-in-90 duration-1000 delay-300">
                       <div className="relative w-[500px] h-[500px] group-hover:rotate-1 transition-transform duration-1000">
-                         {/* Optional Glow beneath image */}
-                         <div className="absolute inset-0 bg-gold/20 rounded-full blur-[100px] animate-pulse" />
+                        {/* Optional Glow beneath image */}
+                        <div className="absolute inset-0 bg-gold/20 rounded-full blur-[100px] animate-pulse" />
                         <div className="w-full h-full relative z-20 animate-float">
                           {shouldRenderImage(index) && (
                             <Image
@@ -207,14 +207,14 @@ export function HeroSlider({ data, brosurUrl }: { data: SliderData[], brosurUrl?
 
       {/* Premium Navigation Arrows - Hidden on mobile */}
       <div className="hidden md:flex absolute inset-x-0 top-1/2 -translate-y-1/2 z-30 justify-between px-6 pointer-events-none">
-        <button 
+        <button
           onClick={() => api?.scrollPrev()}
           aria-label="Slide sebelumnya"
           className="pointer-events-auto w-14 h-14 bg-white/10 hover:bg-gold hover:text-[#0d8174] text-white rounded-full flex items-center justify-center transition-all backdrop-blur-md shadow-2xl border border-white/20 hover:scale-110 active:scale-90 cursor-pointer will-change-transform"
         >
           <ChevronLeft className="w-8 h-8" />
         </button>
-        <button 
+        <button
           onClick={() => api?.scrollNext()}
           aria-label="Slide berikutnya"
           className="pointer-events-auto w-14 h-14 bg-white/10 hover:bg-gold hover:text-[#0d8174] text-white rounded-full flex items-center justify-center transition-all backdrop-blur-md shadow-2xl border border-white/20 hover:scale-110 active:scale-90 cursor-pointer will-change-transform"
@@ -233,9 +233,8 @@ export function HeroSlider({ data, brosurUrl }: { data: SliderData[], brosurUrl?
             className="w-12 h-12 flex items-center justify-center focus:outline-none group/dot cursor-pointer bg-transparent border-none p-0"
           >
             <span
-              className={`rounded-full transition-all duration-500 bg-white/40 group-hover/dot:bg-white/80 ${
-                currentIndex === i ? "bg-white w-6 md:w-12 h-[4px] md:h-1.5" : "w-[6px] md:w-3 h-[4px] md:h-1.5"
-              }`}
+              className={`rounded-full transition-all duration-500 bg-white/40 group-hover/dot:bg-white/80 ${currentIndex === i ? "bg-white w-6 md:w-12 h-[4px] md:h-1.5" : "w-[6px] md:w-3 h-[4px] md:h-1.5"
+                }`}
             />
           </button>
         ))}

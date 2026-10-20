@@ -8,7 +8,7 @@ export function Skeleton({ className }: { className?: string }) {
 
 export function HeroSkeleton() {
   return (
-    <div className="w-full h-[550px] md:h-[650px] bg-slate-100 relative overflow-hidden flex items-center">
+    <div className="w-full h-[calc(100dvh-56px)] min-h-[500px] md:h-[650px] bg-slate-100 relative overflow-hidden flex items-center">
       <div className="container mx-auto px-6 md:px-12 flex flex-col md:flex-row items-center justify-between">
         <div className="w-full md:max-w-[600px] space-y-6">
           <Skeleton className="h-6 w-32" />
