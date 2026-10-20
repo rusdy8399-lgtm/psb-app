@@ -17,7 +17,7 @@ import { toast } from "sonner";
 import Image from "next/image";
 import { AdminTableSkeleton } from "@/components/admin/AdminSkeletons";
 import { uploadClientFile } from "@/lib/client-upload";
-import { isVideoUrl } from "@/lib/utils";
+import { isVideoUrl, resolveMediaUrl } from "@/lib/utils";
 
 interface SliderData {
   id: string;
@@ -37,7 +37,7 @@ export default function SliderCMSPage() {
   const [editingSlider, setEditingSlider] = useState<SliderData | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const uploadControllerRef = useRef<AbortController | null>(null);
-  
+
   // Form State
   const [formData, setFormData] = useState({
     badge: "",
@@ -160,7 +160,7 @@ export default function SliderCMSPage() {
 
   const handleDelete = async (id: string) => {
     if (!confirm("Hapus banner ini?")) return;
-    
+
     try {
       const response = await fetch(`/api/admin/slider/${id}`, { method: "DELETE" });
       if (response.ok) {
@@ -208,21 +208,21 @@ export default function SliderCMSPage() {
                         {s.bgImageUrl ? (
                           isVideoUrl(s.bgImageUrl) ? (
                             <div className="relative w-full h-full bg-black flex items-center justify-center">
-                              <video 
-                                src={s.bgImageUrl} 
-                                className="w-full h-full object-cover" 
-                                muted 
-                                playsInline 
+                              <video
+                                src={resolveMediaUrl(s.bgImageUrl)}
+                                className="w-full h-full object-cover"
+                                muted
+                                playsInline
                               />
                               <span className="absolute bottom-1 right-1 bg-black/80 text-emerald-300 text-[9px] font-bold px-1.5 py-0.5 rounded flex items-center gap-1 backdrop-blur-sm">
                                 <Film className="w-2.5 h-2.5 text-emerald-400" /> VIDEO
                               </span>
                             </div>
                           ) : (
-                            <Image 
-                              src={s.bgImageUrl} 
-                              alt="bg" 
-                              fill 
+                            <Image
+                              src={resolveMediaUrl(s.bgImageUrl)}
+                              alt="bg"
+                              fill
                               className="object-cover"
                               sizes="112px"
                               unoptimized
@@ -238,10 +238,10 @@ export default function SliderCMSPage() {
                       <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1.5 opacity-60">ID: {s.id.slice(0, 8)}...</p>
                     </TableCell>
                     <TableCell>
-                      <span 
+                      <span
                         className={`inline-flex items-center rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-widest border
-                          ${s.isActive 
-                            ? "bg-green-50 text-green-700 border-green-100" 
+                          ${s.isActive
+                            ? "bg-green-50 text-green-700 border-green-100"
                             : "bg-slate-50 text-slate-400 border-slate-100"}`}
                       >
                         {s.isActive ? "Aktif" : "Draft"}
@@ -260,9 +260,9 @@ export default function SliderCMSPage() {
                   </TableRow>
                 ))}
                 {sliders.length === 0 && (
-                   <TableRow>
-                     <TableCell colSpan={5} className="h-40 text-center text-slate-400 font-medium italic">Belum ada banner slider.</TableCell>
-                   </TableRow>
+                  <TableRow>
+                    <TableCell colSpan={5} className="h-40 text-center text-slate-400 font-medium italic">Belum ada banner slider.</TableCell>
+                  </TableRow>
                 )}
               </TableBody>
             </Table>
@@ -277,146 +277,146 @@ export default function SliderCMSPage() {
         <DialogContent className="max-w-2xl overflow-y-auto max-h-[90vh] rounded-[24px] border-none shadow-2xl p-0">
           <DialogHeader className="p-8 bg-slate-50/50 border-b border-slate-100">
             <DialogTitle className="font-heading text-xl font-bold flex items-center gap-3 text-slate-800">
-               <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
-                <ImageIcon className="w-5 h-5" /> 
-               </div>
-               {editingSlider ? "Edit Banner Slider" : "Tambah Banner Slider"}
+              <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
+                <ImageIcon className="w-5 h-5" />
+              </div>
+              {editingSlider ? "Edit Banner Slider" : "Tambah Banner Slider"}
             </DialogTitle>
           </DialogHeader>
           <form onSubmit={handleSave} className="p-8 space-y-8">
             <div className="grid grid-cols-2 gap-6">
               <div className="space-y-2.5">
                 <Label className="font-bold text-slate-700 text-sm ml-1">Label Badge (Kuning)</Label>
-                <Input 
-                  value={formData.badge} 
-                  onChange={(e) => setFormData({...formData, badge: e.target.value})} 
-                  placeholder="PENDAFTARAN DIBUKA" 
+                <Input
+                  value={formData.badge}
+                  onChange={(e) => setFormData({ ...formData, badge: e.target.value })}
+                  placeholder="PENDAFTARAN DIBUKA"
                   className="h-12 rounded-xl border-slate-200 bg-slate-50/30 focus:bg-white shadow-none focus:ring-2 focus:ring-primary/10"
                 />
               </div>
               <div className="space-y-2.5">
                 <Label className="font-bold text-slate-700 text-sm ml-1">Urutan Tampil</Label>
-                <Input 
-                  type="number" 
-                  value={formData.order} 
-                  onChange={(e) => setFormData({...formData, order: parseInt(e.target.value)})} 
+                <Input
+                  type="number"
+                  value={formData.order}
+                  onChange={(e) => setFormData({ ...formData, order: parseInt(e.target.value) })}
                   className="h-12 rounded-xl border-slate-200 bg-slate-50/30 focus:bg-white shadow-none focus:ring-2 focus:ring-primary/10"
                 />
               </div>
             </div>
-            
+
             <div className="space-y-2.5">
               <Label className="font-bold text-slate-700 text-sm ml-1">Judul Utama (Besar)</Label>
-              <Input 
-                required 
-                value={formData.title} 
-                onChange={(e) => setFormData({...formData, title: e.target.value})} 
-                placeholder="Contoh: Membentuk Generasi Qur'ani" 
+              <Input
+                required
+                value={formData.title}
+                onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                placeholder="Contoh: Membentuk Generasi Qur'ani"
                 className="h-12 rounded-xl border-slate-200 bg-slate-50/30 focus:bg-white shadow-none focus:ring-2 focus:ring-primary/10"
               />
               <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest ml-1 opacity-70">Gunakan &lt;br /&gt; untuk baris baru secara paksa.</p>
             </div>
-            
+
             <div className="space-y-2.5">
               <Label className="font-bold text-slate-700 text-sm ml-1">Sub-judul (Teks Kecil)</Label>
-              <Input 
-                value={formData.subtitle} 
-                onChange={(e) => setFormData({...formData, subtitle: e.target.value})} 
-                placeholder="Excellent with Character" 
+              <Input
+                value={formData.subtitle}
+                onChange={(e) => setFormData({ ...formData, subtitle: e.target.value })}
+                placeholder="Excellent with Character"
                 className="h-12 rounded-xl border-slate-200 bg-slate-50/30 focus:bg-white shadow-none focus:ring-2 focus:ring-primary/10"
               />
             </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-6 bg-[#FAFAF8] rounded-2xl border border-slate-100">
-               <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <Label className="font-bold text-slate-700 text-sm flex items-center gap-2">
-                      <div className="w-1.5 h-1.5 rounded-full bg-primary" /> Latar Belakang (Foto / Video)
-                    </Label>
-                    {formData.bgImageUrl && isVideoUrl(formData.bgImageUrl) && (
-                      <span className="text-[10px] font-bold bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full flex items-center gap-1">
-                        <Film className="w-3 h-3 text-emerald-600" /> Format Video
-                      </span>
-                    )}
-                  </div>
-                  <div className="flex flex-col gap-3">
-                     <div className="relative group overflow-hidden rounded-xl aspect-video bg-slate-900 border border-slate-300 shadow-inner">
-                        {formData.bgImageUrl ? (
-                          isVideoUrl(formData.bgImageUrl) ? (
-                            <video 
-                              src={formData.bgImageUrl} 
-                              className="w-full h-full object-cover" 
-                              autoPlay 
-                              muted 
-                              loop 
-                              playsInline 
-                            />
-                          ) : (
-                            <img src={formData.bgImageUrl} className="w-full h-full object-cover" alt="prev" />
-                          )
-                        ) : (
-                           <div className="absolute inset-0 flex flex-col items-center justify-center text-slate-400 gap-1 bg-slate-100">
-                             <div className="flex gap-2 items-center">
-                               <ImageIcon className="w-6 h-6 opacity-40" />
-                               <Video className="w-6 h-6 opacity-40" />
-                             </div>
-                             <span className="text-[11px] text-slate-400 font-medium">Foto atau Video (MP4)</span>
-                           </div>
-                        )}
-                        <label className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 cursor-pointer backdrop-blur-sm z-10">
-                           <Upload className="text-white w-7 h-7 mb-1.5 animate-bounce" />
-                           <span className="text-white text-[10px] font-bold uppercase tracking-widest">Upload Foto / Video</span>
-                           <input 
-                             type="file" 
-                             className="hidden" 
-                             accept="image/*,video/mp4,video/webm,video/ogg,video/quicktime" 
-                             onChange={(e) => handleFileUpload(e, "bgImageUrl")} 
-                             disabled={isUploading} 
-                           />
-                        </label>
-                     </div>
-                     <Input 
-                       required 
-                       value={formData.bgImageUrl} 
-                       onChange={(e) => setFormData({...formData, bgImageUrl: e.target.value})} 
-                       placeholder="URL Foto atau Video MP4 (https://...)..." 
-                       className="h-9 text-[10px] font-mono rounded-lg border-slate-200" 
-                     />
-                     <p className="text-[11px] text-slate-500 leading-tight">
-                       💡 <strong>Mendukung Foto (JPG, PNG) &amp; Video (MP4, WebM)</strong>. Saat website dibuka, video akan langsung berputar otomatis (autoplay) tanpa jeda.
-                     </p>
-                  </div>
-               </div>
 
-               <div className="space-y-3">
-                  <Label className="font-bold text-slate-700 text-sm flex items-center gap-2 mb-1">
-                    <div className="w-1.5 h-1.5 rounded-full bg-primary" /> Overlay Depan (FG)
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-6 bg-[#FAFAF8] rounded-2xl border border-slate-100">
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <Label className="font-bold text-slate-700 text-sm flex items-center gap-2">
+                    <div className="w-1.5 h-1.5 rounded-full bg-primary" /> Latar Belakang (Foto / Video)
                   </Label>
-                  <div className="flex flex-col gap-3">
-                     <div className="relative group overflow-hidden rounded-xl aspect-video bg-slate-200 border border-slate-300 shadow-inner">
-                        {formData.fgImageUrl ? (
-                           <img src={formData.fgImageUrl} className="w-full h-full object-contain p-2" alt="prev" />
-                        ) : (
-                           <div className="absolute inset-0 flex items-center justify-center text-slate-400"><ImageIcon className="w-8 h-8 opacity-20" /></div>
-                        )}
-                        <label className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 cursor-pointer backdrop-blur-sm">
-                           <Upload className="text-white w-8 h-8 mb-2 animate-bounce" />
-                           <span className="text-white text-[10px] font-bold uppercase tracking-widest">Upload FG</span>
-                           <input type="file" className="hidden" accept="image/*" onChange={(e) => handleFileUpload(e, "fgImageUrl")} disabled={isUploading} />
-                        </label>
-                     </div>
-                     <Input value={formData.fgImageUrl} onChange={(e) => setFormData({...formData, fgImageUrl: e.target.value})} placeholder="URL Overlay..." className="h-9 text-[10px] font-mono rounded-lg border-slate-200" />
+                  {formData.bgImageUrl && isVideoUrl(formData.bgImageUrl) && (
+                    <span className="text-[10px] font-bold bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full flex items-center gap-1">
+                      <Film className="w-3 h-3 text-emerald-600" /> Format Video
+                    </span>
+                  )}
+                </div>
+                <div className="flex flex-col gap-3">
+                  <div className="relative group overflow-hidden rounded-xl aspect-video bg-slate-900 border border-slate-300 shadow-inner">
+                    {formData.bgImageUrl ? (
+                      isVideoUrl(formData.bgImageUrl) ? (
+                        <video
+                          src={resolveMediaUrl(formData.bgImageUrl)}
+                          className="w-full h-full object-cover"
+                          autoPlay
+                          muted
+                          loop
+                          playsInline
+                        />
+                      ) : (
+                        <img src={resolveMediaUrl(formData.bgImageUrl)} className="w-full h-full object-cover" alt="prev" />
+                      )
+                    ) : (
+                      <div className="absolute inset-0 flex flex-col items-center justify-center text-slate-400 gap-1 bg-slate-100">
+                        <div className="flex gap-2 items-center">
+                          <ImageIcon className="w-6 h-6 opacity-40" />
+                          <Video className="w-6 h-6 opacity-40" />
+                        </div>
+                        <span className="text-[11px] text-slate-400 font-medium">Foto atau Video (MP4)</span>
+                      </div>
+                    )}
+                    <label className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 cursor-pointer backdrop-blur-sm z-10">
+                      <Upload className="text-white w-7 h-7 mb-1.5 animate-bounce" />
+                      <span className="text-white text-[10px] font-bold uppercase tracking-widest">Upload Foto / Video</span>
+                      <input
+                        type="file"
+                        className="hidden"
+                        accept="image/*,video/mp4,video/webm,video/ogg,video/quicktime"
+                        onChange={(e) => handleFileUpload(e, "bgImageUrl")}
+                        disabled={isUploading}
+                      />
+                    </label>
                   </div>
-               </div>
+                  <Input
+                    required
+                    value={formData.bgImageUrl}
+                    onChange={(e) => setFormData({ ...formData, bgImageUrl: e.target.value })}
+                    placeholder="URL Foto atau Video MP4 (https://...)..."
+                    className="h-9 text-[10px] font-mono rounded-lg border-slate-200"
+                  />
+                  <p className="text-[11px] text-slate-500 leading-tight">
+                    💡 <strong>Mendukung Foto (JPG, PNG) &amp; Video (MP4, WebM)</strong>. Saat website dibuka, video akan langsung berputar otomatis (autoplay) tanpa jeda.
+                  </p>
+                </div>
+              </div>
+
+              <div className="space-y-3">
+                <Label className="font-bold text-slate-700 text-sm flex items-center gap-2 mb-1">
+                  <div className="w-1.5 h-1.5 rounded-full bg-primary" /> Overlay Depan (FG)
+                </Label>
+                <div className="flex flex-col gap-3">
+                  <div className="relative group overflow-hidden rounded-xl aspect-video bg-slate-200 border border-slate-300 shadow-inner">
+                    {formData.fgImageUrl ? (
+                      <img src={formData.fgImageUrl} className="w-full h-full object-contain p-2" alt="prev" />
+                    ) : (
+                      <div className="absolute inset-0 flex items-center justify-center text-slate-400"><ImageIcon className="w-8 h-8 opacity-20" /></div>
+                    )}
+                    <label className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 cursor-pointer backdrop-blur-sm">
+                      <Upload className="text-white w-8 h-8 mb-2 animate-bounce" />
+                      <span className="text-white text-[10px] font-bold uppercase tracking-widest">Upload FG</span>
+                      <input type="file" className="hidden" accept="image/*" onChange={(e) => handleFileUpload(e, "fgImageUrl")} disabled={isUploading} />
+                    </label>
+                  </div>
+                  <Input value={formData.fgImageUrl} onChange={(e) => setFormData({ ...formData, fgImageUrl: e.target.value })} placeholder="URL Overlay..." className="h-9 text-[10px] font-mono rounded-lg border-slate-200" />
+                </div>
+              </div>
             </div>
 
             <div className="flex items-center gap-4 bg-slate-50 p-4 rounded-xl border border-slate-100">
-              <input 
-                type="checkbox" 
-                id="active" 
+              <input
+                type="checkbox"
+                id="active"
                 className="w-5 h-5 accent-primary cursor-pointer rounded-lg"
                 checked={formData.isActive}
-                onChange={(e) => setFormData({...formData, isActive: e.target.checked})}
+                onChange={(e) => setFormData({ ...formData, isActive: e.target.checked })}
               />
               <Label htmlFor="active" className="cursor-pointer font-bold text-slate-700 text-sm">Tampilkan banner ini di beranda</Label>
             </div>

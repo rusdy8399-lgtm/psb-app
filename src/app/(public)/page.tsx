@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { BookOpen, Users, Trophy, GraduationCap, ArrowRight, Library, Languages } from "lucide-react";
+import { resolveMediaUrl } from "@/lib/utils";
 
 export const revalidate = 0; // Dynamic on-demand for immediate CMS slider updates
 
@@ -42,7 +43,11 @@ export default async function Home() {
     }
   ];
 
-  const displaySliders = sliders.length > 0 ? sliders : defaultSliders;
+  const rawSliders = sliders.length > 0 ? sliders : defaultSliders;
+  const displaySliders = rawSliders.map((slide) => ({
+    ...slide,
+    bgImageUrl: resolveMediaUrl(slide.bgImageUrl),
+  }));
 
   // Split Misi into array if it's a string
   const misiArray = settings?.misi?.split("\n").filter(m => m.trim() !== "") || [

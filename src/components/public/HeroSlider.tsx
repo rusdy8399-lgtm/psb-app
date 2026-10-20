@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight, ArrowRight, Volume2, VolumeX } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { isVideoUrl } from "@/lib/utils";
+import { isVideoUrl, resolveMediaUrl } from "@/lib/utils";
 import {
   Carousel,
   CarouselContent,
@@ -102,22 +102,38 @@ export function HeroSlider({ data, brosurUrl }: { data: SliderData[], brosurUrl?
               {/* Photo or Video Container: Dedicated 16:9 Aspect Ratio on Mobile & Fullcover Background on Desktop */}
               <div className="relative w-full aspect-[16/9] sm:aspect-[2/1] md:aspect-auto md:absolute md:inset-0 z-0 overflow-hidden shrink-0 shadow-sm md:shadow-none bg-black">
                 <div className="w-full h-full md:absolute md:inset-0">
-                  {shouldRenderImage(index) && slide.bgImageUrl && (
-                    isVideoUrl(slide.bgImageUrl) ? (
+                  {shouldRenderImage(index) && slide.bgImageUrl && (() => {
+                    const mediaUrl = resolveMediaUrl(slide.bgImageUrl);
+                    const isVideo = isVideoUrl(mediaUrl) || isVideoUrl(slide.bgImageUrl);
+
+                    return isVideo ? (
                       <video
-                        key={slide.bgImageUrl}
-                        src={slide.bgImageUrl}
+                        ref={(el) => {
+                          if (el) {
+                            el.defaultMuted = true;
+                            el.muted = isMuted;
+                            const p = el.play();
+                            if (p !== undefined) {
+                              p.catch(() => {});
+                            }
+                          }
+                        }}
+                        key={mediaUrl}
+                        src={mediaUrl}
                         autoPlay
                         muted={isMuted}
                         loop
                         playsInline
                         preload="auto"
-                        className="w-full h-full object-cover object-center pointer-events-none"
-                      />
+                        className="w-full h-full object-cover object-center"
+                      >
+                        <source src={mediaUrl} type="video/mp4" />
+                        <source src={mediaUrl} type="video/webm" />
+                      </video>
                     ) : (
                       <div className="w-full h-full md:absolute md:inset-0 transition-transform duration-[10000ms] group-hover:scale-105 ease-out">
                         <Image
-                          src={slide.bgImageUrl}
+                          src={mediaUrl}
                           alt={slide.title}
                           fill
                           preload={index === 0}
@@ -127,12 +143,12 @@ export function HeroSlider({ data, brosurUrl }: { data: SliderData[], brosurUrl?
                           quality={85}
                         />
                       </div>
-                    )
-                  )}
+                    );
+                  })()}
                 </div>
 
                 {/* Mute/Unmute Audio Button if Current Slide is a Video */}
-                {slide.bgImageUrl && isVideoUrl(slide.bgImageUrl) && (
+                {slide.bgImageUrl && (isVideoUrl(slide.bgImageUrl) || isVideoUrl(resolveMediaUrl(slide.bgImageUrl))) && (
                   <button
                     type="button"
                     onClick={(e) => {
