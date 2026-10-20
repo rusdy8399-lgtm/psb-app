@@ -5,7 +5,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Plus, Edit, Trash2, Upload, ImageIcon } from "lucide-react";
+import { Plus, Edit, Trash2, Upload, ImageIcon, Film, Video } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -17,6 +17,7 @@ import { toast } from "sonner";
 import Image from "next/image";
 import { AdminTableSkeleton } from "@/components/admin/AdminSkeletons";
 import { uploadClientFile } from "@/lib/client-upload";
+import { isVideoUrl } from "@/lib/utils";
 
 interface SliderData {
   id: string;
@@ -75,15 +76,16 @@ export default function SliderCMSPage() {
     const controller = new AbortController();
     uploadControllerRef.current = controller;
 
+    const isVideo = file.type.startsWith("video/") || /\.(mp4|webm|ogg|mov)$/i.test(file.name);
     setIsUploading(true);
-    const toastId = toast.loading("Mengunggah gambar...");
+    const toastId = toast.loading(isVideo ? "Mengunggah video..." : "Mengunggah gambar...");
 
     try {
       const url = await uploadClientFile(file, { signal: controller.signal });
       setFormData(prev => ({ ...prev, [field]: url }));
-      toast.success("Gambar berhasil diunggah", { id: toastId });
+      toast.success(isVideo ? "Video berhasil diunggah!" : "Gambar berhasil diunggah", { id: toastId });
     } catch (error: unknown) {
-      const msg = error instanceof Error ? error.message : "Gagal mengunggah gambar";
+      const msg = error instanceof Error ? error.message : "Gagal mengunggah file";
       if (!msg.includes("dibatalkan")) {
         toast.error(msg, { id: toastId });
       } else {
@@ -204,14 +206,28 @@ export default function SliderCMSPage() {
                     <TableCell>
                       <div className="relative w-28 h-16 overflow-hidden rounded-xl border border-slate-200 shadow-sm bg-slate-100 group-hover:scale-105 transition-transform duration-300 flex items-center justify-center">
                         {s.bgImageUrl ? (
-                          <Image 
-                            src={s.bgImageUrl} 
-                            alt="bg" 
-                            fill 
-                            className="object-cover"
-                            sizes="112px"
-                            unoptimized
-                          />
+                          isVideoUrl(s.bgImageUrl) ? (
+                            <div className="relative w-full h-full bg-black flex items-center justify-center">
+                              <video 
+                                src={s.bgImageUrl} 
+                                className="w-full h-full object-cover" 
+                                muted 
+                                playsInline 
+                              />
+                              <span className="absolute bottom-1 right-1 bg-black/80 text-emerald-300 text-[9px] font-bold px-1.5 py-0.5 rounded flex items-center gap-1 backdrop-blur-sm">
+                                <Film className="w-2.5 h-2.5 text-emerald-400" /> VIDEO
+                              </span>
+                            </div>
+                          ) : (
+                            <Image 
+                              src={s.bgImageUrl} 
+                              alt="bg" 
+                              fill 
+                              className="object-cover"
+                              sizes="112px"
+                              unoptimized
+                            />
+                          )
                         ) : (
                           <ImageIcon className="w-6 h-6 text-slate-300" />
                         )}
@@ -313,23 +329,62 @@ export default function SliderCMSPage() {
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-6 bg-[#FAFAF8] rounded-2xl border border-slate-100">
                <div className="space-y-3">
-                  <Label className="font-bold text-slate-700 text-sm flex items-center gap-2 mb-1">
-                    <div className="w-1.5 h-1.5 rounded-full bg-primary" /> Latar Belakang (BG)
-                  </Label>
+                  <div className="flex items-center justify-between">
+                    <Label className="font-bold text-slate-700 text-sm flex items-center gap-2">
+                      <div className="w-1.5 h-1.5 rounded-full bg-primary" /> Latar Belakang (Foto / Video)
+                    </Label>
+                    {formData.bgImageUrl && isVideoUrl(formData.bgImageUrl) && (
+                      <span className="text-[10px] font-bold bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full flex items-center gap-1">
+                        <Film className="w-3 h-3 text-emerald-600" /> Format Video
+                      </span>
+                    )}
+                  </div>
                   <div className="flex flex-col gap-3">
-                     <div className="relative group overflow-hidden rounded-xl aspect-video bg-slate-200 border border-slate-300 shadow-inner">
+                     <div className="relative group overflow-hidden rounded-xl aspect-video bg-slate-900 border border-slate-300 shadow-inner">
                         {formData.bgImageUrl ? (
-                           <img src={formData.bgImageUrl} className="w-full h-full object-cover" alt="prev" />
+                          isVideoUrl(formData.bgImageUrl) ? (
+                            <video 
+                              src={formData.bgImageUrl} 
+                              className="w-full h-full object-cover" 
+                              autoPlay 
+                              muted 
+                              loop 
+                              playsInline 
+                            />
+                          ) : (
+                            <img src={formData.bgImageUrl} className="w-full h-full object-cover" alt="prev" />
+                          )
                         ) : (
-                           <div className="absolute inset-0 flex items-center justify-center text-slate-400"><ImageIcon className="w-8 h-8 opacity-20" /></div>
+                           <div className="absolute inset-0 flex flex-col items-center justify-center text-slate-400 gap-1 bg-slate-100">
+                             <div className="flex gap-2 items-center">
+                               <ImageIcon className="w-6 h-6 opacity-40" />
+                               <Video className="w-6 h-6 opacity-40" />
+                             </div>
+                             <span className="text-[11px] text-slate-400 font-medium">Foto atau Video (MP4)</span>
+                           </div>
                         )}
-                        <label className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 cursor-pointer backdrop-blur-sm">
-                           <Upload className="text-white w-8 h-8 mb-2 animate-bounce" />
-                           <span className="text-white text-[10px] font-bold uppercase tracking-widest">Upload BG</span>
-                           <input type="file" className="hidden" accept="image/*" onChange={(e) => handleFileUpload(e, "bgImageUrl")} disabled={isUploading} />
+                        <label className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 cursor-pointer backdrop-blur-sm z-10">
+                           <Upload className="text-white w-7 h-7 mb-1.5 animate-bounce" />
+                           <span className="text-white text-[10px] font-bold uppercase tracking-widest">Upload Foto / Video</span>
+                           <input 
+                             type="file" 
+                             className="hidden" 
+                             accept="image/*,video/mp4,video/webm,video/ogg,video/quicktime" 
+                             onChange={(e) => handleFileUpload(e, "bgImageUrl")} 
+                             disabled={isUploading} 
+                           />
                         </label>
                      </div>
-                     <Input required value={formData.bgImageUrl} onChange={(e) => setFormData({...formData, bgImageUrl: e.target.value})} placeholder="URL Gambar..." className="h-9 text-[10px] font-mono rounded-lg border-slate-200" />
+                     <Input 
+                       required 
+                       value={formData.bgImageUrl} 
+                       onChange={(e) => setFormData({...formData, bgImageUrl: e.target.value})} 
+                       placeholder="URL Foto atau Video MP4 (https://...)..." 
+                       className="h-9 text-[10px] font-mono rounded-lg border-slate-200" 
+                     />
+                     <p className="text-[11px] text-slate-500 leading-tight">
+                       💡 <strong>Mendukung Foto (JPG, PNG) &amp; Video (MP4, WebM)</strong>. Saat website dibuka, video akan langsung berputar otomatis (autoplay) tanpa jeda.
+                     </p>
                   </div>
                </div>
 

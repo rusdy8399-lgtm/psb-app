@@ -5,7 +5,7 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { BookOpen, Users, Trophy, GraduationCap, ArrowRight, Library, Languages } from "lucide-react";
 
-export const revalidate = 3600; // Cache for 1 hour
+export const revalidate = 0; // Dynamic on-demand for immediate CMS slider updates
 
 export const metadata = {
   title: "Pesantren Bali | Pesantren Terbaik & Terakreditasi | Pondok Pesantren Bali Bina Insani",

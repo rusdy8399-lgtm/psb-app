@@ -3,8 +3,9 @@
 import * as React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ChevronLeft, ChevronRight, ArrowRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, ArrowRight, Volume2, VolumeX } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { isVideoUrl } from "@/lib/utils";
 import {
   Carousel,
   CarouselContent,
@@ -25,6 +26,7 @@ export function HeroSlider({ data, brosurUrl }: { data: SliderData[], brosurUrl?
   const [api, setApi] = React.useState<CarouselApi>();
   const [currentIndex, setCurrentIndex] = React.useState(0);
   const [hasHydrated, setHasHydrated] = React.useState(false);
+  const [isMuted, setIsMuted] = React.useState(true);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [autoplayPlugin, setAutoplayPlugin] = React.useState<any>(null);
 
@@ -97,24 +99,65 @@ export function HeroSlider({ data, brosurUrl }: { data: SliderData[], brosurUrl?
         {data.map((slide, index) => (
           <CarouselItem key={slide.id} className="pl-0 border-none outline-none">
             <section className="relative w-full flex flex-col md:flex-row md:items-center overflow-hidden bg-[#0d8174] md:h-[650px] contain-layout-paint">
-              {/* Photo Container: Dedicated 16:9 Aspect Ratio on Mobile (Uncropped, like UMJ) & Fullcover Background on Desktop */}
-              <div className="relative w-full aspect-[16/9] sm:aspect-[2/1] md:aspect-auto md:absolute md:inset-0 z-0 overflow-hidden shrink-0 shadow-sm md:shadow-none">
-                <div className="w-full h-full md:absolute md:inset-0 transition-transform duration-[10000ms] group-hover:scale-105 ease-out">
+              {/* Photo or Video Container: Dedicated 16:9 Aspect Ratio on Mobile & Fullcover Background on Desktop */}
+              <div className="relative w-full aspect-[16/9] sm:aspect-[2/1] md:aspect-auto md:absolute md:inset-0 z-0 overflow-hidden shrink-0 shadow-sm md:shadow-none bg-black">
+                <div className="w-full h-full md:absolute md:inset-0">
                   {shouldRenderImage(index) && slide.bgImageUrl && (
-                    <Image
-                      src={slide.bgImageUrl}
-                      alt={slide.title}
-                      fill
-                      preload={index === 0}
-                      fetchPriority={index === 0 ? "high" : "low"}
-                      className="object-cover object-center"
-                      sizes="(max-width: 768px) 100vw, 1920px"
-                      quality={85}
-                    />
+                    isVideoUrl(slide.bgImageUrl) ? (
+                      <video
+                        key={slide.bgImageUrl}
+                        src={slide.bgImageUrl}
+                        autoPlay
+                        muted={isMuted}
+                        loop
+                        playsInline
+                        preload="auto"
+                        className="w-full h-full object-cover object-center pointer-events-none"
+                      />
+                    ) : (
+                      <div className="w-full h-full md:absolute md:inset-0 transition-transform duration-[10000ms] group-hover:scale-105 ease-out">
+                        <Image
+                          src={slide.bgImageUrl}
+                          alt={slide.title}
+                          fill
+                          preload={index === 0}
+                          fetchPriority={index === 0 ? "high" : "low"}
+                          className="object-cover object-center"
+                          sizes="(max-width: 768px) 100vw, 1920px"
+                          quality={85}
+                        />
+                      </div>
+                    )
                   )}
                 </div>
+
+                {/* Mute/Unmute Audio Button if Current Slide is a Video */}
+                {slide.bgImageUrl && isVideoUrl(slide.bgImageUrl) && (
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setIsMuted(!isMuted);
+                    }}
+                    aria-label={isMuted ? "Aktifkan suara video" : "Bisukan video"}
+                    className="absolute top-3 right-3 md:top-6 md:right-6 z-30 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/60 hover:bg-black/80 text-white backdrop-blur-md text-xs font-medium border border-white/20 transition-all cursor-pointer shadow-lg group/mute"
+                  >
+                    {isMuted ? (
+                      <>
+                        <VolumeX className="w-4 h-4 text-white/80 group-hover/mute:text-white" />
+                        <span className="hidden sm:inline text-[11px]">Suara Mati</span>
+                      </>
+                    ) : (
+                      <>
+                        <Volume2 className="w-4 h-4 text-emerald-400 animate-pulse" />
+                        <span className="hidden sm:inline text-[11px] text-emerald-400 font-semibold">Suara Aktif</span>
+                      </>
+                    )}
+                  </button>
+                )}
+
                 {/* Gradient Overlay for Desktop (and soft gradient for mobile image base) */}
-                <div className="hidden md:block absolute inset-0 bg-gradient-to-r from-black/85 via-black/50 to-transparent z-10" />
+                <div className="hidden md:block absolute inset-0 bg-gradient-to-r from-black/85 via-black/50 to-transparent z-10 pointer-events-none" />
                 <div className="md:hidden absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-black/10 z-10 pointer-events-none" />
               </div>
 

@@ -19,7 +19,12 @@ export async function PUT(
       .set(body)
       .where(eq(heroSection.id, id));
       
-    revalidatePath("/", "layout");
+    try {
+      revalidatePath("/", "layout");
+      revalidatePath("/");
+    } catch (e) {
+      console.warn("Revalidation warning:", e);
+    }
     return NextResponse.json({ success: true });
   } catch (error) {
     return NextResponse.json({ error: "Failed to update slider" }, { status: 500 });
@@ -33,7 +38,12 @@ export async function DELETE(
   try {
     const { id } = await params;
     await db.delete(heroSection).where(eq(heroSection.id, id));
-    revalidatePath("/", "layout");
+    try {
+      revalidatePath("/", "layout");
+      revalidatePath("/");
+    } catch (e) {
+      console.warn("Revalidation warning:", e);
+    }
     return NextResponse.json({ success: true });
   } catch (error) {
     return NextResponse.json({ error: "Failed to delete slider" }, { status: 500 });
