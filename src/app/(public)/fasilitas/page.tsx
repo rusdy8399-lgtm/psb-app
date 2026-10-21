@@ -2,6 +2,7 @@ import { getFasilitas } from "@/lib/data-fetching";
 import { ArrowRight, Building2 } from "lucide-react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
+import type { Metadata } from "next";
 import {
   Dialog,
   DialogContent,
@@ -12,6 +13,20 @@ import {
 } from "@/components/ui/dialog";
 
 export const revalidate = 3600; // Cache for 1 hour
+
+export const metadata: Metadata = {
+  title: "Fasilitas Pesantren | Pondok Pesantren Bali Bina Insani",
+  description: "Fasilitas penunjang pendidikan dan asrama di Pondok Pesantren Bali Bina Insani untuk mendukung kenyamanan dan prestasi santri.",
+  alternates: {
+    canonical: "/fasilitas",
+  },
+  openGraph: {
+    title: "Fasilitas Pesantren | Pondok Pesantren Bali Bina Insani",
+    description: "Fasilitas penunjang pendidikan dan asrama di Pondok Pesantren Bali Bina Insani untuk mendukung kenyamanan dan prestasi santri.",
+    url: "https://www.pesantrenbali.my.id/fasilitas",
+    type: "website",
+  },
+};
 
 export default async function FasilitasPage() {
   const data = await getFasilitas();

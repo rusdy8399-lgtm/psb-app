@@ -40,7 +40,7 @@ export default function Image() {
           }}
         >
           <img
-            src="https://project-98lnv.vercel.app/logo-bina-insani.png"
+            src="https://www.pesantrenbali.my.id/logo-bina-insani.png"
             width={176}
             height={176}
             style={{ borderRadius: "50%", objectFit: "cover" }}

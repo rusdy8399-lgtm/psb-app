@@ -2,8 +2,23 @@ import { MapPin, Phone, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { getSiteSettings } from "@/lib/data-fetching";
+import type { Metadata } from "next";
 
 export const revalidate = 3600;
+
+export const metadata: Metadata = {
+  title: "Hubungi Kami | Pondok Pesantren Bali Bina Insani",
+  description: "Informasi kontak, nomor WhatsApp panitia PSB, dan alamat lokasi Pondok Pesantren Bali Bina Insani di Tabanan, Bali.",
+  alternates: {
+    canonical: "/kontak",
+  },
+  openGraph: {
+    title: "Hubungi Kami | Pondok Pesantren Bali Bina Insani",
+    description: "Informasi kontak, nomor WhatsApp panitia PSB, dan alamat lokasi Pondok Pesantren Bali Bina Insani di Tabanan, Bali.",
+    url: "https://www.pesantrenbali.my.id/kontak",
+    type: "website",
+  },
+};
 
 export default async function KontakPage() {
   const settings = await getSiteSettings();

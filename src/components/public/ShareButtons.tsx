@@ -36,7 +36,7 @@ export function ShareButtons({ title, url }: ShareButtonsProps) {
     if (typeof window !== "undefined") {
       return window.location.href;
     }
-    return url.startsWith("http") ? url : `https://project-98lnv.vercel.app${url}`;
+    return url.startsWith("http") ? url : `https://www.pesantrenbali.my.id${url}`;
   };
 
   const shareWhatsApp = () => {

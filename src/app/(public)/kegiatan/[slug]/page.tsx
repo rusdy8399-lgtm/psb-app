@@ -73,12 +73,19 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   if (!item) return { title: "Berita Tidak Ditemukan" };
 
+  const canonicalPath = `/kegiatan/${item.slug || item.id}`;
+  const canonicalUrl = `https://www.pesantrenbali.my.id${canonicalPath}`;
+
   return {
     title: `${item.judul} | Pondok Pesantren Bali Bina Insani`,
     description: item.deskripsi.substring(0, 160),
+    alternates: {
+      canonical: canonicalPath,
+    },
     openGraph: {
       title: item.judul,
       description: item.deskripsi.substring(0, 160),
+      url: canonicalUrl,
       images: item.fotoUrl ? [item.fotoUrl] : [],
       type: "article",
     },

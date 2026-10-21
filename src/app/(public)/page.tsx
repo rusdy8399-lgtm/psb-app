@@ -11,10 +11,13 @@ export const revalidate = 0; // Dynamic on-demand for immediate CMS slider updat
 export const metadata = {
   title: "Pesantren Bali | Pesantren Terbaik & Terakreditasi | Pondok Pesantren Bali Bina Insani",
   description: "Selamat Datang di Pesantren Bali Bina Insani (Est. 1991). Pilihan pesantren terbaik di Bali untuk pendidikan Islam terpadu, Tahfidz, dan karakter mulia. Daftar sekarang!",
+  alternates: {
+    canonical: "/",
+  },
   openGraph: {
     title: "Pesantren Bali | Pondok Pesantren Bali Bina Insani",
     description: "Pesantren modern terbaik di Bali dengan kurikulum terpadu.",
-    url: "https://project-98lnv.vercel.app",
+    url: "https://www.pesantrenbali.my.id",
     type: "website" as const,
   },
   twitter: {

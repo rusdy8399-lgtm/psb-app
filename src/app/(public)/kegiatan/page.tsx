@@ -8,6 +8,15 @@ export const revalidate = 1800; // Cache for 30 minutes
 export const metadata: Metadata = {
   title: "Kabar Pesantren | Pondok Pesantren Bali Bina Insani",
   description: "Ikuti berbagai kabar berita terkini, agenda kegiatan, dan prestasi santri di Pondok Pesantren Bali Bina Insani.",
+  alternates: {
+    canonical: "/kegiatan",
+  },
+  openGraph: {
+    title: "Kabar Pesantren | Pondok Pesantren Bali Bina Insani",
+    description: "Ikuti berbagai kabar berita terkini, agenda kegiatan, dan prestasi santri di Pondok Pesantren Bali Bina Insani.",
+    url: "https://www.pesantrenbali.my.id/kegiatan",
+    type: "website",
+  },
 };
 
 export default async function KegiatanPage() {

@@ -98,9 +98,9 @@ export function Footer({ settings }: FooterProps) {
               {[
                 { label: "Beranda", href: "/" },
                 { label: "Kegiatan", href: "/kegiatan" },
+                { label: "Galeri Foto", href: "/galeri" },
                 { label: "Fasilitas", href: "/fasilitas" },
                 { label: "Daftar PPDB", href: "/pendaftaran" },
-                { label: "Login Admin", href: "/login" },
               ].map((link) => (
                 <li key={link.href}>
                   <Link

@@ -29,10 +29,11 @@ export const metadata: Metadata = {
   },
   description: "Pesantren Bali Bina Insani (Est. 1991) - Pondok Pesantren terbaik di Bali. Pendidikan Islam terpadu, Tahfidz Al-Qur'an, dan karakter islami bagi santri se-Bali.",
   keywords: ["pesantren bali", "pesantren di bali", "pondok pesantren bali", "sekolah islam bali", "pesantren terbaik bali", "bali bina insani"],
-  metadataBase: new URL("https://project-98lnv.vercel.app"),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://www.pesantrenbali.my.id"),
   openGraph: {
     title: "Pesantren Bali | Pondok Pesantren Bali Bina Insani",
     description: "Pesantren terbaik di Bali dengan kurikulum terpadu dan program unggulan Tahfidz Al-Qur'an.",
+    url: "https://www.pesantrenbali.my.id",
     siteName: "Pesantren Bali Bina Insani",
     locale: "id_ID",
     type: "website",

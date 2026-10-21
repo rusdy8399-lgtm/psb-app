@@ -14,10 +14,13 @@ export const metadata = {
   title: "Download Brosur PSB | Pondok Pesantren Bali Bina Insani",
   description:
     "Unduh brosur penerimaan santri baru (PSB) Pondok Pesantren Bali Bina Insani. Dapatkan informasi lengkap program, fasilitas, dan cara pendaftaran.",
+  alternates: {
+    canonical: "/download-brosur",
+  },
   openGraph: {
     title: "Download Brosur PSB | Pondok Pesantren Bali Bina Insani",
     description: "Unduh brosur penerimaan santri baru (PSB) Pondok Pesantren Bali Bina Insani. Dapatkan informasi lengkap program, fasilitas, dan cara pendaftaran.",
-    url: "https://project-98lnv.vercel.app/brosur",
+    url: "https://www.pesantrenbali.my.id/download-brosur",
     type: "website" as const,
   },
   twitter: {

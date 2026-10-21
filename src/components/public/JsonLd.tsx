@@ -6,8 +6,8 @@ export function JsonLd() {
     "@type": "School",
     "name": "Pondok Pesantren Bali Bina Insani",
     "alternateName": "Bali Bina Insani Islamic Boarding School",
-    "url": "https://project-98lnv.vercel.app",
-    "logo": "https://project-98lnv.vercel.app/logo-bina-insani.png",
+    "url": "https://www.pesantrenbali.my.id",
+    "logo": "https://www.pesantrenbali.my.id/logo-bina-insani.png",
     "foundingDate": "1991",
     "address": {
       "@type": "PostalAddress",

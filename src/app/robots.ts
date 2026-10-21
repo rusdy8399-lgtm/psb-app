@@ -1,12 +1,20 @@
 import { MetadataRoute } from "next";
 
 export default function robots(): MetadataRoute.Robots {
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://www.pesantrenbali.my.id";
+
   return {
     rules: {
       userAgent: "*",
       allow: "/",
-      disallow: ["/admin/", "/api/admin/"],
+      disallow: [
+        "/dashboard",
+        "/dashboard/",
+        "/login",
+        "/api/",
+        "/pendaftaran/sukses",
+      ],
     },
-    sitemap: "https://project-98lnv.vercel.app/sitemap.xml",
+    sitemap: `${baseUrl}/sitemap.xml`,
   };
 }

@@ -8,6 +8,15 @@ export const revalidate = 1800; // Cache for 30 minutes
 export const metadata: Metadata = {
   title: "Galeri Foto | Pondok Pesantren Bali Bina Insani",
   description: "Dokumentasi visual kegiatan edukatif, keagamaan, dan prestasi santri di Pondok Pesantren Bali Bina Insani.",
+  alternates: {
+    canonical: "/galeri",
+  },
+  openGraph: {
+    title: "Galeri Foto | Pondok Pesantren Bali Bina Insani",
+    description: "Dokumentasi visual kegiatan edukatif, keagamaan, dan prestasi santri di Pondok Pesantren Bali Bina Insani.",
+    url: "https://www.pesantrenbali.my.id/galeri",
+    type: "website",
+  },
 };
 
 export default async function GaleriPage() {
