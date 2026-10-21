@@ -12,7 +12,7 @@ interface MobileMenuProps {
 
 export function MobileMenu({ navLinks, pathname, setIsOpen }: MobileMenuProps) {
   return (
-    <div className="md:hidden absolute top-full left-0 w-full bg-white border-b shadow-2xl animate-in fade-in slide-in-from-top-2 duration-300 font-heading">
+    <div className="lg:hidden absolute top-full left-0 w-full bg-white border-b shadow-2xl animate-in fade-in slide-in-from-top-2 duration-300 font-heading z-50">
       <div className="container mx-auto px-6 py-6 flex flex-col space-y-4">
         {navLinks.map((link) => {
           if (link.children) {
@@ -29,11 +29,10 @@ export function MobileMenu({ navLinks, pathname, setIsOpen }: MobileMenuProps) {
                         key={sub.href}
                         href={sub.href}
                         onClick={() => setIsOpen(false)}
-                        className={`text-sm md:text-base font-semibold tracking-normal transition-colors flex items-center justify-between py-1.5 ${
-                          isSubActive
+                        className={`text-sm md:text-base font-semibold tracking-normal transition-colors flex items-center justify-between py-1.5 ${isSubActive
                             ? "text-[#1A4D2E] font-bold"
                             : "text-slate-600 hover:text-[#1A4D2E]"
-                        }`}
+                          }`}
                       >
                         <span>{sub.name}</span>
                         {isSubActive && (
@@ -54,11 +53,10 @@ export function MobileMenu({ navLinks, pathname, setIsOpen }: MobileMenuProps) {
               key={link.href}
               href={link.href}
               onClick={() => setIsOpen(false)}
-              className={`text-base md:text-lg font-medium tracking-normal transition-colors flex items-center justify-between py-1 ${
-                isActive
+              className={`text-base md:text-lg font-medium tracking-normal transition-colors flex items-center justify-between py-1 ${isActive
                   ? "text-[#1A4D2E] border-l-4 border-gold pl-4"
                   : "text-gray-600 hover:text-[#1A4D2E] pl-4 border-l-4 border-transparent"
-              }`}
+                }`}
             >
               <span>{link.name}</span>
               {isActive && <div className="w-2 h-2 bg-gold rounded-full" />}
