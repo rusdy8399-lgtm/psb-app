@@ -1,12 +1,7 @@
 import { db, getSettings } from "@/lib/db";
 import { pendaftar, ortuWakil, berkasDokumen } from "@/lib/db/schema";
 
-export async function generateStaticParams() {
-  const items = await db.query.pendaftar.findMany();
-  return items.map((item) => ({
-    id: item.id.toString(),
-  }));
-}
+export const dynamic = "force-dynamic";
 import { eq } from "drizzle-orm";
 import { PendaftarDetailClient } from "@/components/admin/PendaftarDetailClient";
 import { notFound } from "next/navigation";

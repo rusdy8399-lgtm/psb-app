@@ -5,6 +5,7 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { BookOpen, Users, Trophy, GraduationCap, ArrowRight, Library, Languages } from "lucide-react";
 import { resolveMediaUrl } from "@/lib/utils";
+import { BatikOverlay } from "@/components/public/BatikPattern";
 
 export const revalidate = 0; // Dynamic on-demand for immediate CMS slider updates
 
@@ -73,7 +74,7 @@ export default async function Home() {
 
             {/* Left Column: Text Content */}
             <div className="space-y-5">
-              <span className="text-xs uppercase tracking-wide text-green-700 font-semibold">
+              <span className="text-xs uppercase tracking-wide text-[#1A4D2E] font-semibold">
                 Profile Pesantren
               </span>
               <h2 className="text-xl md:text-2xl lg:text-3xl font-semibold text-gray-800 leading-tight">
@@ -84,9 +85,9 @@ export default async function Home() {
               </p>
 
               {/* Visi Card */}
-              <div className="rounded-xl border border-gray-100 shadow-sm p-5 bg-green-50/50">
-                <h3 className="text-sm font-semibold text-green-700 mb-2 flex items-center gap-2">
-                  <span className="w-6 h-6 rounded-md bg-green-600 text-white flex items-center justify-center text-xs font-bold">V</span>
+              <div className="rounded-xl border border-gray-100 shadow-sm p-5 bg-[#1A4D2E]/5">
+                <h3 className="text-sm font-semibold text-[#1A4D2E] mb-2 flex items-center gap-2">
+                  <span className="w-6 h-6 rounded-md bg-[#1A4D2E] text-white flex items-center justify-center text-xs font-bold">V</span>
                   Visi
                 </h3>
                 <p className="text-sm text-gray-600 leading-relaxed italic">
@@ -96,14 +97,14 @@ export default async function Home() {
 
               {/* Misi Card */}
               <div className="rounded-xl border border-gray-100 shadow-sm p-5 bg-white">
-                <h3 className="text-sm font-semibold text-green-700 mb-3 flex items-center gap-2">
-                  <span className="w-6 h-6 rounded-md bg-green-600 text-white flex items-center justify-center text-xs font-bold">M</span>
+                <h3 className="text-sm font-semibold text-[#1A4D2E] mb-3 flex items-center gap-2">
+                  <span className="w-6 h-6 rounded-md bg-[#1A4D2E] text-white flex items-center justify-center text-xs font-bold">M</span>
                   Misi
                 </h3>
                 <ul className="space-y-2">
                   {misiArray.map((misi, i) => (
                     <li key={i} className="flex gap-2 items-start text-sm text-gray-600">
-                      <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-green-500 shrink-0"></span>
+                      <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-[#1A4D2E] shrink-0"></span>
                       <span>{misi}</span>
                     </li>
                   ))}
@@ -137,7 +138,7 @@ export default async function Home() {
 
           {/* Program Unggulan - 3 columns */}
           <div className="mt-10 content-visibility-auto">
-            <h2 className="text-xs uppercase tracking-wide text-green-700 font-semibold mb-4">Program Unggulan</h2>
+            <h2 className="text-xs uppercase tracking-wide text-[#1A4D2E] font-semibold mb-4">Program Unggulan</h2>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               {([
                 {
@@ -160,10 +161,10 @@ export default async function Home() {
                 },
               ] as const).map((item, idx) => (
                 <div key={idx} className="rounded-xl border border-gray-100 shadow-sm p-5 bg-white hover:shadow-md hover:-translate-y-0.5 transition-all">
-                  <div className="w-12 h-12 bg-green-50 rounded-xl flex items-center justify-center mb-3">
-                    <item.Icon className="w-6 h-6 text-green-700" />
+                  <div className="w-12 h-12 bg-[#1A4D2E]/5 rounded-xl flex items-center justify-center mb-3">
+                    <item.Icon className="w-6 h-6 text-[#1A4D2E]" />
                   </div>
-                  <span className="inline-block text-[10px] font-semibold uppercase tracking-wide text-green-700 bg-green-50 px-2 py-0.5 rounded-full mb-2">
+                  <span className="inline-block text-[10px] font-semibold uppercase tracking-wide text-[#1A4D2E] bg-[#1A4D2E]/10 px-2 py-0.5 rounded-full mb-2">
                     {item.badge}
                   </span>
                   <h3 className="text-sm font-semibold text-gray-800 mb-1.5">{item.title}</h3>
@@ -180,7 +181,7 @@ export default async function Home() {
       <section className="py-12 bg-white border-t border-gray-100 content-visibility-auto">
         <div className="max-w-6xl mx-auto px-4">
           <div className="mb-8">
-            <h2 className="text-xs uppercase tracking-wide text-green-700 font-semibold">Jenjang Pendidikan</h2>
+            <h2 className="text-xs uppercase tracking-wide text-[#1A4D2E] font-semibold">Jenjang Pendidikan</h2>
             <p className="text-sm md:text-base text-gray-500 leading-relaxed mt-1.5 max-w-xl">
               Pondok Pesantren Bali Bina Insani menyelenggarakan pendidikan formal setingkat SMP dan SMA di bawah naungan Kementerian Agama.
             </p>
@@ -189,22 +190,22 @@ export default async function Home() {
           <div className="grid sm:grid-cols-2 gap-6">
             {/* MTs Card */}
             <div className="group relative rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 bg-white">
-              <div className="h-1.5 bg-gradient-to-r from-green-500 to-emerald-400 w-full" />
+              <div className="h-1.5 bg-gradient-to-r from-[#1A4D2E] to-green-600 w-full" />
               <div className="p-7">
                 <div className="flex items-center gap-4 mb-5">
                   {settings?.mtsLogoUrl ? (
-                    <div className="w-14 h-14 rounded-2xl overflow-hidden border border-green-100 shrink-0 relative">
+                    <div className="w-14 h-14 rounded-2xl overflow-hidden border border-[#1A4D2E]/10 shrink-0 relative">
                       <Image src={settings.mtsLogoUrl} alt="Logo MTs" fill className="object-contain p-1" sizes="56px" />
                     </div>
                   ) : (
-                    <div className="w-14 h-14 rounded-2xl bg-green-50 border border-green-100 flex flex-col items-center justify-center shrink-0">
-                      <span className="text-xs font-bold text-green-700 leading-none">MTs</span>
+                    <div className="w-14 h-14 rounded-2xl bg-[#1A4D2E]/5 border border-[#1A4D2E]/10 flex flex-col items-center justify-center shrink-0">
+                      <span className="text-xs font-bold text-[#1A4D2E] leading-none">MTs</span>
                       <span className="text-[9px] text-slate-500 mt-0.5">Negeri / Swasta</span>
                     </div>
                   )}
                   <div>
                     <h3 className="text-lg font-semibold text-gray-800 leading-tight">Madrasah Tsanawiyah</h3>
-                    <span className="inline-block text-[11px] font-semibold text-green-700 bg-green-50 px-2 py-0.5 rounded-full mt-1">
+                    <span className="inline-block text-[11px] font-semibold text-[#1A4D2E] bg-[#1A4D2E]/10 px-2 py-0.5 rounded-full mt-1">
                       Setara SMP · 3 Tahun (Kelas 7–9)
                     </span>
                   </div>
@@ -219,7 +220,7 @@ export default async function Home() {
                     "Bahasa Arab & Inggris aktif",
                   ]).map((p, i) => (
                     <li key={i} className="flex items-center gap-2 text-sm text-gray-600">
-                      <span className="w-1.5 h-1.5 rounded-full bg-green-400 shrink-0" />
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#1A4D2E] shrink-0" />
                       {p}
                     </li>
                   ))}
@@ -275,7 +276,7 @@ export default async function Home() {
         <div className="max-w-6xl mx-auto px-4">
           {/* Header */}
           <div className="mb-8">
-            <span className="text-xs uppercase tracking-wide text-green-700 font-semibold">Keunggulan Kami</span>
+            <span className="text-xs uppercase tracking-wide text-[#1A4D2E] font-semibold">Keunggulan Kami</span>
             <h2 className="text-xl md:text-2xl lg:text-3xl font-semibold text-gray-800 leading-tight mt-1">Kenapa Memilih Kami?</h2>
             <p className="text-sm md:text-base text-gray-600 leading-relaxed mt-2 max-w-xl">
               Kami berkomitmen memberikan pendidikan terbaik dengan keseimbangan ilmu agama, ilmu umum, dan pembentukan karakter.
@@ -284,13 +285,13 @@ export default async function Home() {
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {[
-              { title: "Kurikulum Integral", desc: "Perpaduan kurikulum Diknas dan Pesantren Hidayatullah yang teruji.", icon: BookOpen },
+              { title: "Kurikulum Integral", desc: "Perpaduan kurikulum Pemerintah dan Pesantren yang teruji.", icon: BookOpen },
               { title: "Tenaga Pendidik", desc: "Ustadz/ah kompeten, berpengalaman, dan berdedikasi tinggi.", icon: GraduationCap },
               { title: "Fasilitas Kondusif", desc: "Lingkungan belajar yang asri, aman, dan tertib.", icon: Users },
               { title: "Karakter Islami", desc: "Pembiasaan ibadah sunnah dan adab islami setiap hari.", icon: Trophy },
             ].map((item, idx) => (
               <div key={idx} className="bg-white p-5 rounded-xl shadow-sm border border-gray-100 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 group">
-                <div className="w-10 h-10 rounded-lg bg-green-50 text-green-700 flex items-center justify-center mb-4 group-hover:bg-green-600 group-hover:text-white transition-all duration-300">
+                <div className="w-10 h-10 rounded-lg bg-[#1A4D2E]/5 text-[#1A4D2E] flex items-center justify-center mb-4 group-hover:bg-[#1A4D2E] group-hover:text-white transition-all duration-300">
                   <item.icon className="w-5 h-5" />
                 </div>
                 <h3 className="text-sm font-semibold text-gray-800 mb-1.5">{item.title}</h3>
@@ -304,20 +305,19 @@ export default async function Home() {
       {/* CTA Section - Compact */}
       <section className="py-12 bg-white content-visibility-auto">
         <div className="max-w-4xl mx-auto px-4">
-          <div className="bg-[#0f6c5e] rounded-3xl p-10 md:py-14 md:px-16 text-center relative overflow-hidden shadow-lg">
-            {/* Subtle blur decorations */}
-            <div className="absolute top-0 right-0 w-40 h-40 bg-white/5 rounded-full blur-2xl"></div>
-            <div className="absolute bottom-0 left-0 w-32 h-32 bg-white/5 rounded-full blur-2xl"></div>
+          <div className="bg-[#1A4D2E] rounded-3xl p-10 md:py-14 md:px-16 text-center relative overflow-hidden shadow-2xl border border-white/10">
+            {/* Transparent Batik Ornament Overlay */}
+            <BatikOverlay className="opacity-[0.06]" patternId="batik-cta-card-pattern" />
 
-            <h2 className="relative text-2xl md:text-3xl lg:text-4xl font-bold text-white leading-tight">
+            <h2 className="relative text-2xl md:text-3xl lg:text-4xl font-bold text-white leading-tight font-heading">
               Daftarkan Putra-Putri Anda Sekarang
             </h2>
-            <p className="relative text-sm md:text-base text-white/80 mt-4 max-w-xl mx-auto leading-relaxed">
+            <p className="relative text-sm md:text-base text-white/85 mt-4 max-w-xl mx-auto leading-relaxed">
               Bergabunglah bersama kami untuk mencetak generasi yang Qur'ani, Berilmu, dan Berkarakter.
             </p>
-            <div className="relative mt-6">
+            <div className="relative mt-7">
               <Link href="/pendaftaran">
-                <Button className="bg-gold hover:bg-yellow-500 text-[#1A4D2E] font-medium px-5 py-3 h-auto rounded-xl shadow-md hover:scale-105 active:scale-95 transition-all inline-flex items-center justify-center gap-2 text-sm md:text-base w-full sm:w-auto">
+                <Button className="bg-gradient-to-r from-amber-400 via-amber-300 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-green-950 font-bold px-6 py-3.5 h-auto rounded-full shadow-xl shadow-black/25 hover:scale-105 active:scale-95 transition-all inline-flex items-center justify-center gap-2 text-sm md:text-base w-full sm:w-auto uppercase tracking-wider border border-amber-200/50">
                   Klik Disini Untuk Mendaftar <ArrowRight className="w-4 h-4" />
                 </Button>
               </Link>

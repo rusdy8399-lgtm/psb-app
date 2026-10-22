@@ -98,7 +98,7 @@ export function HeroSlider({ data, brosurUrl }: { data: SliderData[], brosurUrl?
       <CarouselContent className="-ml-0">
         {data.map((slide, index) => (
           <CarouselItem key={slide.id} className="pl-0 border-none outline-none">
-            <section className="relative w-full flex flex-col md:flex-row md:items-center overflow-hidden bg-[#0d8174] md:h-[650px] contain-layout-paint">
+            <section className="relative w-full flex flex-col md:flex-row md:items-center overflow-hidden bg-[#1A4D2E] md:h-[650px] contain-layout-paint">
               {/* Photo or Video Container: Dedicated 16:9 Aspect Ratio on Mobile & Fullcover Background on Desktop */}
               <div className="relative w-full aspect-[16/9] sm:aspect-[2/1] md:aspect-auto md:absolute md:inset-0 z-0 overflow-hidden shrink-0 shadow-sm md:shadow-none bg-black">
                 <div className="w-full h-full md:absolute md:inset-0">
@@ -114,7 +114,7 @@ export function HeroSlider({ data, brosurUrl }: { data: SliderData[], brosurUrl?
                             el.muted = isMuted;
                             const p = el.play();
                             if (p !== undefined) {
-                              p.catch(() => {});
+                              p.catch(() => { });
                             }
                           }
                         }}

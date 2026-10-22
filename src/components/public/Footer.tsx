@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { MapPin, Phone, Mail, FileText, Download } from "lucide-react";
+import { BatikOverlay, BatikBorderStrip } from "./BatikPattern";
 
 // Custom SVG brand icons (lucide-react brand icons unavailable in this version)
 const InstagramIcon = () => (
@@ -41,8 +42,17 @@ export function Footer({ settings }: FooterProps) {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="bg-[#14532d] text-green-100 mt-auto">
-      <div className="max-w-5xl mx-auto px-4 py-8">
+    <footer className="bg-[#1A4D2E] text-white mt-auto relative overflow-hidden">
+      {/* Top Gold Accent Line */}
+      <div className="h-[2px] bg-gradient-to-r from-amber-500/40 via-amber-300 to-amber-500/40 w-full" />
+
+      {/* Decorative Batik Tumpal Border Ribbon */}
+      <BatikBorderStrip className="h-3 sm:h-3.5 text-amber-400/40" patternId="batik-footer-tumpal-border" />
+
+      {/* Transparent Seamless Batik Kawung Overlay */}
+      <BatikOverlay className="opacity-[0.05]" patternId="batik-footer-pattern" />
+
+      <div className="max-w-5xl mx-auto px-4 py-8 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 
           {/* Column 1: Brand & Social */}
@@ -50,7 +60,7 @@ export function Footer({ settings }: FooterProps) {
             <p className="text-sm font-semibold tracking-wide text-white mb-2">
               {schoolName}
             </p>
-            <p className="text-sm text-green-200 leading-relaxed">
+            <p className="text-sm text-white leading-relaxed">
               Platform digital modern untuk Sistem Informasi dan Penerimaan Peserta Didik Baru (PPDB) {schoolName}.
             </p>
 
@@ -58,31 +68,31 @@ export function Footer({ settings }: FooterProps) {
             <div className="flex gap-3 mt-3">
               {settings?.igUrl ? (
                 <Link href={settings.igUrl} target="_blank" aria-label="Instagram"
-                  className="text-green-200 hover:text-white hover:scale-110 transition-all duration-200">
+                  className="text-white hover:text-amber-300 hover:scale-110 transition-all duration-200">
                   <InstagramIcon />
                 </Link>
               ) : (
-                <span className="text-green-200 hover:text-white hover:scale-110 transition-all duration-200 cursor-pointer">
+                <span className="text-white hover:text-amber-300 hover:scale-110 transition-all duration-200 cursor-pointer">
                   <InstagramIcon />
                 </span>
               )}
               {settings?.fbUrl ? (
                 <Link href={settings.fbUrl} target="_blank" aria-label="Facebook"
-                  className="text-green-200 hover:text-white hover:scale-110 transition-all duration-200">
+                  className="text-white hover:text-amber-300 hover:scale-110 transition-all duration-200">
                   <FacebookIcon />
                 </Link>
               ) : (
-                <span className="text-green-200 hover:text-white hover:scale-110 transition-all duration-200 cursor-pointer">
+                <span className="text-white hover:text-amber-300 hover:scale-110 transition-all duration-200 cursor-pointer">
                   <FacebookIcon />
                 </span>
               )}
               {settings?.ytUrl ? (
                 <Link href={settings.ytUrl} target="_blank" aria-label="Youtube"
-                  className="text-green-200 hover:text-white hover:scale-110 transition-all duration-200">
+                  className="text-white hover:text-amber-300 hover:scale-110 transition-all duration-200">
                   <YoutubeIcon />
                 </Link>
               ) : (
-                <span className="text-green-200 hover:text-white hover:scale-110 transition-all duration-200 cursor-pointer">
+                <span className="text-white hover:text-amber-300 hover:scale-110 transition-all duration-200 cursor-pointer">
                   <YoutubeIcon />
                 </span>
               )}
@@ -106,7 +116,7 @@ export function Footer({ settings }: FooterProps) {
                   <Link
                     href={link.href}
                     prefetch={false}
-                    className="text-sm text-green-200 hover:text-white hover:translate-x-0.5 transition-all duration-200 inline-block"
+                    className="text-sm text-white hover:text-amber-300 hover:translate-x-0.5 transition-all duration-200 inline-block"
                   >
                     {link.label}
                   </Link>
@@ -117,7 +127,7 @@ export function Footer({ settings }: FooterProps) {
                   <Link
                     href="/download-brosur"
                     prefetch={false}
-                    className="text-sm text-green-200 hover:text-white hover:translate-x-0.5 transition-all duration-200 inline-flex items-center gap-1.5"
+                    className="text-sm text-white hover:text-amber-300 hover:translate-x-0.5 transition-all duration-200 inline-flex items-center gap-1.5"
                   >
                     Download Brosur <Download className="w-3 h-3" />
                   </Link>
@@ -133,37 +143,37 @@ export function Footer({ settings }: FooterProps) {
             </p>
             <ul className="space-y-2">
               <li className="flex items-start gap-3">
-                <MapPin className="w-5 h-5 mt-1 text-green-300 shrink-0" />
-                <span className="text-sm text-green-200 leading-relaxed">
+                <MapPin className="w-5 h-5 mt-1 text-white shrink-0" />
+                <span className="text-sm text-white leading-relaxed">
                   {settings?.alamat || "Jl. Raya Bali Bina Insani, Kabupaten Tabanan, Bali, Indonesia"}
                 </span>
               </li>
               <li className="flex items-start gap-3">
-                <Phone className="w-5 h-5 mt-0.5 text-green-300 shrink-0" />
+                <Phone className="w-5 h-5 mt-0.5 text-white shrink-0" />
                 {settings?.noWa ? (
                   <a
                     href={`https://wa.me/${settings.noWa.replace(/\D/g, "")}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-sm text-green-200 hover:text-white transition-colors"
+                    className="text-sm text-white hover:text-amber-300 transition-colors"
                   >
                     {settings.noWa}
                   </a>
                 ) : (
-                  <span className="text-sm text-green-200">+62 812 3456 7890</span>
+                  <span className="text-sm text-white">+62 812 3456 7890</span>
                 )}
               </li>
               <li className="flex items-start gap-3">
-                <Mail className="w-5 h-5 mt-0.5 text-green-300 shrink-0" />
+                <Mail className="w-5 h-5 mt-0.5 text-white shrink-0" />
                 {settings?.email ? (
                   <a
                     href={`mailto:${settings.email}`}
-                    className="text-sm text-green-200 hover:text-white transition-colors"
+                    className="text-sm text-white hover:text-amber-300 transition-colors"
                   >
                     {settings.email}
                   </a>
                 ) : (
-                  <span className="text-sm text-green-200">info@balibinainsani.sch.id</span>
+                  <span className="text-sm text-white">info@balibinainsani.sch.id</span>
                 )}
               </li>
             </ul>
@@ -172,7 +182,7 @@ export function Footer({ settings }: FooterProps) {
         </div>
 
         {/* Divider & Copyright */}
-        <div className="border-t border-green-800 mt-6 pt-4 flex flex-col md:flex-row justify-between items-center gap-1 text-xs text-green-300">
+        <div className="border-t border-white/20 mt-6 pt-4 flex flex-col md:flex-row justify-between items-center gap-1 text-xs text-white">
           <p>© {year} {schoolName}. All rights reserved.</p>
           <p>Dikelola oleh Tim IT Bali Bina Insani</p>
         </div>

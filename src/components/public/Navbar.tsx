@@ -105,6 +105,7 @@ export function Navbar({ settings }: NavbarProps) {
           isScrolled ? "h-[68px] md:h-[72px]" : "h-[74px] md:h-[80px]"
         }`}
       >
+
         {/* Layer 1: Left Organic White Wave Pod (Holds Logo) */}
         <div className="absolute inset-y-0 left-0 z-10 flex items-center">
           {/* Solid White Base Container */}
