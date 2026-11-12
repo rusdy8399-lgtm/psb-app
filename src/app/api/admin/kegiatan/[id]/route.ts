@@ -3,6 +3,8 @@ import { revalidatePath } from "next/cache";
 import { db } from "@/lib/db";
 import { kegiatan } from "@/lib/db/schema";
 import { eq, and, ne } from "drizzle-orm";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
 
 export const dynamic = "force-dynamic";
 
@@ -19,6 +21,14 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    });
+
+    if (!session) {
+      return NextResponse.json({ error: "Unauthorized access" }, { status: 401 });
+    }
+
     const { id } = await params;
     const body = await req.json();
     
@@ -50,6 +60,7 @@ export async function PUT(
     if (updateData.slug) {
       revalidatePath(`/kegiatan/${updateData.slug}`);
     }
+    
     return NextResponse.json({ success: true });
   } catch (error) {
     return NextResponse.json({ error: "Failed to update kegiatan" }, { status: 500 });
@@ -61,10 +72,20 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    });
+
+    if (!session) {
+      return NextResponse.json({ error: "Unauthorized access" }, { status: 401 });
+    }
+
     const { id } = await params;
     await db.delete(kegiatan).where(eq(kegiatan.id, id));
+    
     revalidatePath("/", "layout");
     revalidatePath("/kegiatan");
+    
     return NextResponse.json({ success: true });
   } catch (error) {
     return NextResponse.json({ error: "Failed to delete kegiatan" }, { status: 500 });

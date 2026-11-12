@@ -4,6 +4,8 @@ import { db } from "@/lib/db";
 import { kegiatan } from "@/lib/db/schema";
 import { v4 as uuidv4 } from "uuid";
 import { eq } from "drizzle-orm";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
 
 export const dynamic = "force-dynamic";
 
@@ -28,6 +30,14 @@ export async function GET() {
 // POST new kegiatan
 export async function POST(req: NextRequest) {
   try {
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    });
+
+    if (!session) {
+      return NextResponse.json({ error: "Unauthorized access" }, { status: 401 });
+    }
+
     const body = await req.json();
     
     let baseSlug = body.judul ? slugify(body.judul) : uuidv4();

@@ -4,6 +4,8 @@ import { db } from "@/lib/db";
 import { heroSection } from "@/lib/db/schema";
 import { eq, asc } from "drizzle-orm";
 import { v4 as uuidv4 } from "uuid";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
 
 export const dynamic = "force-dynamic";
 
@@ -23,6 +25,14 @@ export async function GET() {
 // POST new slider
 export async function POST(req: NextRequest) {
   try {
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    });
+
+    if (!session) {
+      return NextResponse.json({ error: "Unauthorized access" }, { status: 401 });
+    }
+
     const body = await req.json();
     const newSlider = {
       id: uuidv4(),

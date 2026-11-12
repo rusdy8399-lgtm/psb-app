@@ -3,6 +3,8 @@ import { db } from "@/lib/db";
 import { pendaftar } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 import { Resend } from "resend";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
 
 export const dynamic = "force-dynamic";
 
@@ -14,6 +16,14 @@ export async function POST(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    });
+
+    if (!session) {
+      return NextResponse.json({ error: "Unauthorized access" }, { status: 401 });
+    }
+
     const { id } = await params;
 
     // Fetch Registrant Data
@@ -53,7 +63,7 @@ export async function POST(
             </div>
             <p>Silakan unduh Surat Keterangan Pendaftaran melalui tautan di bawah ini:</p>
             <div style="text-align: center; margin: 30px 0;">
-              <a href="${req.nextUrl.origin}/ppdb/sukses?code=${data.kodePendaftaran}" style="background-color: #C9A84C; color: white; padding: 12px 30px; text-decoration: none; border-radius: 6px; font-weight: bold;">Download Surat Keterangan</a>
+              <a href="${req.nextUrl.origin}/pendaftaran/sukses?code=${data.kodePendaftaran}" style="background-color: #C9A84C; color: white; padding: 12px 30px; text-decoration: none; border-radius: 6px; font-weight: bold;">Download Surat Keterangan</a>
             </div>
             <p style="color: #ef4444; font-weight: bold; font-style: italic;">PENTING: Harap membawa dokumen fisik (KK, Akta, Ijazah) asli & fotokopi saat jadwal verifikasi lapangan.</p>
             <p>Terima kasih.</p>

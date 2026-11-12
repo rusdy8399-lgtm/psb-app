@@ -73,7 +73,7 @@ export async function POST(req: NextRequest) {
       // Payment
       namaPengirim: formData.get("namaPengirim")?.toString() || "",
       tanggalTransfer: formData.get("tanggalTransfer")?.toString() || new Date().toISOString().split('T')[0],
-      paymentAutoVerified: formData.get("paymentAutoVerified") === "true",
+      paymentAutoVerified: false, // Security: public submission is never auto-verified by client flag
     };
 
     // Validation
@@ -87,9 +87,10 @@ export async function POST(req: NextRequest) {
 
     // Generate IDs
     const studentId = crypto.randomUUID();
+    const currentYear = new Date().getFullYear();
     const timestamp = Date.now().toString().slice(-4);
     const random = Math.floor(Math.random() * 9000) + 1000;
-    const kodePendaftaran = `REG-2026-${timestamp}-${random}`;
+    const kodePendaftaran = `REG-${currentYear}-${timestamp}-${random}`;
 
     console.log("PPDB API: Processing files in parallel...");
     const files = {
@@ -198,7 +199,7 @@ export async function POST(req: NextRequest) {
               </div>
               <p>Silakan simpan kode pendaftaran di atas untuk keperluan verifikasi. Anda dapat mengunduh Surat Keterangan Pendaftaran melalui tautan di bawah ini:</p>
               <div style="text-align: center; margin: 30px 0;">
-                <a href="${req.nextUrl.origin}/ppdb/sukses?code=${kodePendaftaran}" style="background-color: #C9A84C; color: white; padding: 12px 30px; text-decoration: none; border-radius: 6px; font-weight: bold;">Download Surat Keterangan</a>
+                <a href="${req.nextUrl.origin}/pendaftaran/sukses?code=${kodePendaftaran}" style="background-color: #C9A84C; color: white; padding: 12px 30px; text-decoration: none; border-radius: 6px; font-weight: bold;">Download Surat Keterangan</a>
               </div>
               <p style="color: #ef4444; font-weight: bold; font-style: italic;">PENTING: Harap membawa dokumen fisik (KK, Akta, Ijazah) saat jadwal verifikasi lapangan.</p>
               <p>Jika ada pertanyaan, silakan hubungi Panitia PPDB melalui WhatsApp di nomor resmi kami.</p>

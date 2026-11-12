@@ -36,10 +36,14 @@ export function proxy(request: NextRequest) {
   return NextResponse.next();
 }
 
-// Optimization: Only run proxy on dashboard and admin API routes
+// Also export as middleware for backward compatibility
+export const middleware = proxy;
+
+// Optimization: Only run on dashboard and admin API routes
 export const config = {
   matcher: [
     "/dashboard/:path*", 
     "/api/admin/:path*"
   ],
 };
+

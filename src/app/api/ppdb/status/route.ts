@@ -5,7 +5,6 @@ import { eq } from "drizzle-orm";
 
 export const dynamic = "force-dynamic";
 
-
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
@@ -32,8 +31,19 @@ export async function GET(req: NextRequest) {
     // Include settings info for PDF generation
     const settings = await db.query.pengaturanWeb.findFirst();
 
+    // Selectively return only fields needed for confirmation & certificate download
     return NextResponse.json({
-      ...data,
+      id: data.id,
+      namaLengkap: data.namaLengkap,
+      kodePendaftaran: data.kodePendaftaran,
+      jenjang: data.jenjang,
+      tempatLahir: data.tempatLahir,
+      tanggalLahir: data.tanggalLahir,
+      nisn: data.nisn,
+      nik: data.nik,
+      asalSekolah: data.asalSekolah,
+      status: data.status,
+      createdAt: data.createdAt,
       pasFotoUrl: berkas?.pasFotoUrl,
       heroBadge: settings?.heroBadge || "PENERIMAAN SANTRI BARU 2026/2027"
     });

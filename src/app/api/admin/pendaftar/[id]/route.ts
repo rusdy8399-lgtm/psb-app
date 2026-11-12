@@ -1,23 +1,32 @@
 import { db } from "@/lib/db";
-import { pendaftar, berkasDokumen } from "@/lib/db/schema";
+import { pendaftar, berkasDokumen, ortuWakil } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
 import { deleteFromStorage } from "@/lib/upload";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
 
 export const dynamic = "force-dynamic";
-
 
 export async function DELETE(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const { id } = await params;
-
   try {
+    // 1. Verify session
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    });
+
+    if (!session) {
+      return NextResponse.json({ error: "Unauthorized access" }, { status: 401 });
+    }
+
+    const { id } = await params;
     console.log(`Admin API: Deleting pendaftar ID: ${id}`);
 
-    // 1. Fetch file URLs for cleanup
+    // 2. Fetch file URLs for cleanup
     const berkas = await db.query.berkasDokumen.findFirst({
       where: eq(berkasDokumen.pendaftarId, id),
     });
@@ -37,7 +46,9 @@ export async function DELETE(
       await Promise.all(fileUrls.map(url => deleteFromStorage(url)));
     }
 
-    // 2. Delete from database (Cascading will handle ortu_wakil and berkas_dokumen)
+    // 3. Delete from database (explicitly delete child tables for SQLite data integrity)
+    await db.delete(ortuWakil).where(eq(ortuWakil.pendaftarId, id));
+    await db.delete(berkasDokumen).where(eq(berkasDokumen.pendaftarId, id));
     await db.delete(pendaftar).where(eq(pendaftar.id, id));
 
     console.log(`Admin API: Successfully deleted pendaftar ${id}`);
@@ -49,10 +60,10 @@ export async function DELETE(
       message: "Data pendaftaran berhasil dihapus beserta berkas pendukungnya." 
     });
   } catch (error: any) {
-    console.error("Admin API: Delete FAILED", error);
-    return NextResponse.json(
-      { error: "Gagal menghapus data pendaftaran", details: error.message },
-      { status: 500 }
-    );
+    console.error("Admin API Delete Error:", error);
+    return NextResponse.json({ 
+      error: "Gagal menghapus data pendaftaran", 
+      details: error.message 
+    }, { status: 500 });
   }
 }
