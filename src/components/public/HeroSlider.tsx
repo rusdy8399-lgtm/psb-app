@@ -31,6 +31,7 @@ export function HeroSlider({ data, brosurUrl }: { data: SliderData[], brosurUrl?
   const [autoplayPlugin, setAutoplayPlugin] = React.useState<any>(null);
 
   React.useEffect(() => {
+    let active = true;
     setHasHydrated(true);
 
     // Dynamic CSS Loading
@@ -39,10 +40,15 @@ export function HeroSlider({ data, brosurUrl }: { data: SliderData[], brosurUrl?
 
     // Lazy load Embla Autoplay only on the client side
     import("embla-carousel-autoplay").then((mod) => {
+      if (!active) return;
       setAutoplayPlugin(() =>
         mod.default({ delay: 5000, stopOnInteraction: false, stopOnMouseEnter: true })
       );
     });
+
+    return () => {
+      active = false;
+    };
   }, []);
 
   React.useEffect(() => {
@@ -62,19 +68,23 @@ export function HeroSlider({ data, brosurUrl }: { data: SliderData[], brosurUrl?
 
   // Pause autoplay if tab is inactive
   React.useEffect(() => {
+    if (!api || !autoplayPlugin) return;
     const handleVisibilityChange = () => {
-      if (!autoplayPlugin) return;
-      if (document.hidden) {
-        autoplayPlugin.stop();
-      } else {
-        autoplayPlugin.play();
+      try {
+        if (document.hidden) {
+          autoplayPlugin.stop?.();
+        } else if (api.slideNodes().length > 0) {
+          autoplayPlugin.play?.();
+        }
+      } catch {
+        // Ignore if Embla instance is unmounted or not yet initialized
       }
     };
     document.addEventListener("visibilitychange", handleVisibilityChange);
     return () => {
       document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
-  }, [autoplayPlugin]);
+  }, [api, autoplayPlugin]);
 
   const shouldRenderImage = (index: number) => {
     if (index === 0) return true; // Always render slide 0 for LCP and SSR matching

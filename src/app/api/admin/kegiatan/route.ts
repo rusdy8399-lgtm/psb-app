@@ -40,7 +40,7 @@ export async function POST(req: NextRequest) {
 
     const body = await req.json();
     
-    let baseSlug = body.judul ? slugify(body.judul) : uuidv4();
+    const baseSlug = body.judul ? slugify(body.judul) : uuidv4();
     let finalSlug = baseSlug;
     let counter = 1;
     

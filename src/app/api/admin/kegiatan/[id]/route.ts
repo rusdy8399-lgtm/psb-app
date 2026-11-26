@@ -32,10 +32,10 @@ export async function PUT(
     const { id } = await params;
     const body = await req.json();
     
-    let updateData = { ...body };
+    const updateData = { ...body };
     
     if (body.judul) {
-      let baseSlug = slugify(body.judul);
+      const baseSlug = slugify(body.judul);
       let finalSlug = baseSlug;
       let counter = 1;
       

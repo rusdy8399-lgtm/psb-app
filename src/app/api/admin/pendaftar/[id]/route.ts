@@ -59,11 +59,11 @@ export async function DELETE(
       success: true, 
       message: "Data pendaftaran berhasil dihapus beserta berkas pendukungnya." 
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Admin API Delete Error:", error);
     return NextResponse.json({ 
       error: "Gagal menghapus data pendaftaran", 
-      details: error.message 
+      details: error instanceof Error ? error.message : "Unknown error" 
     }, { status: 500 });
   }
 }

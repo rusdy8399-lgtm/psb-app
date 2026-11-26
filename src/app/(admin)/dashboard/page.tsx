@@ -14,8 +14,10 @@ export default async function DashboardHomePage() {
   const yesterday = new Date();
   yesterday.setDate(yesterday.getDate() - 1);
 
-  const [totalRes, mtsRes, maRes, newRes, recentPendaftar] = await Promise.all([
+  const [totalRes, paudRes, miRes, mtsRes, maRes, newRes, recentPendaftar] = await Promise.all([
     db.select({ count: sql<number>`count(*)` }).from(pendaftar),
+    db.select({ count: sql<number>`count(*)` }).from(pendaftar).where(eq(pendaftar.jenjang, "PAUD")),
+    db.select({ count: sql<number>`count(*)` }).from(pendaftar).where(eq(pendaftar.jenjang, "MI")),
     db.select({ count: sql<number>`count(*)` }).from(pendaftar).where(eq(pendaftar.jenjang, "MTs")),
     db.select({ count: sql<number>`count(*)` }).from(pendaftar).where(eq(pendaftar.jenjang, "MA")),
     db.select({ count: sql<number>`count(*)` }).from(pendaftar).where(gte(pendaftar.createdAt, yesterday)),
@@ -26,12 +28,16 @@ export default async function DashboardHomePage() {
   ]);
 
   const totalCount = totalRes[0].count || 0;
+  const paudCount = paudRes[0].count || 0;
+  const miCount = miRes[0].count || 0;
   const mtsCount = mtsRes[0].count || 0;
   const maCount = maRes[0].count || 0;
   const newCount = newRes[0].count || 0;
 
   const stats = [
     { name: "Total Pendaftar", value: totalCount.toString(), icon: Users, color: "text-blue-500", bg: "bg-blue-100" },
+    { name: "Pendaftar PAUD", value: paudCount.toString(), icon: UserCheck, color: "text-teal-500", bg: "bg-teal-100" },
+    { name: "Pendaftar MI", value: miCount.toString(), icon: UserCheck, color: "text-emerald-500", bg: "bg-emerald-100" },
     { name: "Pendaftar MTs", value: mtsCount.toString(), icon: UserCheck, color: "text-green-500", bg: "bg-green-100" },
     { name: "Pendaftar MA", value: maCount.toString(), icon: UserCheck, color: "text-purple-500", bg: "bg-purple-100" },
     { name: "Pendaftar Baru (24j)", value: newCount.toString(), icon: Clock, color: "text-orange-500", bg: "bg-orange-100" },
@@ -49,7 +55,7 @@ export default async function DashboardHomePage() {
         </div>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {stats.map((stat, idx) => (
           <Card key={idx} className="border-none shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-2xl overflow-hidden group">
             <CardContent className="p-8 flex items-center justify-between">

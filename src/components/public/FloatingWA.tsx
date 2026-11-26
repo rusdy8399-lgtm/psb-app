@@ -12,7 +12,10 @@ export function FloatingWA({ waNumber }: { waNumber: string }) {
   useEffect(() => {
     setMounted(true);
     if (typeof window !== "undefined") {
-      const idle = (window as any).requestIdleCallback || ((cb: any) => setTimeout(cb, 1));
+      const win = window as Window & {
+        requestIdleCallback?: (cb: () => void) => number;
+      };
+      const idle = win.requestIdleCallback || ((cb: () => void) => setTimeout(cb, 1));
       idle(() => {
         import("@/styles/animations.css");
       });

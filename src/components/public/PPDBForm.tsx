@@ -21,9 +21,10 @@ interface PPDBFormProps {
     biayaRegistrasi?: string | null;
     heroBadge?: string | null;
   } | null;
+  initialJenjang?: string;
 }
 
-export function PPDBForm({ settings }: PPDBFormProps) {
+export function PPDBForm({ settings, initialJenjang = "" }: PPDBFormProps) {
   const router = useRouter();
   const [step, setStep] = useState(0); // 0: Select Jenjang, 1: A, 2: B, 3: C, 4: D
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -31,7 +32,7 @@ export function PPDBForm({ settings }: PPDBFormProps) {
 
   // Form State
   const [formData, setFormData] = useState({
-    jenjang: "",
+    jenjang: initialJenjang,
     namaLengkap: "",
     tempatLahir: "",
     tanggalLahir: "",
@@ -84,11 +85,12 @@ export function PPDBForm({ settings }: PPDBFormProps) {
   const validateStep = () => {
     if (step === 0 && !formData.jenjang) return "Pilih jenjang pendidikan";
     if (step === 1) {
+      const needsSchoolInfo = formData.jenjang === "MTs" || formData.jenjang === "MA";
       if (!formData.namaLengkap) return "Nama Lengkap wajib diisi";
       if (!formData.tempatLahir || !formData.tanggalLahir) return "Tempat & Tanggal Lahir wajib diisi";
       if (!formData.jenisKelamin) return "Pilih jenis kelamin";
-      if (!formData.nisn) return "NISN wajib diisi";
-      if (!formData.asalSekolah) return "Asal Sekolah wajib diisi";
+      if (needsSchoolInfo && !formData.nisn) return "NISN wajib diisi";
+      if (needsSchoolInfo && !formData.asalSekolah) return "Asal Sekolah wajib diisi";
       if (!formData.alamat) return "Alamat wajib diisi";
     }
     if (step === 2) {
@@ -195,7 +197,7 @@ export function PPDBForm({ settings }: PPDBFormProps) {
         toast.success("Pendaftaran Berhasil Terkirim!");
         router.push(`/pendaftaran/sukses?code=${data.kodePendaftaran}`);
       } else {
-        const errData: any = await response.json();
+        const errData = (await response.json()) as { error?: string; details?: string };
         console.error("ERROR API DETAIL:", errData);
         const errorMessage = errData.error || "Gagal mengirim pendaftaran.";
         const errorDetail = errData.details ? `: ${errData.details}` : "";
@@ -203,7 +205,7 @@ export function PPDBForm({ settings }: PPDBFormProps) {
         setFormError(finalError);
         toast.error(finalError);
       }
-    } catch (error: any) {
+    } catch {
       setFormError("Terjadi kesalahan koneksi. Silakan coba lagi.");
       toast.error("Terjadi kesalahan koneksi.");
     } finally {
@@ -262,25 +264,24 @@ export function PPDBForm({ settings }: PPDBFormProps) {
             <h2 className="text-lg font-bold text-slate-800 mb-1">Pilih Jenjang Sekolah</h2>
             <p className="text-sm text-slate-500 mb-6">Pilih jenjang pendidikan yang ingin Anda daftarkan.</p>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4 max-w-md mx-auto">
-              <button
-                type="button"
-                onClick={() => handleInputChange("jenjang", "MTs")}
-                className={`p-4 md:p-5 rounded-2xl border-2 transition-all duration-200 flex flex-col items-center gap-1.5 ${formData.jenjang === "MTs" ? "border-[#166534] bg-[#F0FDF4] shadow-sm scale-95" : "border-[#E5E7EB] hover:border-[#166534]/50 hover:bg-[#F0FDF4]/30"
-                  }`}
-              >
-                <span className="text-2xl font-black text-primary">MTs</span>
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-none">MTS (SMP)</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => handleInputChange("jenjang", "MA")}
-                className={`p-4 md:p-5 rounded-2xl border-2 transition-all duration-200 flex flex-col items-center gap-1.5 ${formData.jenjang === "MA" ? "border-[#166534] bg-[#F0FDF4] shadow-sm scale-95" : "border-[#E5E7EB] hover:border-[#166534]/50 hover:bg-[#F0FDF4]/30"
-                  }`}
-              >
-                <span className="text-2xl font-black text-primary">MA</span>
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-none">MA (SMA)</span>
-              </button>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 max-w-2xl mx-auto">
+              {[
+                { value: "PAUD", label: "PAUD", sub: "RA / TK" },
+                { value: "MI", label: "MI", sub: "MI (SD)" },
+                { value: "MTs", label: "MTs", sub: "MTS (SMP)" },
+                { value: "MA", label: "MA", sub: "MA (SMA)" },
+              ].map((opt) => (
+                <button
+                  key={opt.value}
+                  type="button"
+                  onClick={() => handleInputChange("jenjang", opt.value)}
+                  className={`p-4 md:p-5 rounded-2xl border-2 transition-all duration-200 flex flex-col items-center gap-1.5 ${formData.jenjang === opt.value ? "border-[#166534] bg-[#F0FDF4] shadow-sm scale-95" : "border-[#E5E7EB] hover:border-[#166534]/50 hover:bg-[#F0FDF4]/30"
+                    }`}
+                >
+                  <span className="text-2xl font-black text-primary">{opt.label}</span>
+                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-none">{opt.sub}</span>
+                </button>
+              ))}
             </div>
 
             <div className="mt-6 md:mt-8 flex justify-center">
@@ -334,8 +335,16 @@ export function PPDBForm({ settings }: PPDBFormProps) {
               </div>
 
               <div className="space-y-1.5">
-                <Label className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">NISN <span className="text-destructive">*</span></Label>
-                <Input value={formData.nisn} onChange={e => handleInputChange("nisn", e.target.value)} placeholder="10 digit NISN" required className="h-10 rounded-lg text-sm font-normal" />
+                <Label className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">
+                  NISN {(formData.jenjang === "PAUD" || formData.jenjang === "MI") ? <span className="text-slate-300">(Opsional)</span> : <span className="text-destructive">*</span>}
+                </Label>
+                <Input
+                  value={formData.nisn}
+                  onChange={e => handleInputChange("nisn", e.target.value)}
+                  placeholder="10 digit NISN"
+                  required={formData.jenjang !== "PAUD" && formData.jenjang !== "MI"}
+                  className="h-10 rounded-lg text-sm font-normal"
+                />
               </div>
 
               <div className="space-y-1.5">
@@ -344,8 +353,16 @@ export function PPDBForm({ settings }: PPDBFormProps) {
               </div>
 
               <div className="space-y-1.5">
-                <Label className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">Asal Sekolah <span className="text-destructive">*</span></Label>
-                <Input value={formData.asalSekolah} onChange={e => handleInputChange("asalSekolah", e.target.value)} placeholder="Nama Sekolah Sebelumnya" required className="h-10 rounded-lg text-sm font-normal" />
+                <Label className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">
+                  Asal Sekolah {(formData.jenjang === "PAUD" || formData.jenjang === "MI") ? <span className="text-slate-300">(Opsional)</span> : <span className="text-destructive">*</span>}
+                </Label>
+                <Input
+                  value={formData.asalSekolah}
+                  onChange={e => handleInputChange("asalSekolah", e.target.value)}
+                  placeholder="Nama Sekolah Sebelumnya"
+                  required={formData.jenjang !== "PAUD" && formData.jenjang !== "MI"}
+                  className="h-10 rounded-lg text-sm font-normal"
+                />
               </div>
 
               <div className="md:col-span-2 space-y-1.5">

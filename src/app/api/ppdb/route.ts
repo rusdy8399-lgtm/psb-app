@@ -11,19 +11,20 @@ export const dynamic = "force-dynamic";
 const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
 
 // Helper to save files to storage
-async function saveFile(file: any, subDir: string) {
+async function saveFile(file: FormDataEntryValue | null, subDir: string) {
   if (!file || typeof file === "string" || file.size === 0) return null;
   try {
     return await uploadToStorage(file, `ppdb/${subDir}`);
-  } catch (error: any) {
-    throw new Error(`Gagal upload berkas ${subDir}: ${error.message}`);
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "Unknown error";
+    throw new Error(`Gagal upload berkas ${subDir}: ${message}`);
   }
 }
 
 // Helper to normalize WhatsApp number to +62 format
 function normalizeWhatsApp(phone: string): string {
   if (!phone) return "";
-  let cleaned = phone.replace(/\s+/g, ""); // Remove spaces
+  const cleaned = phone.replace(/\s+/g, ""); // Remove spaces
   if (cleaned.startsWith("0")) {
     return "+62" + cleaned.slice(1);
   }
@@ -57,9 +58,9 @@ export async function POST(req: NextRequest) {
       alamat: formData.get("alamat")?.toString() || "",
       email: formData.get("email")?.toString() || "",
       nik: formData.get("nik")?.toString() || "",
-      nisn: formData.get("nisn")?.toString() || "",
+      nisn: formData.get("nisn")?.toString() || "-",
       noKk: formData.get("noKk")?.toString() || "",
-      asalSekolah: formData.get("asalSekolah")?.toString() || "",
+      asalSekolah: formData.get("asalSekolah")?.toString() || "-",
       
       // Parents
       namaAyah: formData.get("namaAyah")?.toString() || "",
@@ -77,7 +78,8 @@ export async function POST(req: NextRequest) {
     };
 
     // Validation
-    if (!data.namaLengkap || !data.jenjang || !data.nisn) {
+    const needsNisn = data.jenjang !== "PAUD" && data.jenjang !== "MI";
+    if (!data.namaLengkap || !data.jenjang || (needsNisn && data.nisn === "-")) {
       return NextResponse.json({ error: "Data wajib (Nama, Jenjang, NISN) tidak lengkap" }, { status: 400 });
     }
 
@@ -217,12 +219,12 @@ export async function POST(req: NextRequest) {
       message: "Pendaftaran berhasil dikirim. Silakan tunggu verifikasi admin." 
     });
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("CRITICAL PPDB API Error:", error);
     
     // Return detailed error for troubleshooting
-    const detailMessage = error.message || "Unknown error";
-    const stack = process.env.NODE_ENV === "development" ? error.stack : undefined;
+    const detailMessage = error instanceof Error ? error.message : "Unknown error";
+    const stack = process.env.NODE_ENV === "development" && error instanceof Error ? error.stack : undefined;
     
     return NextResponse.json({ 
       error: "Gagal memproses pendaftaran", 

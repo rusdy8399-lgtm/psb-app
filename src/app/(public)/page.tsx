@@ -81,7 +81,7 @@ export default async function Home() {
                 Membangun Generasi Madani <br className="hidden md:block" />Secara Integral
               </h2>
               <p className="text-sm md:text-base text-gray-600 leading-relaxed">
-                Pondok Pesantren Bali Bina Insani adalah lembaga pendidikan Islam terpadu yang berdiri di Pulau Dewata. Kami hadir untuk mencetak generasi yang unggul dalam ilmu agama, sains, dan teknologi — selaras dengan nilai-nilai Qur'ani.
+                Pondok Pesantren Bali Bina Insani adalah lembaga pendidikan Islam terpadu yang berdiri di Pulau Dewata. Kami hadir untuk mencetak generasi yang unggul dalam ilmu agama, sains, dan teknologi — selaras dengan nilai-nilai Qur&apos;ani.
               </p>
 
               {/* Visi Card */}
@@ -178,94 +178,97 @@ export default async function Home() {
       </section>
 
       {/* Jenjang Pendidikan */}
-      <section className="py-12 bg-white border-t border-gray-100 content-visibility-auto">
+      <section className="py-14 bg-gradient-to-b from-sky-50/70 via-white to-white border-t border-gray-100 content-visibility-auto">
         <div className="max-w-6xl mx-auto px-4">
-          <div className="mb-8">
-            <h2 className="text-xs uppercase tracking-wide text-[#1A4D2E] font-semibold">Jenjang Pendidikan</h2>
-            <p className="text-sm md:text-base text-gray-500 leading-relaxed mt-1.5 max-w-xl">
-              Pondok Pesantren Bali Bina Insani menyelenggarakan pendidikan formal setingkat SMP dan SMA di bawah naungan Kementerian Agama.
-            </p>
-          </div>
-
-          <div className="grid sm:grid-cols-2 gap-6">
-            {/* MTs Card */}
-            <div className="group relative rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 bg-white">
-              <div className="h-1.5 bg-gradient-to-r from-[#1A4D2E] to-green-600 w-full" />
-              <div className="p-7">
-                <div className="flex items-center gap-4 mb-5">
-                  {settings?.mtsLogoUrl ? (
-                    <div className="w-14 h-14 rounded-2xl overflow-hidden border border-[#1A4D2E]/10 shrink-0 relative">
-                      <Image src={settings.mtsLogoUrl} alt="Logo MTs" fill className="object-contain p-1" sizes="56px" />
-                    </div>
-                  ) : (
-                    <div className="w-14 h-14 rounded-2xl bg-[#1A4D2E]/5 border border-[#1A4D2E]/10 flex flex-col items-center justify-center shrink-0">
-                      <span className="text-xs font-bold text-[#1A4D2E] leading-none">MTs</span>
-                      <span className="text-[9px] text-slate-500 mt-0.5">Negeri / Swasta</span>
-                    </div>
-                  )}
-                  <div>
-                    <h3 className="text-lg font-semibold text-gray-800 leading-tight">Madrasah Tsanawiyah</h3>
-                    <span className="inline-block text-[11px] font-semibold text-[#1A4D2E] bg-[#1A4D2E]/10 px-2 py-0.5 rounded-full mt-1">
-                      Setara SMP · 3 Tahun (Kelas 7–9)
-                    </span>
-                  </div>
-                </div>
-                <p className="text-sm text-gray-500 leading-relaxed">
-                  {settings?.mtsDeskripsi || "Jenjang pertama yang memadukan kurikulum nasional Kementerian Agama dengan program kepesantrenan. Santri membangun fondasi ilmu agama, hafalan Al-Qur'an, dan karakter Islami sejak dini."}
-                </p>
-                <ul className="mt-4 space-y-1.5">
-                  {(settings?.mtsPoin ? settings.mtsPoin.split("\n").filter(p => p.trim()) : [
-                    "Tahfidz Al-Qur'an (target 5 juz)",
-                    "Kajian Kitab Kuning dasar",
-                    "Bahasa Arab & Inggris aktif",
-                  ]).map((p, i) => (
-                    <li key={i} className="flex items-center gap-2 text-sm text-gray-600">
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#1A4D2E] shrink-0" />
-                      {p}
-                    </li>
-                  ))}
-                </ul>
+          <div className="relative rounded-3xl bg-gradient-to-br from-[#38BDF8] via-[#2B7DE9] to-[#1D4ED8] p-6 sm:p-8 md:p-10 pt-12 md:pt-14 shadow-xl border-2 border-white/70">
+            {/* Top Center Pill Badge */}
+            <div className="absolute -top-5 left-1/2 -translate-x-1/2 z-20">
+              <div className="px-6 sm:px-8 py-2 rounded-full bg-gradient-to-r from-[#60A5FA] via-[#38BDF8] to-[#2563EB] border-2 border-white/80 shadow-md whitespace-nowrap">
+                <h2 className="text-sm sm:text-base md:text-lg font-extrabold uppercase tracking-wider text-white drop-shadow-xs">
+                  Jenjang Pendidikan
+                </h2>
               </div>
             </div>
 
-            {/* MA Card */}
-            <div className="group relative rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 bg-white">
-              <div className="h-1.5 bg-gradient-to-r from-[#1A4D2E] to-green-600 w-full" />
-              <div className="p-7">
-                <div className="flex items-center gap-4 mb-5">
-                  {settings?.maLogoUrl ? (
-                    <div className="w-14 h-14 rounded-2xl overflow-hidden border border-[#1A4D2E]/10 shrink-0 relative">
-                      <Image src={settings.maLogoUrl} alt="Logo MA" fill className="object-contain p-1" sizes="56px" />
-                    </div>
-                  ) : (
-                    <div className="w-14 h-14 rounded-2xl bg-[#1A4D2E]/5 border border-[#1A4D2E]/10 flex flex-col items-center justify-center shrink-0">
-                      <span className="text-xs font-bold text-[#1A4D2E] leading-none">MA</span>
-                      <span className="text-[9px] text-slate-500 mt-0.5">Negeri / Swasta</span>
-                    </div>
-                  )}
-                  <div>
-                    <h3 className="text-lg font-semibold text-gray-800 leading-tight">Madrasah Aliyah</h3>
-                    <span className="inline-block text-[11px] font-semibold text-[#1A4D2E] bg-[#1A4D2E]/10 px-2 py-0.5 rounded-full mt-1">
-                      Setara SMA · 3 Tahun (Kelas 10–12)
-                    </span>
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-4 gap-y-12 sm:gap-6 pt-6">
+              {[
+                {
+                  slug: "paud",
+                  code: "PAUD",
+                  sub: "BALI BINA INSANI",
+                  levelHint: "Usia Min. 3 Thn",
+                  logoUrl: settings?.paudLogoUrl,
+                  cardBg: "bg-gradient-to-b from-[#F9B16E] to-[#EE964B]",
+                },
+                {
+                  slug: "mi",
+                  code: "MI",
+                  sub: "BALI BINA INSANI",
+                  levelHint: "Setara SD",
+                  logoUrl: settings?.miLogoUrl,
+                  cardBg: "bg-gradient-to-b from-[#237A6B] to-[#17584D]",
+                },
+                {
+                  slug: "mts",
+                  code: "MTS",
+                  sub: "BALI BINA INSANI",
+                  levelHint: "Setara SMP",
+                  logoUrl: settings?.mtsLogoUrl,
+                  cardBg: "bg-gradient-to-b from-[#4DA6E8] to-[#2F89D1]",
+                },
+                {
+                  slug: "ma",
+                  code: "MA",
+                  sub: "BALI BINA INSANI",
+                  levelHint: "Setara SMA",
+                  logoUrl: settings?.maLogoUrl,
+                  cardBg: "bg-gradient-to-b from-[#334F9E] to-[#243978]",
+                },
+              ].map((item) => (
+                <Link
+                  key={item.code}
+                  href={`/lembaga/${item.slug}`}
+                  className={`group relative ${item.cardBg} rounded-2xl border-2 border-white/90 shadow-lg hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 pt-12 pb-5 px-3 sm:px-4 text-center flex flex-col items-center justify-between`}
+                >
+                  {/* Floating Logo Badge */}
+                  <div className="absolute -top-9 left-1/2 -translate-x-1/2 w-18 h-18 sm:w-20 sm:h-20 flex items-center justify-center">
+                    {item.logoUrl ? (
+                      <div className="w-full h-full rounded-full bg-white/95 p-1.5 shadow-md border-2 border-white relative overflow-hidden group-hover:scale-105 transition-transform">
+                        <Image
+                          src={item.logoUrl}
+                          alt={`Logo ${item.code}`}
+                          fill
+                          className="object-contain p-1.5"
+                          sizes="80px"
+                        />
+                      </div>
+                    ) : (
+                      <div className="w-16 h-16 sm:w-18 sm:h-18 rounded-full bg-white shadow-md border-2 border-white flex flex-col items-center justify-center group-hover:scale-105 transition-transform">
+                        <span className="text-sm sm:text-base font-black text-[#1A4D2E] leading-none">
+                          {item.code}
+                        </span>
+                        <span className="text-[8px] font-bold text-slate-400 uppercase mt-0.5">
+                          {item.levelHint}
+                        </span>
+                      </div>
+                    )}
                   </div>
-                </div>
-                <p className="text-sm text-gray-500 leading-relaxed">
-                  {settings?.maDeskripsi || "Jenjang lanjutan dengan pendalaman ilmu agama yang lebih komprehensif. Santri dipersiapkan untuk melanjutkan pendidikan ke perguruan tinggi dalam maupun luar negeri."}
-                </p>
-                <ul className="mt-4 space-y-1.5">
-                  {(settings?.maPoin ? settings.maPoin.split("\n").filter(p => p.trim()) : [
-                    "Tahfidz Al-Qur'an (target 10 juz+)",
-                    "Kajian Kitab Kuning lanjutan",
-                    "Tahassus Bahasa Arab, Inggris & Jepang",
-                  ]).map((p, i) => (
-                    <li key={i} className="flex items-center gap-2 text-sm text-gray-600">
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#1A4D2E] shrink-0" />
-                      {p}
-                    </li>
-                  ))}
-                </ul>
-              </div>
+
+                  <div className="w-full">
+                    <h3 className="text-2xl sm:text-3xl font-black text-white tracking-tight drop-shadow-sm">
+                      {item.code}
+                    </h3>
+                    <p className="text-[11px] sm:text-xs font-extrabold text-white/95 uppercase tracking-wide mt-0.5 drop-shadow-xs">
+                      {item.sub}
+                    </p>
+                  </div>
+
+                  <div className="mt-3 inline-flex items-center gap-1 text-[10px] font-bold text-white/90 bg-white/15 group-hover:bg-white group-hover:text-slate-800 px-3 py-1 rounded-full transition-colors">
+                    <span>Program &amp; Biaya</span>
+                    <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
+                  </div>
+                </Link>
+              ))}
             </div>
           </div>
         </div>
@@ -313,7 +316,7 @@ export default async function Home() {
               Daftarkan Putra-Putri Anda Sekarang
             </h2>
             <p className="relative text-sm md:text-base text-white/85 mt-4 max-w-xl mx-auto leading-relaxed">
-              Bergabunglah bersama kami untuk mencetak generasi yang Qur'ani, Berilmu, dan Berkarakter.
+              Bergabunglah bersama kami untuk mencetak generasi yang Qur&apos;ani, Berilmu, dan Berkarakter.
             </p>
             <div className="relative mt-7">
               <Link href="/pendaftaran">

@@ -108,7 +108,7 @@ export async function GET(req: NextRequest) {
         "X-Content-Type-Options": "nosniff",
       },
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Image Proxy Error:", error);
     return NextResponse.json({ error: "Failed to proxy image" }, { status: 500 });
   }

@@ -47,7 +47,7 @@ export async function GET(req: NextRequest) {
       pasFotoUrl: berkas?.pasFotoUrl,
       heroBadge: settings?.heroBadge || "PENERIMAAN SANTRI BARU 2026/2027"
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("PPDB Status API Error:", error);
     return NextResponse.json({ error: "Gagal mengambil data status" }, { status: 500 });
   }

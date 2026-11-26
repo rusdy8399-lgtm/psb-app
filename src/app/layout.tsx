@@ -22,6 +22,12 @@ export const viewport = {
   initialScale: 1,
 };
 
+const rawSiteUrl = process.env.NEXT_PUBLIC_SITE_URL;
+const PRODUCTION_SITE_URL =
+  rawSiteUrl && !rawSiteUrl.includes("localhost") && !rawSiteUrl.includes("127.0.0.1")
+    ? rawSiteUrl
+    : "https://www.pesantrenbali.my.id";
+
 export const metadata: Metadata = {
   title: {
     default: "Pesantren Bali | Pondok Pesantren Bali Bina Insani | Pesantren Terbaik",
@@ -29,7 +35,7 @@ export const metadata: Metadata = {
   },
   description: "Pesantren Bali Bina Insani (Est. 1991) - Pondok Pesantren terbaik di Bali. Pendidikan Islam terpadu, Tahfidz Al-Qur'an, dan karakter islami bagi santri se-Bali.",
   keywords: ["pesantren bali", "pesantren di bali", "pondok pesantren bali", "sekolah islam bali", "pesantren terbaik bali", "bali bina insani"],
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://www.pesantrenbali.my.id"),
+  metadataBase: new URL(PRODUCTION_SITE_URL),
   openGraph: {
     title: "Pesantren Bali | Pondok Pesantren Bali Bina Insani",
     description: "Pesantren terbaik di Bali dengan kurikulum terpadu dan program unggulan Tahfidz Al-Qur'an.",

@@ -35,6 +35,13 @@ export default function PengaturanPage() {
     infoRekening: "",
     biayaRegistrasi: "",
     brosurUrl: "",
+    paudLogoUrl: "",
+    paudBannerUrl: "",
+    paudDeskripsi: "",
+    paudPoin: "",
+    miLogoUrl: "",
+    miDeskripsi: "",
+    miPoin: "",
     mtsLogoUrl: "",
     mtsDeskripsi: "",
     mtsPoin: "",
@@ -68,6 +75,13 @@ export default function PengaturanPage() {
           infoRekening: data.infoRekening || "",
           biayaRegistrasi: data.biayaRegistrasi || "",
           brosurUrl: data.brosurUrl || "",
+          paudLogoUrl: data.paudLogoUrl || "",
+          paudBannerUrl: data.paudBannerUrl || "",
+          paudDeskripsi: data.paudDeskripsi || "",
+          paudPoin: data.paudPoin || "",
+          miLogoUrl: data.miLogoUrl || "",
+          miDeskripsi: data.miDeskripsi || "",
+          miPoin: data.miPoin || "",
           mtsLogoUrl: data.mtsLogoUrl || "",
           mtsDeskripsi: data.mtsDeskripsi || "",
           mtsPoin: data.mtsPoin || "",
@@ -463,99 +477,123 @@ export default function PengaturanPage() {
             <h3 className="text-lg font-bold text-slate-800 font-heading tracking-tight">Jenjang Pendidikan</h3>
           </div>
           <div className="grid md:grid-cols-2 gap-10">
-
-            {/* MTs */}
-            <div className="space-y-5">
-              <p className="text-sm font-bold text-slate-600 uppercase tracking-widest border-b border-slate-100 pb-2">Madrasah Tsanawiyah (MTs)</p>
-              {/* Logo Upload */}
-              <div className="space-y-2">
-                <Label className="font-bold text-slate-700 text-sm ml-1">Logo MTs</Label>
-                <div className="flex items-center gap-4 p-4 bg-slate-50 rounded-2xl border border-slate-100">
-                  <div className="w-16 h-16 rounded-xl bg-white border border-slate-200 flex items-center justify-center overflow-hidden group relative shadow-sm">
-                    {formData.mtsLogoUrl ? (
-                      <img src={formData.mtsLogoUrl} alt="Logo MTs" className="w-full h-full object-contain p-1" />
-                    ) : (
-                      <span className="text-xs font-bold text-green-600">MTs</span>
-                    )}
-                    <label className="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 cursor-pointer backdrop-blur-[2px] z-10">
-                      <Upload className="text-white w-5 h-5" />
-                      <input type="file" className="hidden" accept="image/*" onChange={(e) => handleFileUpload(e, "mtsLogoUrl")} />
-                    </label>
-                  </div>
-                  <div className="flex-1">
-                    <Input value={formData.mtsLogoUrl} onChange={(e) => setFormData({ ...formData, mtsLogoUrl: e.target.value })} placeholder="URL Logo MTs..." className="h-8 text-[10px] font-mono rounded-lg border-slate-200" />
-                    <p className="text-[9px] text-slate-400 font-bold uppercase tracking-widest pl-1 mt-1">Klik kotak untuk upload</p>
-                  </div>
-                </div>
-              </div>
-              {/* Deskripsi */}
-              <div className="space-y-2">
-                <Label className="font-bold text-slate-700 text-sm ml-1">Deskripsi MTs</Label>
-                <Textarea
-                  value={formData.mtsDeskripsi}
-                  onChange={(e) => setFormData({ ...formData, mtsDeskripsi: e.target.value })}
-                  placeholder="Deskripsi singkat jenjang MTs..."
-                  className="min-h-[100px] rounded-xl border-slate-200 bg-slate-50/30 focus:bg-white shadow-none focus:ring-2 focus:ring-primary/10 transition-all font-medium text-slate-600"
-                />
-              </div>
-              {/* Poin */}
-              <div className="space-y-2">
-                <Label className="font-bold text-slate-700 text-sm ml-1">Poin Keunggulan MTs <span className="text-slate-400 font-normal">(satu per baris)</span></Label>
-                <Textarea
-                  value={formData.mtsPoin}
-                  onChange={(e) => setFormData({ ...formData, mtsPoin: e.target.value })}
-                  placeholder={`Tahfidz Al-Qur'an (target 5 juz)\nKajian Kitab Kuning dasar\nBahasa Arab & Inggris aktif`}
-                  className="min-h-[110px] rounded-xl border-slate-200 bg-slate-50/30 focus:bg-white shadow-none focus:ring-2 focus:ring-primary/10 transition-all font-medium text-slate-600"
-                />
-              </div>
-            </div>
-
-            {/* MA */}
-            <div className="space-y-5">
-              <p className="text-sm font-bold text-slate-600 uppercase tracking-widest border-b border-slate-100 pb-2">Madrasah Aliyah (MA)</p>
-              {/* Logo Upload */}
-              <div className="space-y-2">
-                <Label className="font-bold text-slate-700 text-sm ml-1">Logo MA</Label>
-                <div className="flex items-center gap-4 p-4 bg-slate-50 rounded-2xl border border-slate-100">
-                  <div className="w-16 h-16 rounded-xl bg-white border border-slate-200 flex items-center justify-center overflow-hidden group relative shadow-sm">
-                    {formData.maLogoUrl ? (
-                      <img src={formData.maLogoUrl} alt="Logo MA" className="w-full h-full object-contain p-1" />
-                    ) : (
-                      <span className="text-xs font-bold text-[#1A4D2E]">MA</span>
-                    )}
-                    <label className="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 cursor-pointer backdrop-blur-[2px] z-10">
-                      <Upload className="text-white w-5 h-5" />
-                      <input type="file" className="hidden" accept="image/*" onChange={(e) => handleFileUpload(e, "maLogoUrl")} />
-                    </label>
-                  </div>
-                  <div className="flex-1">
-                    <Input value={formData.maLogoUrl} onChange={(e) => setFormData({ ...formData, maLogoUrl: e.target.value })} placeholder="URL Logo MA..." className="h-8 text-[10px] font-mono rounded-lg border-slate-200" />
-                    <p className="text-[9px] text-slate-400 font-bold uppercase tracking-widest pl-1 mt-1">Klik kotak untuk upload</p>
+            {[
+              {
+                code: "PAUD",
+                title: "PAUD BALI BINA INSANI",
+                logoField: "paudLogoUrl" as const,
+                descField: "paudDeskripsi" as const,
+                poinField: null,
+                poinPlaceholder: "",
+              },
+              {
+                code: "MI",
+                title: "Madrasah Ibtidaiyah (MI)",
+                logoField: "miLogoUrl" as const,
+                descField: "miDeskripsi" as const,
+                poinField: "miPoin" as const,
+                poinPlaceholder: "Tahfidz Al-Qur'an (target Juz 30 & surat pilihan)\nPembinaan ibadah harian & akhlakul karimah\nPembelajaran dasar Bahasa Arab & Inggris",
+              },
+              {
+                code: "MTs",
+                title: "Madrasah Tsanawiyah (MTs)",
+                logoField: "mtsLogoUrl" as const,
+                descField: "mtsDeskripsi" as const,
+                poinField: "mtsPoin" as const,
+                poinPlaceholder: "Tahfidz Al-Qur'an (target 5 juz)\nKajian Kitab Kuning dasar\nBahasa Arab & Inggris aktif",
+              },
+              {
+                code: "MA",
+                title: "Madrasah Aliyah (MA)",
+                logoField: "maLogoUrl" as const,
+                descField: "maDeskripsi" as const,
+                poinField: "maPoin" as const,
+                poinPlaceholder: "Tahfidz Al-Qur'an (target 10 juz+)\nKajian Kitab Kuning lanjutan\nTahassus Bahasa Arab, Inggris & Jepang",
+              },
+            ].map((item) => (
+              <div key={item.code} className="space-y-5">
+                <p className="text-sm font-bold text-slate-600 uppercase tracking-widest border-b border-slate-100 pb-2">
+                  {item.title}
+                </p>
+                {/* Logo Upload */}
+                <div className="space-y-2">
+                  <Label className="font-bold text-slate-700 text-sm ml-1">Logo {item.code}</Label>
+                  <div className="flex items-center gap-4 p-4 bg-slate-50 rounded-2xl border border-slate-100">
+                    <div className="w-16 h-16 rounded-xl bg-white border border-slate-200 flex items-center justify-center overflow-hidden group relative shadow-sm">
+                      {formData[item.logoField] ? (
+                        <img src={formData[item.logoField]} alt={`Logo ${item.code}`} className="w-full h-full object-contain p-1" />
+                      ) : (
+                        <span className="text-xs font-bold text-[#1A4D2E]">{item.code}</span>
+                      )}
+                      <label className="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 cursor-pointer backdrop-blur-[2px] z-10">
+                        <Upload className="text-white w-5 h-5" />
+                        <input type="file" className="hidden" accept="image/*" onChange={(e) => handleFileUpload(e, item.logoField)} />
+                      </label>
+                    </div>
+                    <div className="flex-1">
+                      <Input
+                        value={formData[item.logoField]}
+                        onChange={(e) => setFormData({ ...formData, [item.logoField]: e.target.value })}
+                        placeholder={`URL Logo ${item.code}...`}
+                        className="h-8 text-[10px] font-mono rounded-lg border-slate-200"
+                      />
+                      <p className="text-[9px] text-slate-400 font-bold uppercase tracking-widest pl-1 mt-1">Klik kotak untuk upload</p>
+                    </div>
                   </div>
                 </div>
+                {item.code === "PAUD" && (
+                  <div className="space-y-2">
+                    <Label className="font-bold text-slate-700 text-sm ml-1">Foto Banner Atas PAUD</Label>
+                    <div className="flex items-center gap-4 p-4 bg-slate-50 rounded-2xl border border-slate-100">
+                      <div className="w-24 h-16 rounded-xl bg-white border border-slate-200 flex items-center justify-center overflow-hidden group relative shadow-sm shrink-0">
+                        {formData.paudBannerUrl ? (
+                          <img src={formData.paudBannerUrl} alt="Banner PAUD" className="w-full h-full object-cover" />
+                        ) : (
+                          <ImageIcon className="w-5 h-5 text-slate-300" />
+                        )}
+                        <label className="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 cursor-pointer backdrop-blur-[2px] z-10">
+                          <Upload className="text-white w-5 h-5" />
+                          <input type="file" className="hidden" accept="image/*" onChange={(e) => handleFileUpload(e, "paudBannerUrl")} />
+                        </label>
+                      </div>
+                      <div className="flex-1">
+                        <Input
+                          value={formData.paudBannerUrl}
+                          onChange={(e) => setFormData({ ...formData, paudBannerUrl: e.target.value })}
+                          placeholder="URL Foto Banner PAUD..."
+                          className="h-8 text-[10px] font-mono rounded-lg border-slate-200"
+                        />
+                        <p className="text-[9px] text-slate-400 font-bold uppercase tracking-widest pl-1 mt-1">Klik kotak untuk upload foto banner</p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+                {/* Deskripsi */}
+                <div className="space-y-2">
+                  <Label className="font-bold text-slate-700 text-sm ml-1">Deskripsi {item.code}</Label>
+                  <Textarea
+                    value={formData[item.descField]}
+                    onChange={(e) => setFormData({ ...formData, [item.descField]: e.target.value })}
+                    placeholder={`Deskripsi singkat jenjang ${item.code}...`}
+                    className="min-h-[100px] rounded-xl border-slate-200 bg-slate-50/30 focus:bg-white shadow-none focus:ring-2 focus:ring-primary/10 transition-all font-medium text-slate-600"
+                  />
+                </div>
+                {/* Poin */}
+                {item.poinField && (
+                  <div className="space-y-2">
+                    <Label className="font-bold text-slate-700 text-sm ml-1">
+                      Poin Keunggulan {item.code} <span className="text-slate-400 font-normal">(satu per baris)</span>
+                    </Label>
+                    <Textarea
+                      value={formData[item.poinField]}
+                      onChange={(e) => setFormData({ ...formData, [item.poinField]: e.target.value })}
+                      placeholder={item.poinPlaceholder}
+                      className="min-h-[110px] rounded-xl border-slate-200 bg-slate-50/30 focus:bg-white shadow-none focus:ring-2 focus:ring-primary/10 transition-all font-medium text-slate-600"
+                    />
+                  </div>
+                )}
               </div>
-              {/* Deskripsi */}
-              <div className="space-y-2">
-                <Label className="font-bold text-slate-700 text-sm ml-1">Deskripsi MA</Label>
-                <Textarea
-                  value={formData.maDeskripsi}
-                  onChange={(e) => setFormData({ ...formData, maDeskripsi: e.target.value })}
-                  placeholder="Deskripsi singkat jenjang MA..."
-                  className="min-h-[100px] rounded-xl border-slate-200 bg-slate-50/30 focus:bg-white shadow-none focus:ring-2 focus:ring-primary/10 transition-all font-medium text-slate-600"
-                />
-              </div>
-              {/* Poin */}
-              <div className="space-y-2">
-                <Label className="font-bold text-slate-700 text-sm ml-1">Poin Keunggulan MA <span className="text-slate-400 font-normal">(satu per baris)</span></Label>
-                <Textarea
-                  value={formData.maPoin}
-                  onChange={(e) => setFormData({ ...formData, maPoin: e.target.value })}
-                  placeholder={`Tahfidz Al-Qur'an (target 10 juz+)\nKajian Kitab Kuning lanjutan\nTahassus Bahasa Arab, Inggris & Jepang`}
-                  className="min-h-[110px] rounded-xl border-slate-200 bg-slate-50/30 focus:bg-white shadow-none focus:ring-2 focus:ring-primary/10 transition-all font-medium text-slate-600"
-                />
-              </div>
-            </div>
-
+            ))}
           </div>
         </section>
       </form>

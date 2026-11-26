@@ -9,14 +9,11 @@ interface BrosurPreviewProps {
 }
 
 export function BrosurPreview({ url, schoolName }: BrosurPreviewProps) {
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(Boolean(url));
   const [isFallback, setIsFallback] = useState(false);
 
   useEffect(() => {
-    if (!url) {
-      setIsLoading(false);
-      return;
-    }
+    if (!url) return;
 
     let isCancelled = false;
 
@@ -27,9 +24,15 @@ export function BrosurPreview({ url, schoolName }: BrosurPreviewProps) {
 
       // On mobile devices or browsers without built-in PDF viewer, show alternative viewer fallback
       if (isMobileDevice || noPdfSupport) {
-        setIsFallback(true);
-        setIsLoading(false);
-        return;
+        Promise.resolve().then(() => {
+          if (!isCancelled) {
+            setIsFallback(true);
+            setIsLoading(false);
+          }
+        });
+        return () => {
+          isCancelled = true;
+        };
       }
 
       // Check if URL can be reached or if network/TLS/CORS blocks inline preview

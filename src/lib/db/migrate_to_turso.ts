@@ -33,7 +33,7 @@ async function migrate() {
   for (const { name, table } of tables) {
     try {
       console.log(`📦 Table: ${name}...`);
-      const data = await localDb.select().from(table as any);
+      const data = await localDb.select().from(table as unknown as Parameters<typeof localDb.select>[0] extends never ? never : typeof schema.pendaftar);
       
       if (data.length > 0) {
         let successCount = 0;
@@ -42,10 +42,10 @@ async function migrate() {
         for (const row of data) {
           try {
             // One-by-one insert to pinpoint errors and bypass bulk limitations
-            await tursoDb.insert(table as any).values(row).onConflictDoNothing();
+            await tursoDb.insert(table as unknown as typeof schema.pendaftar).values(row).onConflictDoNothing();
             successCount++;
-          } catch (rowErr: any) {
-            console.error(`  ⚠️ Row failed in ${name}:`, rowErr.message);
+          } catch (rowErr: unknown) {
+            console.error(`  ⚠️ Row failed in ${name}:`, rowErr instanceof Error ? rowErr.message : String(rowErr));
             skipCount++;
           }
         }
@@ -53,8 +53,8 @@ async function migrate() {
       } else {
         console.log(`ℹ️ ${name} is empty.`);
       }
-    } catch (error: any) {
-      console.error(`❌ Global error for ${name}:`, error.message);
+    } catch (error: unknown) {
+      console.error(`❌ Global error for ${name}:`, error instanceof Error ? error.message : String(error));
     }
   }
 

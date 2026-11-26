@@ -76,7 +76,7 @@ export async function POST(
 
     return NextResponse.json({ success: true, message: "Email berhasil dikirim ulang" });
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Resend Admin API Error:", error);
     return NextResponse.json({ error: "Terjadi kesalahan internal" }, { status: 500 });
   }

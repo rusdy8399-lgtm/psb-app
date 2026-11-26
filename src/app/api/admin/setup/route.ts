@@ -39,11 +39,11 @@ export async function GET() {
       message: "Akun administrator berhasil dibuat. Silakan login di /login.",
       email: adminEmail,
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Setup error:", error);
     return NextResponse.json({ 
       error: "Failed to create admin", 
-      details: error.message 
+      details: error instanceof Error ? error.message : "Unknown error" 
     }, { status: 500 });
   }
 }

@@ -15,10 +15,47 @@ import { toast } from "sonner";
 import { generateCertificate } from "@/lib/pdf/CertificateGenerator";
 
 interface PendaftarDetailProps {
-  pendaftar: any;
-  ortu: any;
-  berkas: any;
-  settings?: any;
+  pendaftar: {
+    id: string;
+    namaLengkap: string;
+    kodePendaftaran: string;
+    jenjang: string;
+    tempatLahir: string;
+    tanggalLahir: string;
+    jenisKelamin: string;
+    alamat: string;
+    noHp?: string | null;
+    email?: string | null;
+    asalSekolah: string;
+    nik?: string | null;
+    nisn: string;
+    noKk: string;
+    status: string;
+    createdAt: Date | string;
+  } | null | undefined;
+  ortu: {
+    namaAyah: string;
+    pekerjaanAyah: string;
+    penghasilanAyah: string;
+    namaIbu: string;
+    pekerjaanIbu?: string | null;
+    noHpWali: string;
+    alamatOrtu?: string | null;
+  } | null | undefined;
+  berkas: {
+    kkUrl?: string | null;
+    aktaUrl?: string | null;
+    aktaKelahiranUrl?: string | null;
+    ijazahUrl?: string | null;
+    pasFotoUrl?: string | null;
+    buktiBayarUrl?: string | null;
+    buktiPembayaranUrl?: string | null;
+    namaPengirim?: string | null;
+    tanggalTransfer?: string | null;
+  } | null | undefined;
+  settings?: {
+    heroBadge?: string | null;
+  } | null;
 }
 
 export function PendaftarDetailClient({ pendaftar, ortu, berkas, settings }: PendaftarDetailProps) {
@@ -44,11 +81,11 @@ export function PendaftarDetailClient({ pendaftar, ortu, berkas, settings }: Pen
         tempatLahir: pendaftar.tempatLahir,
         tanggalLahir: pendaftar.tanggalLahir,
         nisn: pendaftar.nisn,
-        nik: pendaftar.nik,
+        nik: pendaftar.nik ?? undefined,
         asalSekolah: pendaftar.asalSekolah,
-        pasFotoUrl: berkas?.pasFotoUrl,
+        pasFotoUrl: berkas?.pasFotoUrl ?? undefined,
         tanggalDaftar: new Date(pendaftar.createdAt).toLocaleDateString('id-ID'),
-        tahunAjaran: settings?.heroBadge,
+        tahunAjaran: settings?.heroBadge ?? undefined,
       });
     } catch (e) {
       toast.error("Gagal membuat PDF");
@@ -68,7 +105,7 @@ export function PendaftarDetailClient({ pendaftar, ortu, berkas, settings }: Pen
       {
         loading: 'Mengirim email...',
         success: 'Email berhasil dikirim ke pendaftar!',
-        error: (err: any) => err.message || 'Gagal mengirim email. Pastikan API Key sudah terpasang.',
+        error: (err: unknown) => (err instanceof Error ? err.message : undefined) || 'Gagal mengirim email. Pastikan API Key sudah terpasang.',
       }
     );
   };
@@ -93,14 +130,14 @@ export function PendaftarDetailClient({ pendaftar, ortu, berkas, settings }: Pen
           router.push("/dashboard/pendaftar");
           return 'Pendaftaran berhasil dihapus!';
         },
-        error: (err: any) => err.message || 'Gagal menghapus data.',
+        error: (err: unknown) => (err instanceof Error ? err.message : undefined) || 'Gagal menghapus data.',
       }
     );
   };
 
   // --- UI Render Helpers ---
   
-  const renderDataField = (label: string, value: string | number | null, Icon?: React.ElementType) => (
+  const renderDataField = (label: string, value: string | number | null | undefined, Icon?: React.ElementType) => (
     <div className="flex flex-col gap-1">
       <span className="text-[11px] font-medium text-gray-400 uppercase tracking-wider">{label}</span>
       <div className="flex items-center gap-2">
@@ -112,7 +149,7 @@ export function PendaftarDetailClient({ pendaftar, ortu, berkas, settings }: Pen
     </div>
   );
 
-  const renderFileRow = (label: string, url: string | null) => (
+  const renderFileRow = (label: string, url: string | null | undefined) => (
     <div className="flex items-center justify-between p-3.5 bg-gray-50/50 rounded-lg border border-gray-100 group transition-all hover:bg-white hover:shadow-sm">
       <div className="flex items-center gap-3">
         <div className={`p-1.5 rounded-md ${url ? 'bg-indigo-50 text-indigo-500' : 'bg-gray-100 text-gray-300'}`}>
@@ -253,7 +290,7 @@ export function PendaftarDetailClient({ pendaftar, ortu, berkas, settings }: Pen
               {berkas ? (
                 <>
                   {renderFileRow("Kartu Keluarga (KK)", berkas.kkUrl)}
-                  {renderFileRow("Akta Kelahiran", berkas.aktaKelahiranUrl)}
+                  {renderFileRow("Akta Kelahiran", berkas.aktaKelahiranUrl ?? berkas.aktaUrl)}
                   {renderFileRow("Ijazah Terakhir", berkas.ijazahUrl)}
                   {renderFileRow("Pas Foto 3x4", berkas.pasFotoUrl)}
                 </>
@@ -277,10 +314,10 @@ export function PendaftarDetailClient({ pendaftar, ortu, berkas, settings }: Pen
                      {renderDataField("Pengirim", berkas.namaPengirim)}
                   </div>
                   <div className="relative group rounded-xl overflow-hidden border border-gray-100 aspect-video bg-gray-50 flex items-center justify-center">
-                    {berkas.buktiPembayaranUrl ? (
+                    {(berkas.buktiPembayaranUrl ?? berkas.buktiBayarUrl) ? (
                       <div className="w-full h-full relative">
                         <img 
-                          src={berkas.buktiPembayaranUrl} 
+                          src={(berkas.buktiPembayaranUrl ?? berkas.buktiBayarUrl) || ""} 
                           alt="Bukti Transfer" 
                           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                           onError={(e) => {
@@ -294,7 +331,7 @@ export function PendaftarDetailClient({ pendaftar, ortu, berkas, settings }: Pen
                             }
                           }}
                         />
-                        <a href={berkas.buktiPembayaranUrl} target="_blank" rel="noopener noreferrer" className="absolute inset-0 bg-gray-900/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-[2px]">
+                        <a href={(berkas.buktiPembayaranUrl ?? berkas.buktiBayarUrl) || "#"} target="_blank" rel="noopener noreferrer" className="absolute inset-0 bg-gray-900/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-[2px]">
                           <Button variant="secondary" size="sm" className="font-bold text-xs gap-2">
                              Preview <ExternalLink className="w-3.5 h-3.5" />
                           </Button>

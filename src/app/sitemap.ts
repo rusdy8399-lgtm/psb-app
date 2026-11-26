@@ -1,5 +1,6 @@
 import { MetadataRoute } from "next";
 import { getKegiatanList, getGaleriList } from "@/lib/data-fetching";
+import { LEMBAGA_LIST } from "@/lib/lembaga-data";
 
 export const revalidate = 3600; // Cache sitemap for 1 hour
 
@@ -10,7 +11,11 @@ function parseValidDate(dateStr: string | null | undefined): Date | undefined {
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://www.pesantrenbali.my.id";
+  const rawSiteUrl = process.env.NEXT_PUBLIC_SITE_URL;
+  const baseUrl =
+    rawSiteUrl && !rawSiteUrl.includes("localhost") && !rawSiteUrl.includes("127.0.0.1")
+      ? rawSiteUrl
+      : "https://www.pesantrenbali.my.id";
 
   // Safely fetch dynamic activities
   let kegiatanItems: Awaited<ReturnType<typeof getKegiatanList>> = [];
@@ -103,5 +108,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   ];
 
-  return [...staticUrls, ...kegiatanUrls];
+  const lembagaUrls: MetadataRoute.Sitemap = LEMBAGA_LIST.map((item) => ({
+    url: `${baseUrl}/lembaga/${item.slug}`,
+    changeFrequency: "monthly" as const,
+    priority: 0.85,
+  }));
+
+  return [...staticUrls, ...lembagaUrls, ...kegiatanUrls];
 }

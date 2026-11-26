@@ -57,7 +57,7 @@ export const pendaftar = sqliteTable("pendaftar", {
   tempatLahir: text("tempat_lahir").notNull(),
   tanggalLahir: text("tanggal_lahir").notNull(),
   jenisKelamin: text("jenis_kelamin").notNull(), // 'L' | 'P'
-  jenjang: text("jenjang").notNull(), // 'MTs' | 'MA'
+  jenjang: text("jenjang").notNull(), // 'PAUD' | 'MI' | 'MTs' | 'MA'
   alamat: text("alamat").notNull(),
   noHp: text("no_hp"),
   email: text("email"),
@@ -139,6 +139,15 @@ export const pengaturanWeb = sqliteTable("pengaturan_web", {
   infoRekening: text("info_rekening").default("BRI: 0573010001017300 a.n. PSB Bali Bina Insani"),
   biayaRegistrasi: text("biaya_registrasi").default("200000"),
   brosurUrl: text("brosur_url"),
+  // Jenjang PAUD
+  paudLogoUrl: text("paud_logo_url"),
+  paudBannerUrl: text("paud_banner_url"),
+  paudDeskripsi: text("paud_deskripsi"),
+  paudPoin: text("paud_poin"),
+  // Jenjang MI
+  miLogoUrl: text("mi_logo_url"),
+  miDeskripsi: text("mi_deskripsi"),
+  miPoin: text("mi_poin"),
   // Jenjang MTs
   mtsLogoUrl: text("mts_logo_url"),
   mtsDeskripsi: text("mts_deskripsi"),
